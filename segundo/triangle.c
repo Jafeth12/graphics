@@ -1,4 +1,7 @@
 #include "shader.h"
+#include <cglm/affine.h>
+#include <cglm/mat4.h>
+#include <cglm/vec4.h>
 #include <triangle.h>
 
 triangle* tri_new(float red, float green, float blue, float scale) {
@@ -22,7 +25,7 @@ triangle* tri_new(float red, float green, float blue, float scale) {
     tri->color[1] = green;
     tri->color[2] = blue;
 
-    tri->pos[0] = 1.0f;
+    tri->pos[0] = 0.0f;
     tri->pos[1] = 0.0f;
     tri->pos[2] = 0.0f;
 
@@ -56,10 +59,10 @@ void tri_draw(triangle* tri, shader* sh) {
 
     mat4 mat;
     glm_translate_make(mat, tri->pos);
-    glm_mat4_scale_p(mat, tri->scale);
+    glm_scale_uni(mat, tri->scale);
 
-    shader_set_vec3(sh, "color", tri->color);
     shader_set_mat4(sh, "transform", mat);
+    shader_set_vec3(sh, "color", tri->color);
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }

@@ -65,6 +65,33 @@ void win_draw_triangles(window *win) {
     }
 }
 
+// ---------------
+void processInput(window *win) {
+    float movement = 0.02f;
+
+    if (glfwGetKey(win->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(win->window, 1);
+    } 
+
+    if (glfwGetKey(win->window, GLFW_KEY_D) == GLFW_PRESS) {
+        tri_move_right(win->triangles[0], movement);
+    } 
+
+    if (glfwGetKey(win->window, GLFW_KEY_A) == GLFW_PRESS) {
+        tri_move_left(win->triangles[0], movement);
+    } 
+
+    if (glfwGetKey(win->window, GLFW_KEY_W) == GLFW_PRESS) {
+        tri_move_up(win->triangles[0], movement);
+    } 
+
+    if (glfwGetKey(win->window, GLFW_KEY_S) == GLFW_PRESS) {
+        tri_move_down(win->triangles[0], movement);
+    }
+
+}
+// ---------------
+
 void win_loop(window *win) {
     // TODO poner colorecitos
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -72,7 +99,7 @@ void win_loop(window *win) {
     while (!glfwWindowShouldClose(win->window)) {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // processInput(win);
+        processInput(win);
         win_draw_triangles(win);
 
         // swap front and back buffers
@@ -82,5 +109,13 @@ void win_loop(window *win) {
     }
 
     glfwTerminate();
+
     free(win);
+
+    for (int i = 0; i < MAX_TRIANGLES; ++i) {
+        if (win->triangles[i] != NULL) {
+            free(win->triangles[i]);
+        }
+    }
+
 }
