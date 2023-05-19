@@ -1,0 +1,4 @@
+.cache/
+.git/
+glfw/
+compile_commands.json
