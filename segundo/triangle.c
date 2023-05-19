@@ -22,6 +22,10 @@ triangle* tri_new(float red, float green, float blue, float scale) {
     tri->color[1] = green;
     tri->color[2] = blue;
 
+    tri->pos[0] = 1.0f;
+    tri->pos[1] = 0.0f;
+    tri->pos[2] = 0.0f;
+
     tri->scale = scale;
 
     float vertices[] = {
@@ -50,12 +54,28 @@ void tri_draw(triangle* tri, shader* sh) {
 
     shader_use(sh);
 
-    shader_set_float(sh, "scale", tri->scale);
-    shader_set_float(sh, "red", tri->color[0]);
-    shader_set_float(sh, "green", tri->color[1]);
-    shader_set_float(sh, "blue", tri->color[2]);
+    mat4 mat;
+    glm_translate_make(mat, tri->pos);
+    glm_mat4_scale_p(mat, tri->scale);
 
-    // shader_set_vec3(sh, "color", tri->color);
+    shader_set_vec3(sh, "color", tri->color);
+    shader_set_mat4(sh, "transform", mat);
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+void tri_move_right(triangle* tri, float value) {
+    tri->pos[0] += value;
+}
+
+void tri_move_left(triangle* tri, float value) {
+    tri->pos[0] -= value;
+}
+
+void tri_move_up(triangle* tri, float value) {
+    tri->pos[1] += value;
+}
+
+void tri_move_down(triangle* tri, float value) {
+    tri->pos[1] -= value;
 }

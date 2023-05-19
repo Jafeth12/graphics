@@ -18,8 +18,8 @@ int main() {
         return -1;
     }
 
-    win_add_triangle(win, 1.0f, 0.0f, 0.0f, 0.5f);
-    // win_add_triangle(win, 0.0f, 0.0f, 1.0f, 0.3f);
+    win_add_triangle(win, 1.0f, 1.0f, 0.0f, 0.5f);
+    // win_add_triangle(win, 0.0f, 0.0f, 1.0f, 0.2f);
 
     win_loop(win);
 

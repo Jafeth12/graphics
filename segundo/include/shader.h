@@ -2,6 +2,7 @@
 #define SHADERS_H
 
 #include <glad/glad.h>
+#include <cglm/cglm.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,7 +25,9 @@ void shader_set_int(shader *s, const char *name, int value);
 
 void shader_set_float(shader *s, const char *name, float value);
 
-// void shader_set_vec3(shader *s, const char *name, float x, float y, float z);
+void shader_set_vec3(shader *s, const char *name, vec3 value);
+
+void shader_set_mat4(shader *s, const char *name, mat4 value);
 
 #endif // SHADERS_H
 

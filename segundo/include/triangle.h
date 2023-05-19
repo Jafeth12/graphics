@@ -4,6 +4,7 @@
 // TODO add colors to the triangle
 
 #include <glad/glad.h>
+#include <cglm/cglm.h>
 
 #include <shader.h>
 
@@ -14,11 +15,20 @@ typedef struct triangle {
     unsigned int VBO;
     unsigned int VAO;
     float scale;
-    float color[3];
+    vec3 color;
+    vec3 pos;
 } triangle;
 
 triangle* tri_new(float red, float green, float blue, float scale);
 
 void tri_draw(triangle* tri, shader* sh);
+
+void tri_move_right(triangle* tri, float value);
+
+void tri_move_left(triangle* tri, float value);
+
+void tri_move_up(triangle* tri, float value);
+
+void tri_move_down(triangle* tri, float value);
 
 #endif // !TRIANGLE_H
