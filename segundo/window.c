@@ -1,4 +1,3 @@
-#include "triangle.h"
 #include <window.h>
 
 int points = 0;
@@ -113,7 +112,7 @@ void processInput(window *win) {
 
 void win_loop(window *win) {
     // TODO poner colorecitos
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClearColor(0.1f, 0.4f, 0.2f, 0.0f);
 
     while (!glfwWindowShouldClose(win->window)) {
         glClear(GL_COLOR_BUFFER_BIT);

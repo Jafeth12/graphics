@@ -19,7 +19,7 @@ int main() {
         return -1;
     }
 
-    triangle *player = tri_new(1.0f, 1.0f, 0.0f, 0.3f);
+    triangle *player = tri_new(0.0f, 1.0f, 0.0f, 0.2f);
     triangle *apple = tri_new(1.0f, 0.0f, 0.0f, 0.2f);
 
     win_add_triangle(win, player);

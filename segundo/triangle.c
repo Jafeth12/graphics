@@ -1,8 +1,3 @@
-#include "shader.h"
-#include <cglm/affine.h>
-#include <cglm/mat4.h>
-#include <cglm/vec4.h>
-#include <stdio.h>
 #include <triangle.h>
 
 triangle* tri_new(float red, float green, float blue, float scale) {
