@@ -2,6 +2,7 @@
 #include <cglm/affine.h>
 #include <cglm/mat4.h>
 #include <cglm/vec4.h>
+#include <stdio.h>
 #include <triangle.h>
 
 triangle* tri_new(float red, float green, float blue, float scale) {
@@ -65,6 +66,36 @@ void tri_draw(triangle* tri, shader* sh) {
     shader_set_vec3(sh, "color", tri->color);
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+int tri_collision(triangle* tri1, triangle* tri2) {
+    float x1 = tri1->pos[0];
+    float y1 = tri1->pos[1];
+    float x2 = tri2->pos[0];
+    float y2 = tri2->pos[1];
+
+    // printf("--------------------\n");
+    // printf("\nx1-x2: %f\n", x1-x2);
+    // printf("y1-y2: %f\n", y1-y2);
+    // printf("--------------------\n");
+
+    float diffx = x1-x2;
+    float diffy = y1-y2;
+
+    if (fabsf(diffx) <= 0.15f && fabsf(diffy) <= 0.15f) {
+        return 1;
+    }
+
+    return 0;
+}
+
+void tri_move_random(triangle* tri) {
+    srand(glfwGetTime());
+    // random x and y values that dont leave the screen
+    float x = (float)rand() / (float)(RAND_MAX/2) - 1.0f;
+    float y = (float)rand() / (float)(RAND_MAX/2) - 1.0f;
+    tri->pos[0] = x;
+    tri->pos[1] = y;
 }
 
 void tri_move_right(triangle* tri, float value) {

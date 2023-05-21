@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 
 #include <window.h>
+#include <triangle.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,13 +13,17 @@ int main() {
         return -1;
     }
 
-    window *win = win_create(640, 480, "Hello World", "shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
+    window *win = win_create(800, 600, "Hello World", "shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
     if (!win) {
         printf("Error creating window\n");
         return -1;
     }
 
-    win_add_triangle(win, 1.0f, 1.0f, 0.0f, 0.2f);
+    triangle *player = tri_new(1.0f, 1.0f, 0.0f, 0.3f);
+    triangle *apple = tri_new(1.0f, 0.0f, 0.0f, 0.2f);
+
+    win_add_triangle(win, player);
+    win_add_triangle(win, apple);
 
     win_loop(win);
 

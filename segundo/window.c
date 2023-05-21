@@ -1,4 +1,7 @@
+#include "triangle.h"
 #include <window.h>
+
+int points = 0;
 
 //---------------
 
@@ -47,14 +50,16 @@ window* win_create(int width, int height, char *title, char *vs_filename, char *
     return win;
 }
 
-void win_add_triangle(window *win, float red, float green, float blue, float scale) {
+int win_add_triangle(window *win, triangle *tri) {
     for (int i = 0; i < MAX_TRIANGLES; i++) {
         if (win->triangles[i] == NULL) {
-            triangle *tri = tri_new(red, green, blue, scale);
+            if (i == TRI_PLAYER) tri_move_random(tri);
             win->triangles[i] = tri;
-            break;
+            return 0;
         }
     }
+
+    return -1;
 }
 
 void win_draw_triangles(window *win) {
@@ -65,30 +70,44 @@ void win_draw_triangles(window *win) {
     }
 }
 
+void processCollision(window *win) {
+    if (win->triangles[TRI_PLAYER] == NULL || win->triangles[TRI_APPLE] == NULL) {
+        return;
+    }
+
+    if (tri_collision(win->triangles[TRI_PLAYER], win->triangles[TRI_APPLE])) {
+        tri_move_random(win->triangles[TRI_APPLE]);
+        ++points;
+        printf("Points: %d\n", points);
+    }
+}
+
 // ---------------
 void processInput(window *win) {
     float movement = 0.02f;
+
 
     if (glfwGetKey(win->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(win->window, 1);
     } 
 
     if (glfwGetKey(win->window, GLFW_KEY_D) == GLFW_PRESS) {
-        tri_move_right(win->triangles[0], movement);
+        tri_move_right(win->triangles[TRI_PLAYER], movement);
     } 
 
     if (glfwGetKey(win->window, GLFW_KEY_A) == GLFW_PRESS) {
-        tri_move_left(win->triangles[0], movement);
+        tri_move_left(win->triangles[TRI_PLAYER], movement);
     } 
 
     if (glfwGetKey(win->window, GLFW_KEY_W) == GLFW_PRESS) {
-        tri_move_up(win->triangles[0], movement);
+        tri_move_up(win->triangles[TRI_PLAYER], movement);
     } 
 
     if (glfwGetKey(win->window, GLFW_KEY_S) == GLFW_PRESS) {
-        tri_move_down(win->triangles[0], movement);
+        tri_move_down(win->triangles[TRI_PLAYER], movement);
     }
 
+    processCollision(win);
 }
 // ---------------
 

@@ -23,6 +23,10 @@ triangle* tri_new(float red, float green, float blue, float scale);
 
 void tri_draw(triangle* tri, shader* sh);
 
+int tri_collision(triangle* tri1, triangle* tri2);
+
+void tri_move_random(triangle* tri);
+
 void tri_move_right(triangle* tri, float value);
 
 void tri_move_left(triangle* tri, float value);
