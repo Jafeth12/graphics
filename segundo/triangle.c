@@ -85,7 +85,7 @@ int tri_collision(triangle* tri1, triangle* tri2) {
 }
 
 void tri_move_random(triangle* tri) {
-    srand(glfwGetTime());
+    // srand(glfwGetTime());
     // random x and y values that dont leave the screen
     float x = (float)rand() / (float)(RAND_MAX/2) - 1.0f;
     float y = (float)rand() / (float)(RAND_MAX/2) - 1.0f;

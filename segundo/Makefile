@@ -25,7 +25,7 @@ $(GLAD): $(SRC_GLAD_DIR)/$(GLAD).c
 # 	gcc -c -o $(WINDOW).o $(INCLUDE) $(INCLUDE_GLAD) $(WINDOW).c
 
 $(PROGRAM): $(PROGRAM).c $(SHADERS).c $(WINDOW).c $(TRIANGLE).c $(GLAD)
-	gcc -g -O3 $(PROGRAM).c $(INCLUDE) $(INCLUDE_GLAD) -o $(PROGRAM) $(GLAD).o $(SHADERS).c $(WINDOW).c $(TRIANGLE).c $(LIBS)
+	gcc -g -O3 $(PROGRAM).c $(INCLUDE) $(INCLUDE_GLAD) -o $(PROGRAM).exe $(GLAD).o $(SHADERS).c $(WINDOW).c $(TRIANGLE).c $(LIBS)
 
 # $(PROGRAM): $(PROGRAM).c $(SHADERS) $(WINDOW) $(TRIANGLE)
 # 	gcc -g $(PROGRAM).c $(INCLUDE) $(INCLUDE_GLAD) -o $(PROGRAM) $(GLAD).o $(SHADERS).o $(WINDOW).o $(TRIANGLE).o $(LIBS)
