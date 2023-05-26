@@ -5,8 +5,8 @@
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
 
-#include <shader.h>
 #include <triangle.h>
+#include <camera.h>
 
 #include <stdlib.h>
 
@@ -17,6 +17,7 @@
 
 typedef struct window {
     GLFWwindow* window;
+    camera *camera;
     shader *shader;
     triangle *triangles[MAX_TRIANGLES];
 } window;

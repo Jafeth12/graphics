@@ -3,6 +3,7 @@ GLAD = glad
 SHADERS = shader
 WINDOW = window
 TRIANGLE = triangle
+CAMERA = camera
 
 INCLUDE = -Iinclude
 INCLUDE_GLAD = -I../glad/include
@@ -24,17 +25,17 @@ $(GLAD): $(SRC_GLAD_DIR)/$(GLAD).c
 # $(WINDOW): $(WINDOW).c $(SHADERS)
 # 	gcc -c -o $(WINDOW).o $(INCLUDE) $(INCLUDE_GLAD) $(WINDOW).c
 
-$(PROGRAM): $(PROGRAM).c $(SHADERS).c $(WINDOW).c $(TRIANGLE).c $(GLAD)
-	gcc -g -O3 $(PROGRAM).c $(INCLUDE) $(INCLUDE_GLAD) -o $(PROGRAM).exe $(GLAD).o $(SHADERS).c $(WINDOW).c $(TRIANGLE).c $(LIBS)
+$(PROGRAM): $(PROGRAM).c $(CAMERA).c $(SHADERS).c $(WINDOW).c $(TRIANGLE).c $(GLAD)
+	gcc -g -O3 $(PROGRAM).c $(INCLUDE) $(INCLUDE_GLAD) -o $(PROGRAM).exe $(GLAD).o $(SHADERS).c $(WINDOW).c $(TRIANGLE).c $(CAMERA).c $(LIBS)
 
 # $(PROGRAM): $(PROGRAM).c $(SHADERS) $(WINDOW) $(TRIANGLE)
 # 	gcc -g $(PROGRAM).c $(INCLUDE) $(INCLUDE_GLAD) -o $(PROGRAM) $(GLAD).o $(SHADERS).o $(WINDOW).o $(TRIANGLE).o $(LIBS)
 
 run: $(PROGRAM)
-	./$(PROGRAM)
+	./$(PROGRAM).exe
 
 gdb: $(PROGRAM)
-	gdb ./$(PROGRAM)
+	gdb ./$(PROGRAM).exe
 
 clean:
 	rm $(PROGRAM) *.o

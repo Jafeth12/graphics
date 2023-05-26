@@ -28,9 +28,9 @@ triangle* tri_new(float red, float green, float blue, float scale) {
     tri->scale = scale;
 
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f, // left
-        0.5f, -0.5f, 0.0f, // right
-        0.0f, 0.5f, 0.0f, // top
+        -0.6f, -0.6f, 0.0f, // bottom-left
+        0.6f, -0.6f, -0.2f, // bottom-right
+        0.0f, 0.6f, 0.3f, // top
     };
 
     glGenVertexArrays(1, &tri->VAO);
@@ -41,7 +41,7 @@ triangle* tri_new(float red, float green, float blue, float scale) {
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
     glEnableVertexAttribArray(0);
 
@@ -57,10 +57,10 @@ void tri_draw(triangle* tri, shader* sh) {
     glm_translate_make(mat, tri->pos);
     glm_scale_uni(mat, tri->scale);
 
-    shader_set_mat4(sh, "transform", mat);
+    shader_set_mat4(sh, "model", mat);
     shader_set_vec3(sh, "color", tri->color);
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 int tri_collision(triangle* tri1, triangle* tri2) {

@@ -16,7 +16,7 @@ $(SHADERS): $(SHADERS).c
 	gcc -c -o $(SHADERS).o $(INCLUDE) $(SHADERS).c
 
 $(PROGRAM): $(PROGRAM).c $(GLAD) $(SHADERS)
-	gcc -g $(PROGRAM).c $(INCLUDE) -o $(PROGRAM) $(GLAD).o $(SHADERS).o $(LIBS)
+	gcc -g $(PROGRAM).c $(INCLUDE) -o $(PROGRAM).exe $(GLAD).o $(SHADERS).o $(LIBS)
 
 run: $(PROGRAM)
 	./$(PROGRAM)

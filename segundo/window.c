@@ -1,3 +1,4 @@
+#include "camera.h"
 #include <window.h>
 
 int points = 0;
@@ -44,7 +45,10 @@ window* win_create(int width, int height, char *title, char *vs_filename, char *
 
     shader *sh = shader_init(vs_filename, fs_filename);
     win->shader = sh;
-    // shader_use(sh);
+
+    shader_use(sh);
+
+    win->camera = camera_create(sh);
 
     return win;
 }
@@ -85,7 +89,6 @@ void processCollision(window *win) {
 void processInput(window *win) {
     float movement = 0.02f;
 
-
     if (glfwGetKey(win->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(win->window, 1);
     } 
@@ -106,6 +109,22 @@ void processInput(window *win) {
         tri_move_down(win->triangles[TRI_PLAYER], movement);
     }
 
+    if (glfwGetKey(win->window, GLFW_KEY_UP) == GLFW_PRESS) {
+        cam_move_forward(win->camera);
+    }
+
+    if (glfwGetKey(win->window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        cam_move_backward(win->camera);
+    }
+
+    if (glfwGetKey(win->window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        cam_move_left(win->camera);
+    }
+
+    if (glfwGetKey(win->window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+        cam_move_right(win->camera);
+    }
+
     processCollision(win);
 }
 // ---------------
@@ -113,9 +132,10 @@ void processInput(window *win) {
 void win_loop(window *win) {
     // TODO poner colorecitos
     glClearColor(0.1f, 0.4f, 0.2f, 0.0f);
+    glEnable(GL_DEPTH_TEST);
 
     while (!glfwWindowShouldClose(win->window)) {
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         processInput(win);
         win_draw_triangles(win);
