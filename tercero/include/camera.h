@@ -8,9 +8,7 @@
 
 typedef struct camera {
     vec3 position;
-    vec3 front;
     vec3 up;
-    vec3 right;
 
     mat4 view;
     mat4 projection;
@@ -26,7 +24,7 @@ typedef struct camera {
     // float fov;
 } camera;
 
-camera* camera_create(shader *shader);
+camera* cam_create(shader *shader);
 
 void cam_move_forward(camera *cam);
 
@@ -35,5 +33,7 @@ void cam_move_backward(camera *cam);
 void cam_move_right(camera *cam);
 
 void cam_move_left(camera *cam);
+
+void cam_update(camera *cam);
 
 #endif // !CAMERA_H

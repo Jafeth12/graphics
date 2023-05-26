@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 int main() {
-    world *world = w_create(800, 600, "Hello World", "shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
+    world *world = w_create("Hello World", "shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
     if (!world) {
         printf("Error creating window\n");
         return -1;

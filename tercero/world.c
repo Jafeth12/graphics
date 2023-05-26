@@ -22,18 +22,18 @@ int w_init_glfw() {
     return 0;
 }
 
-world* w_create(int width, int height, char *title, char *vs_filename, char *fs_filename) {
+world* w_create(char *title, char *vs_filename, char *fs_filename) {
     if (w_init_glfw() != 0) {
         printf("Error initializing GLFW\n");
         return 0;
     }
 
     world *w = malloc(sizeof(world));
-    for (int i = 0; i < MAX_TRIANGLES; i++) {
-        w->triangles[i] = NULL;
-    }
+    // for (int i = 0; i < MAX_TRIANGLES; i++) {
+    //     w->triangles[i] = NULL;
+    // }
 
-    GLFWwindow* window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World", NULL, NULL);
     if (!window) {
         return 0;
     }
@@ -42,6 +42,9 @@ world* w_create(int width, int height, char *title, char *vs_filename, char *fs_
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        glfwTerminate();
+        free(window);
+        free(w);
         return 0;
     }
 
@@ -52,42 +55,33 @@ world* w_create(int width, int height, char *title, char *vs_filename, char *fs_
 
     shader_use(sh);
 
-    w->camera = camera_create(sh);
+    w->camera = cam_create(sh);
+
+    float pos[] = {
+        //6 porque son dos triangulos
+        5, 0, 5,        // El de delante del todo a la derecha (vista de la camara, izquierda vista del homer).
+        5, 0, -5,       // El de detras a la derecha (vista camara).
+        -5, 0, -5,      // El de detras a la izquierda
+        
+        -5, 0, -5,       // Detras a la izquierda
+        5, 0, 5,        // Delante a la derecha
+        -5, 0, 5       // Delante a la izquierda.
+    };
+
+    glGenVertexArrays(1, &w->floor_VAO);
+    glBindVertexArray(w->floor_VAO);
+
+    glGenBuffers(1, &w->floor_VBO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, w->floor_VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(pos), pos, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glBindVertexArray(0);
 
     return w;
 }
-
-// int win_add_triangle(window *win, triangle *tri) {
-//     for (int i = 0; i < MAX_TRIANGLES; i++) {
-//         if (win->triangles[i] == NULL) {
-//             if (i == TRI_PLAYER) tri_move_random(tri);
-//             win->triangles[i] = tri;
-//             return 0;
-//         }
-//     }
-//
-//     return -1;
-// }
-
-// void win_draw_triangles(window *win) {
-//     for (int i = 0; i < MAX_TRIANGLES; i++) {
-//         if (win->triangles[i] != NULL) {
-//             tri_draw(win->triangles[i], win->shader);
-//         }
-//     }
-// }
-
-// void processCollision(window *win) {
-//     if (win->triangles[TRI_PLAYER] == NULL || win->triangles[TRI_APPLE] == NULL) {
-//         return;
-//     }
-//
-//     if (tri_collision(win->triangles[TRI_PLAYER], win->triangles[TRI_APPLE])) {
-//         tri_move_random(win->triangles[TRI_APPLE]);
-//         ++points;
-//         printf("Points: %d\n", points);
-//     }
-// }
 
 // ---------------
 void processInput(world *w) {
@@ -96,22 +90,6 @@ void processInput(world *w) {
     if (glfwGetKey(w->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(w->window, 1);
     } 
-
-    // if (glfwGetKey(world->window, GLFW_KEY_D) == GLFW_PRESS) {
-    //     tri_move_right(world->triangles[TRI_PLAYER], movement);
-    // } 
-    //
-    // if (glfwGetKey(world->window, GLFW_KEY_A) == GLFW_PRESS) {
-    //     tri_move_left(world->triangles[TRI_PLAYER], movement);
-    // } 
-    //
-    // if (glfwGetKey(world->window, GLFW_KEY_W) == GLFW_PRESS) {
-    //     tri_move_up(world->triangles[TRI_PLAYER], movement);
-    // } 
-    //
-    // if (glfwGetKey(world->window, GLFW_KEY_S) == GLFW_PRESS) {
-    //     tri_move_down(world->triangles[TRI_PLAYER], movement);
-    // }
 
     if (glfwGetKey(w->window, GLFW_KEY_UP) == GLFW_PRESS) {
         cam_move_forward(w->camera);
@@ -129,7 +107,6 @@ void processInput(world *w) {
         cam_move_right(w->camera);
     }
 
-    // processCollision(world);
 }
 // ---------------
 
@@ -138,11 +115,13 @@ void w_loop(world *w) {
     glClearColor(0.1f, 0.4f, 0.2f, 0.0f);
     glEnable(GL_DEPTH_TEST);
 
+    shader_use(w->shader);
+
     while (!glfwWindowShouldClose(w->window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         processInput(w);
-        // win_draw_triangles(world);
+        w_render(w);
 
         // swap front and back buffers
         glfwSwapBuffers(w->window);
@@ -151,8 +130,24 @@ void w_loop(world *w) {
     }
 
     glfwTerminate();
+}
 
-    // free(world);
+void w_render(world *w) {
+    shader_use(w->shader);
+
+    cam_update(w->camera);
+    
+    glBindVertexArray(w->floor_VAO);
+
+    mat4 mat;
+    glm_mat4_identity(mat);
+    shader_set_mat4(w->shader, "model", mat);
+
+    float col[3] = {1.0f, 0.0f, 0.0f};
+    shader_set_vec3(w->shader, "color", col);
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
 }
 
 void w_free(world *w) {
