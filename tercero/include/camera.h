@@ -18,7 +18,7 @@ typedef struct camera {
 
     // float yaw;
     // float pitch;
-    //
+
     // float movementSpeed;
     // float mouseSensitivity;
     // float zoom;
@@ -26,6 +26,10 @@ typedef struct camera {
 } camera;
 
 camera* cam_create(shader *shader);
+
+void cam_move_up(camera *cam);
+
+void cam_move_down(camera *cam);
 
 void cam_move_forward(camera *cam);
 

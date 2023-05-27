@@ -91,6 +91,14 @@ void processInput(world *w) {
         glfwSetWindowShouldClose(w->window, 1);
     } 
 
+    if (glfwGetKey(w->window, GLFW_KEY_W) == GLFW_PRESS) {
+        cam_move_up(w->camera);
+    }
+
+    if (glfwGetKey(w->window, GLFW_KEY_S) == GLFW_PRESS) {
+        cam_move_down(w->camera);
+    }
+
     if (glfwGetKey(w->window, GLFW_KEY_UP) == GLFW_PRESS) {
         cam_move_forward(w->camera);
     }
