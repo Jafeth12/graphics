@@ -5,7 +5,8 @@
 #include <GLFW/glfw3.h>
 #include <cglm/cglm.h>
 
-#include <triangle.h>
+// #include <triangle.h>
+#include <block.h>
 #include <camera.h>
 
 #include <stdlib.h>
@@ -15,8 +16,8 @@
 #define TRI_PLAYER 0
 #define TRI_APPLE 1
 
-#define WIDTH 800
-#define HEIGHT 400
+#define WIDTH 1920
+#define HEIGHT 1080
 
 typedef struct world {
     GLFWwindow* window;
@@ -24,6 +25,7 @@ typedef struct world {
     shader *shader;
     GLuint floor_VBO;
     GLuint floor_VAO;
+    block *blocks[MAX_TRIANGLES];
     // triangle *triangles[MAX_TRIANGLES];
 } world;
 

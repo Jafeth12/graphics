@@ -1,3 +1,4 @@
+#include "block.h"
 #include <world.h>
 
 int points = 0;
@@ -29,9 +30,9 @@ world* w_create(char *title, char *vs_filename, char *fs_filename) {
     }
 
     world *w = malloc(sizeof(world));
-    // for (int i = 0; i < MAX_TRIANGLES; i++) {
-    //     w->triangles[i] = NULL;
-    // }
+    for (int i = 0; i < MAX_TRIANGLES; i++) {
+        w->blocks[i] = NULL;
+    }
 
     GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World", NULL, NULL);
     if (!window) {
@@ -56,6 +57,12 @@ world* w_create(char *title, char *vs_filename, char *fs_filename) {
     shader_use(sh);
 
     w->camera = cam_create(sh);
+
+    block *b1 = block_new(1.0, 0.0, 0.0, 1.0);
+    block *b2 = block_new(1.0, 1.0, 0.0, 1.0);
+
+    w->blocks[0] = b1;
+    w->blocks[1] = b2;
 
     float pos[] = {
         //6 porque son dos triangulos
@@ -92,27 +99,45 @@ void processInput(world *w) {
     } 
 
     if (glfwGetKey(w->window, GLFW_KEY_W) == GLFW_PRESS) {
-        cam_move_up(w->camera);
-    }
-
-    if (glfwGetKey(w->window, GLFW_KEY_S) == GLFW_PRESS) {
-        cam_move_down(w->camera);
-    }
-
-    if (glfwGetKey(w->window, GLFW_KEY_UP) == GLFW_PRESS) {
         cam_move_forward(w->camera);
     }
 
-    if (glfwGetKey(w->window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+    if (glfwGetKey(w->window, GLFW_KEY_S) == GLFW_PRESS) {
         cam_move_backward(w->camera);
     }
 
-    if (glfwGetKey(w->window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+    if (glfwGetKey(w->window, GLFW_KEY_A) == GLFW_PRESS) {
         cam_move_left(w->camera);
     }
 
-    if (glfwGetKey(w->window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+    if (glfwGetKey(w->window, GLFW_KEY_D) == GLFW_PRESS) {
         cam_move_right(w->camera);
+    }
+
+    if (glfwGetKey(w->window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+        cam_move_down(w->camera);
+    }
+
+    if (glfwGetKey(w->window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+        cam_move_up(w->camera);
+    }
+
+    if (glfwGetKey(w->window, GLFW_KEY_UP) == GLFW_PRESS) {
+        block_move_up(w->blocks[0]);
+        // cam_rotate_left(w->camera);
+    }
+
+    if (glfwGetKey(w->window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        // cam_rotate_right(w->camera);
+        block_move_down(w->blocks[0]);
+    }
+
+    if (glfwGetKey(w->window, GLFW_KEY_K) == GLFW_PRESS) {
+        block_move_up(w->blocks[1]);
+    }
+
+    if (glfwGetKey(w->window, GLFW_KEY_J) == GLFW_PRESS) {
+        block_move_down(w->blocks[1]);
     }
 
 }
@@ -144,17 +169,12 @@ void w_render(world *w) {
     shader_use(w->shader);
 
     cam_update(w->camera);
-    
-    glBindVertexArray(w->floor_VAO);
 
-    mat4 mat;
-    glm_mat4_identity(mat);
-    shader_set_mat4(w->shader, "model", mat);
-
-    float col[3] = {1.0f, 0.0f, 0.0f};
-    shader_set_vec3(w->shader, "color", col);
-
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    for (int i = 0; i < MAX_TRIANGLES; ++i) {
+        if (w->blocks[i] != NULL) {
+            block_draw(w->blocks[i], w->shader);
+        }
+    }
 
 }
 

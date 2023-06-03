@@ -8,7 +8,7 @@
 
 typedef struct camera {
     vec3 position;
-    vec3 front;
+    vec3 target;
     vec3 up;
 
     mat4 view;
@@ -16,10 +16,7 @@ typedef struct camera {
 
     shader *shader;
 
-    // float yaw;
-    // float pitch;
-
-    // float movementSpeed;
+    float movementSpeed;
     // float mouseSensitivity;
     // float zoom;
     // float fov;
@@ -38,6 +35,10 @@ void cam_move_backward(camera *cam);
 void cam_move_right(camera *cam);
 
 void cam_move_left(camera *cam);
+
+void cam_rotate_left(camera *cam);
+
+void cam_rotate_right(camera *cam);
 
 void cam_update(camera *cam);
 
