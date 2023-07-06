@@ -1,0 +1,14 @@
+-game
+    - world
+        - chunks
+            - block
+    - camera
+
+
+////
+-utils:
+    - vao
+    - vbo
+    - ebo
+    - shader
+    - ? obj_loader ?
