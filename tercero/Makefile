@@ -11,31 +11,36 @@ SRC_GLAD_DIR = ../glad/src
 
 LIBS = -lglfw -lGL -lm -lX11 -lXrandr -lpthread -ldl
 
-all: $(PROGRAM)
+all: game
 
-$(GLAD): $(SRC_GLAD_DIR)/$(GLAD).c
-	gcc -c -o $(GLAD).o $(INCLUDE_GLAD) $(SRC_GLAD_DIR)/$(GLAD).c
-#
+$(GLAD).o: $(SRC_GLAD_DIR)/$(GLAD).c
+	gcc -c -g $(INCLUDE_GLAD) $(SRC_GLAD_DIR)/$(GLAD).c
+
 # $(TRIANGLE): $(TRIANGLE).c $(GLAD)
 # 	gcc -c -o $(TRIANGLE).o $(INCLUDE) $(INCLUDE_GLAD) $(TRIANGLE).c
-#
-# $(SHADERS): $(SHADERS).c $(GLAD)
-# 	gcc -c -o $(SHADERS).o $(INCLUDE) $(INCLUDE_GLAD) $(SHADERS).c
-#
-# $(WINDOW): $(WINDOW).c $(SHADERS)
-# 	gcc -c -o $(WINDOW).o $(INCLUDE) $(INCLUDE_GLAD) $(WINDOW).c
+$(SHADERS).o: $(SHADERS).c 
+	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(SHADERS).c
 
-$(PROGRAM): $(PROGRAM).c $(CAMERA).c $(BLOCK).c $(SHADERS).c $(WINDOW).c $(GLAD)
-	gcc -g $(PROGRAM).c $(INCLUDE) $(INCLUDE_GLAD) -o $(PROGRAM).exe $(SHADERS).c $(BLOCK).c $(WINDOW).c $(CAMERA).c $(GLAD).o $(LIBS)
+$(CAMERA).o: $(CAMERA).c
+	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(CAMERA).c
 
-# $(PROGRAM): $(PROGRAM).c $(SHADERS) $(WINDOW) $(TRIANGLE)
-# 	gcc -g $(PROGRAM).c $(INCLUDE) $(INCLUDE_GLAD) -o $(PROGRAM) $(GLAD).o $(SHADERS).o $(WINDOW).o $(TRIANGLE).o $(LIBS)
+$(BLOCK).o: $(BLOCK).c
+	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(BLOCK).c
 
-run: $(PROGRAM)
-	./$(PROGRAM).exe
+$(WINDOW).o: $(WINDOW).c
+	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(WINDOW).c
 
-gdb: $(PROGRAM)
-	gdb ./$(PROGRAM).exe
+$(PROGRAM).o: $(PROGRAM).c
+	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(PROGRAM).c
+
+game: $(GLAD).o $(SHADERS).o $(CAMERA).o $(BLOCK).o $(WINDOW).o $(PROGRAM).o
+	gcc -o game.exe $(INCLUDE) $(INCLUDE_GLAD) out/$(GLAD).o $(SHADERS).o $(CAMERA).o $(BLOCK).o $(WINDOW).o $(PROGRAM).o $(LIBS)
+
+run: game
+	./game.exe
+
+gdb: game
+	gdb ./game.exe
 
 clean:
-	rm $(PROGRAM) *.o
+	rm *.exe *.o
