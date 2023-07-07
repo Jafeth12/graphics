@@ -1,7 +1,7 @@
 PROGRAM = main
 GLAD = glad
 SHADERS = shader
-WINDOW = world
+WORLD = world
 BLOCK = block
 CAMERA = camera
 
@@ -19,20 +19,20 @@ $(GLAD).o: $(SRC_GLAD_DIR)/$(GLAD).c
 $(SHADERS).o: $(SHADERS).c 
 	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(SHADERS).c
 
-$(CAMERA).o: $(CAMERA).c
-	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(CAMERA).c
+# $(CAMERA).o: $(CAMERA).c
+	# gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(CAMERA).c
 
-$(BLOCK).o: $(BLOCK).c
-	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(BLOCK).c
+# $(BLOCK).o: $(BLOCK).c
+# 	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(BLOCK).c
 
-$(WINDOW).o: $(WINDOW).c
-	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(WINDOW).c
+# $(WORLD).o: $(WORLD).c
+# 	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(WORLD).c
 
 $(PROGRAM).o: $(PROGRAM).c
 	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(PROGRAM).c
 
-game: $(GLAD).o $(SHADERS).o $(CAMERA).o $(BLOCK).o $(WINDOW).o $(PROGRAM).o
-	gcc -o game.exe $(INCLUDE) $(INCLUDE_GLAD) out/$(GLAD).o $(SHADERS).o $(CAMERA).o $(BLOCK).o $(WINDOW).o $(PROGRAM).o $(LIBS)
+game: $(GLAD).o $(SHADERS).o $(PROGRAM).o
+	gcc -o game.exe $(INCLUDE) $(INCLUDE_GLAD) $(GLAD).o $(SHADERS).o $(PROGRAM).o $(LIBS)
 
 run: game
 	./game.exe
