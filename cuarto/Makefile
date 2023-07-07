@@ -1,44 +1,34 @@
-PROGRAM = main
+CC = gcc
+
 GLAD = glad
-SHADERS = shader
-WORLD = world
-BLOCK = block
-CAMERA = camera
 
 INCLUDE = -Iinclude
 INCLUDE_GLAD = -I../glad/include
 SRC_GLAD_DIR = ../glad/src
 
-LIBS = -lglfw -lGL -lm -lX11 -lXrandr -lpthread -ldl
+SRCS := shader.c window.c main.c
+OBJS := $(GLAD).o $(SRCS:.c=.o)
+CFLAGS := -g -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-function -Wno-unused-value
+LDLIBS := -lglfw -lGL -lm -lX11 -lXrandr -lpthread -ldl
 
-all: game
+TARGET = game
+
+all: $(TARGET)
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) $(INCLUDE) $(INCLUDE_GLAD) $<
 
 $(GLAD).o: $(SRC_GLAD_DIR)/$(GLAD).c
-	gcc -c -g $(INCLUDE_GLAD) $(SRC_GLAD_DIR)/$(GLAD).c
+	$(CC) -c $(CFLAGS) $(INCLUDE_GLAD) $<
 
-$(SHADERS).o: $(SHADERS).c 
-	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(SHADERS).c
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) $(INCLUDE) $(INCLUDE_GLAD) $(CFLAGS) -o $(TARGET).exe $^ $(LDLIBS)
 
-# $(CAMERA).o: $(CAMERA).c
-	# gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(CAMERA).c
+run: $(TARGET)
+	./$(TARGET).exe
 
-# $(BLOCK).o: $(BLOCK).c
-# 	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(BLOCK).c
-
-# $(WORLD).o: $(WORLD).c
-# 	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(WORLD).c
-
-$(PROGRAM).o: $(PROGRAM).c
-	gcc -c -g $(INCLUDE) $(INCLUDE_GLAD) $(PROGRAM).c
-
-game: $(GLAD).o $(SHADERS).o $(PROGRAM).o
-	gcc -o game.exe $(INCLUDE) $(INCLUDE_GLAD) $(GLAD).o $(SHADERS).o $(PROGRAM).o $(LIBS)
-
-run: game
-	./game.exe
-
-gdb: game
-	gdb ./game.exe
+gdb: $(TARGET)
+	gdb ./$(TARGET).exe
 
 clean:
 	rm *.exe *.o

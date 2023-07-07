@@ -1,7 +1,7 @@
 #ifndef VAO_H
 #define VAO_H
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 #include "vbo.h"
 

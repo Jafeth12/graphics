@@ -1,7 +1,7 @@
 #ifndef VBO_H
 #define VBO_H
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 typedef struct vbo {
     GLuint handle;
