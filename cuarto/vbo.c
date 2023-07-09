@@ -10,6 +10,7 @@ void vbo_gen(char dynamic, vbo *vb) {
 vbo* vbo_new(char dynamic, unsigned int size, const GLvoid *data) {
     vbo *vb = malloc(sizeof(vbo));
     vbo_gen(dynamic, vb);
+    vbo_bind(vb);
     vbo_data(vb, size, data);
     return vb;
 }

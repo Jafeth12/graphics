@@ -6,6 +6,7 @@ blockmesh* bmesh_new(block *b) {
     bm->block = b;
 
     bm->vao = vao_new();
+    vao_bind(bm->vao);
 
     bm->vbo = vbo_new(0, BLOCK_VERTICES_SIZE, BLOCK_VERTICES);
 

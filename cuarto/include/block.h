@@ -1,6 +1,8 @@
 #ifndef BLOCK_H
 #define BLOCK_H
 
+#include <stdlib.h>
+
 extern float BLOCK_VERTICES[];
 extern unsigned int BLOCK_INDICES[];
 
@@ -12,8 +14,6 @@ extern unsigned int BLOCK_INDICES_COUNT;
 #define GRASS 0
 #define DIRT 1
 #define STONE 2
-
-#include <stdlib.h>
 
 typedef struct block {
     unsigned int id;

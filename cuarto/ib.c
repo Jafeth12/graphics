@@ -8,8 +8,8 @@ void ib_gen(char dynamic, ib *i_b) {
 ib* ib_new(char dynamic, unsigned int count, const GLuint *data) {
     ib *i_b = malloc(sizeof(ib));
     ib_gen(dynamic, i_b);
+    ib_bind(i_b);
     ib_data(i_b, count, data);
-
     return i_b;
 }
 

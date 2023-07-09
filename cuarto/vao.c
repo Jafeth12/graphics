@@ -2,7 +2,7 @@
 
 void vao_gen(vao *va) {
     glGenVertexArrays(1, &va->handle);
-    va->vbos = list_new(NULL);
+    va->vbos = NULL;
     va->vb_count = 0;
 }
 
