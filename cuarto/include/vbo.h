@@ -1,22 +1,30 @@
 #ifndef VBO_H
 #define VBO_H
 
+#include "vbo_element.h"
+#include "list.h"
+
 #include <glad/glad.h>
 
 typedef struct vbo {
     GLuint handle;
-    GLenum type;
-    GLboolean dynamic;
+    char dynamic;
+    size_t element_count;
+    list *elements;
 } vbo;
 
 #define ebo vbo
 
-void vbo_gen(GLsizei n, GLenum type, GLboolean dynamic, vbo *v);
+void vbo_gen(char dynamic, vbo *vb);
 
-void vbo_bind(vbo *v);
+vbo* vbo_new(char dynamic, unsigned int size, const GLvoid *data);
+
+void vbo_bind(vbo *vb);
 
 void vbo_unbind();
 
-void vbo_data(vbo *v, GLsizeiptr size, const GLvoid *data, GLenum usage);
+void vbo_data(vbo *vb, unsigned int size, const GLvoid *data);
+
+void vbo_add_element(vbo *vb, GLint size, GLenum type, char normalized, GLsizei stride);
 
 #endif

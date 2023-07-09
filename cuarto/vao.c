@@ -1,21 +1,59 @@
 #include "vao.h"
 
-void vao_gen(GLsizei n, vao *v) {
-    for (int i = 0; i < n; i++) {
-        glGenVertexArrays(1, &v->handle);
-    }
+void vao_gen(vao *va) {
+    glGenVertexArrays(1, &va->handle);
+    va->vbos = list_new(NULL);
+    va->vb_count = 0;
 }
 
-void vao_bind(vao *v) {
-    glBindVertexArray(v->handle);
+vao* vao_new() {
+    vao *va = malloc(sizeof(vao));
+    vao_gen(va);
+    return va;
+}
+
+void vao_bind(vao *va) {
+    glBindVertexArray(va->handle);
 }
 
 void vao_unbind() {
     glBindVertexArray(0);
 }
 
-void vao_attr(vbo *v, GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid *offset) {
-    vbo_bind(v);
+void vao_add_vbo(vao *va, vbo *vb) {
+    vao_bind(va);
+    vbo_bind(vb);
+
+    list_append(va->vbos, vb);
+    va->vb_count++;
+
+    list *e;
+    int i = 0;
+    void* offset = 0;
+    list_for_each(e, vb->elements) {
+        vbo_element *el = e->data;
+
+        vao_attr(i, el->count, el->type, el->normalized, el->stride, (void*)offset);
+
+        int sizeof_type = vbo_el_sizeof(el->type);
+        if (sizeof_type == 0) {
+            printf("ERROR: Unknown type %d\n", el->type);
+            exit(-1);
+        }
+
+        offset += el->count * sizeof_type;
+
+        glEnableVertexAttribArray(i);
+        ++i;
+    }
+}
+
+void vao_add_ib(vao *va, ib *i_b) {
+    vao_bind(va);
+    ib_bind(i_b);
+}
+
+void vao_attr(GLuint index, GLint size, GLenum type, char normalized, GLsizei stride, const void *offset) {
 
     // NOTE: glVertexAttribPointer will AUTO-CONVERT integer values to floating point.
     // Integer vertex attributes must be specified with glVertexAttribIPointer.
@@ -32,7 +70,7 @@ void vao_attr(vbo *v, GLuint index, GLint size, GLenum type, GLsizei stride, con
             glVertexAttribIPointer(index, size, type, stride, (void *) offset);
             break;
         default:
-            glVertexAttribPointer(index, size, type, GL_FALSE, stride, (void *) offset);
+            glVertexAttribPointer(index, size, type, normalized ? GL_TRUE : GL_FALSE, stride, (void *) offset);
             break;
     }
 

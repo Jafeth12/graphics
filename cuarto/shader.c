@@ -57,7 +57,7 @@ shader* shader_init(
     return sh;
 }
 
-void shader_use(shader *sh) {
+void shader_bind(shader *sh) {
     glUseProgram(sh->shader_program);
 }
 

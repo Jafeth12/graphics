@@ -6,13 +6,14 @@ INCLUDE = -Iinclude
 INCLUDE_GLAD = -I../glad/include
 SRC_GLAD_DIR = ../glad/src
 BIN_DIR = bin
-TARGET = $(BIN_DIR)/game.exe
+TARGET = $(BIN_DIR)/game
 
-SRCS := shader.c window.c main.c
+SRCS := shader.c list.c vbo_element.c vbo.c vao.c window.c main.c
 
 GLAD_OBJ := $(BIN_DIR)/$(GLAD).o
 OBJS := $(GLAD_OBJ) $(addprefix $(BIN_DIR)/,$(SRCS:.c=.o))
-CFLAGS := -g -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-function -Wno-unused-value
+OPTS := -O0
+CFLAGS := $(OPTS) -g -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-function -Wno-unused-value
 LDLIBS := -lglfw -lGL -lm -lX11 -lXrandr -lpthread -ldl
 
 $(TARGET): $(OBJS)

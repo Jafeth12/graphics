@@ -17,7 +17,7 @@ shader* shader_init( const char *vertex_shader_filename, const char *fragment_sh
 
 // ----------------------
 
-void shader_use(shader *s);
+void shader_bind(shader *s);
 
 void shader_set_bool(shader *s, const char *name, int value);
 

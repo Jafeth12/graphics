@@ -16,7 +16,7 @@ int win_init_glfw(void) {
     return 0;
 }
 
-window *win_create(GLuint width, GLuint height, const char *title, void (*custom_loop)(void)) {
+window *win_create(GLuint width, GLuint height, const char *title, void (*custom_loop)(void*arg), void* args) {
     if (win_init_glfw() < 0) return NULL;
 
     window *win = malloc(sizeof(window));
@@ -24,6 +24,7 @@ window *win_create(GLuint width, GLuint height, const char *title, void (*custom
     win->height = height;
     win->title = title;
     win->custom_loop = NULL;
+    win->custom_args = args;
 
     GLFWwindow *handle = glfwCreateWindow(width, height, title, NULL, NULL);
     win->handle = handle;
@@ -43,12 +44,12 @@ void win_loop(window *win) {
     glClearColor(0.2f, 1.0f, 1.0f, 0.0f);
     glEnable(GL_DEPTH_TEST);
 
-    void (*custom_loop)(void) = win->custom_loop;
+    void (*custom_loop)(void*arg) = win->custom_loop;
 
     while (!glfwWindowShouldClose(win->handle)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        if (custom_loop != NULL) (*custom_loop)();
+        if (custom_loop != NULL) (*custom_loop)(win->custom_args);
 
         // swap front and back buffers
         glfwSwapBuffers(win->handle);

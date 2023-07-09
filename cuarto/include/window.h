@@ -14,10 +14,11 @@ typedef struct window {
     const char *title;
 
     // custom loop that runs inside the window loop
-    void (*custom_loop)(void);
+    void (*custom_loop)(void*arg);
+    void *custom_args;
 } window;
 
-window *win_create(GLuint width, GLuint height, const char *title, void (*custom_loop)(void));
+window *win_create(GLuint width, GLuint height, const char *title, void (*custom_loop)(void*arg), void* args);
 
 int win_init_glfw(void);
 

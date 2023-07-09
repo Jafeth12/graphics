@@ -1,21 +1,38 @@
 #include "vbo.h"
 
-void vbo_gen(GLsizei n, GLenum type, GLboolean dynamic, vbo *v) {
-    for (int i = 0; i < n; i++) {
-        glGenBuffers(1, &v->handle);
-        v->type = type;
-        v->dynamic = dynamic;
-    }
+void vbo_gen(char dynamic, vbo *vb) {
+    glGenBuffers(1, &vb->handle);
+    vb->dynamic = dynamic;
+    vb->elements = list_new(NULL);
+    vb->element_count = 0;
 }
 
-void vbo_bind(vbo *v) {
-    glBindBuffer(v->type, v->handle);
+vbo* vbo_new(char dynamic, unsigned int size, const GLvoid *data) {
+    vbo *vb = malloc(sizeof(vbo));
+    vbo_gen(dynamic, vb);
+    vbo_data(vb, size, data);
+    return vb;
+}
+
+void vbo_bind(vbo *vb) {
+    glBindBuffer(GL_ARRAY_BUFFER, vb->handle);
 }
 
 void vbo_unbind() {
     glBindBuffer(0, 0);
 }
 
-void vbo_data(vbo *v, GLsizeiptr size, const GLvoid *data, GLenum usage) {
-    glBufferData(v->type, size, data, usage);
+void vbo_data(vbo *vb, unsigned int size, const GLvoid *data) {
+    glBufferData(GL_ARRAY_BUFFER, size, data, vb->dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+}
+
+void vbo_add_element(vbo *vb, GLint count, GLenum type, char normalized, GLsizei stride) {
+    vbo_element *el = malloc(sizeof(vbo_element));
+    el->count = count;
+    el->type = type;
+    el->normalized = normalized;
+    el->stride = stride;
+
+    list_append(vb->elements, el);
+    vb->element_count++;
 }
