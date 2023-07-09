@@ -13,7 +13,7 @@ block* block_new(unsigned int id, float pos[3]) {
 //---------
  
 unsigned int BLOCK_INDICES_COUNT = 36;
-unsigned int BLOCK_VERTICES_SIZE = 8 * sizeof(float);
+unsigned int BLOCK_VERTICES_SIZE = 24 * sizeof(float);
 unsigned int BLOCK_INDICES_SIZE = 36 * sizeof(unsigned int);
 
 float BLOCK_VERTICES[] = {

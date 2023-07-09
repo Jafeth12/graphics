@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "window.h"
+#include "game.h"
 
 int main(void) {
-    window *win = win_create(800, 600, "Hello World", NULL);
-    if (win == NULL) {
-        fprintf(stderr, "Error creating window\n");
+    game *g = game_init();
+    if (!g) {
+        fprintf(stderr, "Error creating game\n");
         return -1;
     }
 
-    win_loop(win);
-    win_destroy(win);
+    game_run(g);
+    game_destroy(g);
 
     return 0;
 }

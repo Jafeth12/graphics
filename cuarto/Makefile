@@ -8,7 +8,7 @@ SRC_GLAD_DIR = ../glad/src
 BIN_DIR = bin
 TARGET = $(BIN_DIR)/game
 
-SRCS := shader.c list.c vbo_element.c vbo.c vao.c window.c main.c
+SRCS := shader.c list.c vbo_element.c vbo.c ib.c vao.c window.c block.c blockmesh.c world.c game.c main.c
 
 GLAD_OBJ := $(BIN_DIR)/$(GLAD).o
 OBJS := $(GLAD_OBJ) $(addprefix $(BIN_DIR)/,$(SRCS:.c=.o))

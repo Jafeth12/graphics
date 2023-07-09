@@ -11,9 +11,9 @@ game *game_init() {
 
     g->world = world_new();
 
-    // world_add_block(g->world, GRASS, (float[3]){0.0f, 0.0f, 0.0f});
+    world_add_block(g->world, GRASS, (float[3]){0.0f, 0.0f, -5.0f});
 
-    g->sh = NULL;
+    game_add_shader(g, "shaders/vs.glsl", "shaders/fs.glsl");
 
     return g;
 }

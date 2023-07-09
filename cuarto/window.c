@@ -23,7 +23,7 @@ window *win_create(GLuint width, GLuint height, const char *title, void (*custom
     win->width = width;
     win->height = height;
     win->title = title;
-    win->custom_loop = NULL;
+    win->custom_loop = custom_loop;
     win->custom_args = args;
 
     GLFWwindow *handle = glfwCreateWindow(width, height, title, NULL, NULL);

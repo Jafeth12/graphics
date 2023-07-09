@@ -3,7 +3,7 @@
 void vbo_gen(char dynamic, vbo *vb) {
     glGenBuffers(1, &vb->handle);
     vb->dynamic = dynamic;
-    vb->elements = list_new(NULL);
+    vb->elements = NULL;
     vb->element_count = 0;
 }
 
@@ -33,6 +33,8 @@ void vbo_add_element(vbo *vb, GLint count, GLenum type, char normalized, GLsizei
     el->normalized = normalized;
     el->stride = stride;
 
-    list_append(vb->elements, el);
+    if (vb->elements == NULL) vb->elements = list_new(el);
+    else list_append(vb->elements, el);
+
     vb->element_count++;
 }

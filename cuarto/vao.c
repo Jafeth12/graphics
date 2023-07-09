@@ -24,7 +24,9 @@ void vao_add_vbo(vao *va, vbo *vb) {
     vao_bind(va);
     vbo_bind(vb);
 
-    list_append(va->vbos, vb);
+    if (va->vb_count == 0) va->vbos = list_new(vb);
+    else list_append(va->vbos, vb);
+
     va->vb_count++;
 
     list *e;

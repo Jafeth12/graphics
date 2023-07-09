@@ -2,14 +2,16 @@
 
 world* world_new() {
     world *w = malloc(sizeof(world));
-    w->blockmeshes = list_new(NULL);
+    w->blockmeshes = NULL;
 
     return w;
 }
 
 void world_add_block(world *w, unsigned int id, float pos[3]) {
     blockmesh *bm = bmesh_new_block(id, pos);
-    list_append(w->blockmeshes, bm);
+
+    if (w->blockmeshes == NULL) w->blockmeshes = list_new(bm);
+    else list_append(w->blockmeshes, bm);
 }
 
 void world_draw(world *w, shader *s) {
