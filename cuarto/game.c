@@ -1,7 +1,5 @@
 #include "game.h"
 
-float y_block = 0.0f;
-
 game *game_init() {
     game *g = malloc(sizeof(game));
 
@@ -11,12 +9,13 @@ game *game_init() {
         return 0;
     }
 
-    game_add_shader(g, "shaders/vs.glsl", "shaders/fs.glsl");
+    game_load_shaders(g);
+    // game_add_shader(g, "shaders/vs.glsl", "shaders/fs.glsl");
 
     g->cam = camera_create_perspective(70.0f, 0.1f, 100.0f, (float)GAME_WIDTH / (float)GAME_HEIGHT);
-    shader_bind(g->sh);
-    shader_set_mat4(g->sh, "view", g->cam->view);
-    shader_set_mat4(g->sh, "projection", g->cam->projection);
+
+    shader_set_mat4(g->shaders[SHADER_DEFAULT], "view", g->cam->view);
+    shader_set_mat4(g->shaders[SHADER_DEFAULT], "projection", g->cam->projection);
 
     g->world = world_new();
     g->pl = player_new((vec3){0.0f, 0.0f, 0.0f});
@@ -30,8 +29,10 @@ void game_run(game *g) {
     win_loop(g->win);
 }
 
-void game_add_shader(game *g, const char *vert_path, const char *frag_path) {
-    g->sh = shader_init(vert_path, frag_path);
+void game_load_shaders(game *g) {
+    g->shaders[SHADER_DEFAULT] = shader_init("shaders/vs.glsl", "shaders/fs.glsl");
+
+    // more to be added if needed
 }
 
 void game_process_input(game *g) {
@@ -65,7 +66,7 @@ void game_process_input(game *g) {
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_B) == GLFW_PRESS) {
-        world_add_block(g->world, GRASS, (float[3]){g->pl->position[0], g->pl->position[1], g->pl->position[2]});
+        world_add_block(g->world, GRASS, (float[3]){ceil(g->pl->position[0]), ceil(g->pl->position[1])-1, ceil(g->pl->position[2])});
     }
 
 }
@@ -88,11 +89,10 @@ void game_loop(game *g) {
     camera_update(g->cam);
 
     // esto hay que quitarlo de aqui. lo pongo porque quiero ver lo que estoy haciendo
-    shader_bind(g->sh);
-    shader_set_mat4(g->sh, "view", g->cam->view);
-    shader_set_mat4(g->sh, "projection", g->cam->projection);
+    shader_set_mat4(g->shaders[SHADER_DEFAULT], "view", g->cam->view);
+    shader_set_mat4(g->shaders[SHADER_DEFAULT], "projection", g->cam->projection);
 
-    world_draw(g->world, g->sh);
+    world_draw(g->world, g->shaders[SHADER_DEFAULT]);
 }
 
 // --------------------------------------------------

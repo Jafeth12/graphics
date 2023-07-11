@@ -15,19 +15,26 @@
 #define GAME_WIDTH 800
 #define GAME_HEIGHT 600
 
+enum SHADER_TYPE {
+    SHADER_DEFAULT = 0,
+    SHADER_COUNT
+    // to be continued... 
+};
+
 typedef struct game {
     window *win;
     world *world;
-    shader *sh;
+    // shader *sh;
     player *pl;
     camera *cam;
+    shader *shaders[SHADER_COUNT];
 } game;
 
 game *game_init();
 
 void game_run(game *g);
 
-void game_add_shader(game *g, const char *vert_path, const char *frag_path);
+void game_load_shaders(game *g);
 
 void game_loop(game *g);
 
