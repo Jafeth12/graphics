@@ -47,7 +47,7 @@ typedef struct camera {
     union {
         perspective_cam perspective;
         orthogongal_cam orthogongal;
-    } ;
+    };
 
 } camera;
 

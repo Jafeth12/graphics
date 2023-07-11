@@ -36,6 +36,8 @@ void game_run(game *g);
 
 void game_load_shaders(game *g);
 
+void game_update_first_person_camera(game *g);
+
 void game_loop(game *g);
 
 void game_process_input(game *g);

@@ -40,6 +40,11 @@ window *win_create(GLuint width, GLuint height, const char *title, void (*custom
     return win;
 }
 
+void win_mouse_set_grabbed(window *win, char grabbed) {
+    win->mouse_grabbed = grabbed;
+    glfwSetInputMode(win->handle, GLFW_CURSOR, grabbed ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+}
+
 void win_loop(window *win) {
     glClearColor(0.2f, 1.0f, 1.0f, 0.0f);
     glEnable(GL_DEPTH_TEST);

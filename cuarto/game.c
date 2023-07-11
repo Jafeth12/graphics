@@ -8,14 +8,11 @@ game *game_init() {
         fprintf(stderr, "Error creating window\n");
         return 0;
     }
+    win_mouse_set_grabbed(g->win, 1);
 
     game_load_shaders(g);
-    // game_add_shader(g, "shaders/vs.glsl", "shaders/fs.glsl");
 
     g->cam = camera_create_perspective(70.0f, 0.1f, 100.0f, (float)GAME_WIDTH / (float)GAME_HEIGHT);
-
-    shader_set_mat4(g->shaders[SHADER_DEFAULT], "view", g->cam->view);
-    shader_set_mat4(g->shaders[SHADER_DEFAULT], "projection", g->cam->projection);
 
     g->world = world_new();
     g->pl = player_new((vec3){0.0f, 0.0f, 0.0f});
@@ -35,10 +32,27 @@ void game_load_shaders(game *g) {
     // more to be added if needed
 }
 
+void game_update_first_person_camera(game *g) {
+    camera_set_position(g->cam, g->pl->position);
+    camera_update(g->cam);
+
+    shader_set_mat4(g->shaders[SHADER_DEFAULT], "view", g->cam->view);
+    shader_set_mat4(g->shaders[SHADER_DEFAULT], "projection", g->cam->projection);
+}
+
+
 void game_process_input(game *g) {
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(g->win->handle, 1);
+    }
+
+    if (glfwGetKey(g->win->handle, GLFW_KEY_P) == GLFW_PRESS) {
+        printf("x: %f, y: %f, z: %f\n", g->pl->position[0], g->pl->position[1], g->pl->position[2]);
+    }
+
+    if (glfwGetKey(g->win->handle, GLFW_KEY_M) == GLFW_PRESS) {
+        win_mouse_set_grabbed(g->win, !g->win->mouse_grabbed);
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_W) == GLFW_PRESS) {
@@ -84,13 +98,7 @@ void game_destroy(game *g) {
 
 void game_loop(game *g) {
     game_process_input(g);
-
-    camera_set_position(g->cam, g->pl->position);
-    camera_update(g->cam);
-
-    // esto hay que quitarlo de aqui. lo pongo porque quiero ver lo que estoy haciendo
-    shader_set_mat4(g->shaders[SHADER_DEFAULT], "view", g->cam->view);
-    shader_set_mat4(g->shaders[SHADER_DEFAULT], "projection", g->cam->projection);
+    game_update_first_person_camera(g);
 
     world_draw(g->world, g->shaders[SHADER_DEFAULT]);
 }
