@@ -36,7 +36,7 @@ void bmesh_draw(blockmesh *bm, shader *sh) {
     glm_translate_make(mat, bm->block->pos);
     shader_set_mat4(sh, "model", mat);
 
-    float color[3] = {1.0f, 0.0f, 0.0f};
+    float color[3] = {0.0f, 0.7f, 0.0f};
     shader_set_vec3(sh, "color", color);
 
     vao_bind(bm->vao);

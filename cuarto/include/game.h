@@ -6,14 +6,21 @@
 
 #include "window.h"
 #include "world.h"
+#include "camera.h"
+#include "player.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+
+#define GAME_WIDTH 800
+#define GAME_HEIGHT 600
 
 typedef struct game {
     window *win;
     world *world;
     shader *sh;
+    player *pl;
+    camera *cam;
 } game;
 
 game *game_init();
