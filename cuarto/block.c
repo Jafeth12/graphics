@@ -1,8 +1,8 @@
 #include "block.h"
 
-block* block_new(unsigned int id, float pos[3]) {
+block* block_new(enum block_type type, float pos[3]) {
     block *b = malloc(sizeof(block));
-    b->id = id;
+    b->type = type;
     b->pos[0] = pos[0];
     b->pos[1] = pos[1];
     b->pos[2] = pos[2];
@@ -13,6 +13,8 @@ block* block_new(unsigned int id, float pos[3]) {
 //---------
  
 unsigned int BLOCK_INDICES_COUNT = 36;
+unsigned int BLOCK_VERTICES_COUNT = 24;
+
 unsigned int BLOCK_VERTICES_SIZE = 24 * sizeof(float);
 unsigned int BLOCK_INDICES_SIZE = 36 * sizeof(unsigned int);
 

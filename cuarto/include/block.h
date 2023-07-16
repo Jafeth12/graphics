@@ -10,16 +10,19 @@ extern unsigned int BLOCK_VERTICES_SIZE;
 extern unsigned int BLOCK_INDICES_SIZE;
 
 extern unsigned int BLOCK_INDICES_COUNT;
+extern unsigned int BLOCK_VERTICES_COUNT;
 
-#define GRASS 0
-#define DIRT 1
-#define STONE 2
+enum block_type {
+    GRASS = 0,
+    DIRT,
+    STONE
+};
 
 typedef struct block {
-    unsigned int id;
+    enum block_type type;
     float pos[3];
 } block;
 
-block* block_new(unsigned int id, float pos[3]);
+block* block_new(enum block_type type, float pos[3]);
 
 #endif

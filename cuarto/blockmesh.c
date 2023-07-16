@@ -23,8 +23,8 @@ blockmesh* bmesh_new(block *b) {
     return bm;
 }
 
-blockmesh* bmesh_new_block(unsigned int id, float pos[3]) {
-    block *b = block_new(id, pos);
+blockmesh* bmesh_new_block(enum block_type type, float pos[3]) {
+    block *b = block_new(type, pos);
     return bmesh_new(b);
 }
 

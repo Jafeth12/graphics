@@ -27,6 +27,7 @@ typedef struct game {
     player *pl;
     camera *cam;
     shader *shaders[SHADER_COUNT];
+    char needs_redraw;
 } game;
 
 game *game_init();

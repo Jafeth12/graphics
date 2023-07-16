@@ -16,8 +16,10 @@ game *game_init() {
 
     g->world = world_new();
     g->pl = player_new((vec3){0.0f, 0.0f, 0.0f});
+    g->needs_redraw = 1;
 
-    world_add_block(g->world, GRASS, (float[3]){0.0f, 0.0f, 0.0f});
+    // world_add_block(g->world, GRASS, (float[3]){0.0f, 0.0f, 0.0f});
+    world_add_chunk(g->world, (float[3]){0.0f, 0.0f, 0.0f});
 
     return g;
 }
@@ -56,26 +58,32 @@ void game_process_input(game *g) {
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_W) == GLFW_PRESS) {
         player_move_forward(g->pl);
+        g->needs_redraw = 1;
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_S) == GLFW_PRESS) {
         player_move_backward(g->pl);
+        g->needs_redraw = 1;
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_A) == GLFW_PRESS) {
         player_move_left(g->pl);
+        g->needs_redraw = 1;
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_D) == GLFW_PRESS) {
         player_move_right(g->pl);
+        g->needs_redraw = 1;
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_SPACE) == GLFW_PRESS) {
         player_move_up(g->pl);
+        g->needs_redraw = 1;
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
         player_move_down(g->pl);
+        g->needs_redraw = 1;
     }
 
     // if (glfwGetKey(g->win->handle, GLFW_KEY_LEFT) == GLFW_PRESS) {
@@ -96,6 +104,7 @@ void game_process_input(game *g) {
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_B) == GLFW_PRESS) {
         world_add_block(g->world, GRASS, (float[3]){ceil(g->pl->position[0]), ceil(g->pl->position[1])-1, ceil(g->pl->position[2])});
+        g->needs_redraw = 1;
     }
 
 }
@@ -116,6 +125,11 @@ void game_loop(game *g) {
     game_update_first_person_camera(g);
 
     world_draw(g->world, g->shaders[SHADER_DEFAULT]);
+
+    // if (g->needs_redraw) {
+    //     world_draw(g->world, g->shaders[SHADER_DEFAULT]);
+    //     g->needs_redraw = 0;
+    // }
 }
 
 // --------------------------------------------------
