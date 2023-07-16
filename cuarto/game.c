@@ -12,7 +12,7 @@ game *game_init() {
 
     game_load_shaders(g);
 
-    g->cam = camera_create_perspective(70.0f, 0.1f, 100.0f, (float)GAME_WIDTH / (float)GAME_HEIGHT);
+    g->cam = camera_create_perspective(45.0f, 0.1f, 100.0f, (float)GAME_WIDTH / (float)GAME_HEIGHT);
 
     g->world = world_new();
     g->pl = player_new((vec3){0.0f, 0.0f, 0.0f});
@@ -39,7 +39,6 @@ void game_update_first_person_camera(game *g) {
     shader_set_mat4(g->shaders[SHADER_DEFAULT], "view", g->cam->view);
     shader_set_mat4(g->shaders[SHADER_DEFAULT], "projection", g->cam->projection);
 }
-
 
 void game_process_input(game *g) {
 
@@ -79,6 +78,22 @@ void game_process_input(game *g) {
         player_move_down(g->pl);
     }
 
+    // if (glfwGetKey(g->win->handle, GLFW_KEY_LEFT) == GLFW_PRESS) {
+    //     g->cam->perspective.yaw -= 0.5f;
+    // }
+    //
+    // if (glfwGetKey(g->win->handle, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+    //     g->cam->perspective.yaw += 0.5f;
+    // }
+    //
+    // if (glfwGetKey(g->win->handle, GLFW_KEY_UP) == GLFW_PRESS) {
+    //     g->cam->perspective.pitch += 0.5f;
+    // }
+    //
+    // if (glfwGetKey(g->win->handle, GLFW_KEY_DOWN) == GLFW_PRESS) {
+    //     g->cam->perspective.pitch -= 0.5f;
+    // }
+
     if (glfwGetKey(g->win->handle, GLFW_KEY_B) == GLFW_PRESS) {
         world_add_block(g->world, GRASS, (float[3]){ceil(g->pl->position[0]), ceil(g->pl->position[1])-1, ceil(g->pl->position[2])});
     }
@@ -90,7 +105,7 @@ void game_destroy(game *g) {
     win_destroy(g->win);
     player_destroy(g->pl);
     camera_destroy(g->cam);
-    // shader_destroy(g->sh);
+    // shader_destroy(g->shaders[SHADER_DEFAULT]);
     free(g);
 }
 

@@ -14,11 +14,11 @@ void world_add_block(world *w, unsigned int id, float pos[3]) {
     else list_append(w->blockmeshes, bm);
 }
 
-void world_draw(world *w, shader *s) {
+void world_draw(world *w, shader *sh) {
     list *element;
     list_for_each(element, w->blockmeshes) {
         blockmesh *bm = element->data;
-        bmesh_draw(bm, s);
+        bmesh_draw(bm, sh);
     }
 }
 

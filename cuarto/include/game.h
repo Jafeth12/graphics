@@ -24,7 +24,6 @@ enum SHADER_TYPE {
 typedef struct game {
     window *win;
     world *world;
-    // shader *sh;
     player *pl;
     camera *cam;
     shader *shaders[SHADER_COUNT];

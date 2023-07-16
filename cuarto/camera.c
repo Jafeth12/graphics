@@ -27,7 +27,7 @@ camera* camera_create_perspective(float fov, float near, float far, float aspect
     cam->perspective.far = far;
     cam->perspective.aspect_ratio = aspect_ratio;
 
-    cam->perspective.yaw = 0.0f;
+    cam->perspective.yaw = -90.0f;
     cam->perspective.pitch = 0.0f;
 
     glm_perspective(fov, aspect_ratio, near, far, cam->projection);
@@ -66,8 +66,21 @@ void camera_update(camera* cam) {
 void camera_perspective_update(camera *cam) {
     if (cam->type != PERSPECTIVE) return;
 
+    // cam->direction[0] = cos(glm_rad(cam->perspective.yaw)) * cos(glm_rad(cam->perspective.pitch));
+    // cam->direction[1] = sin(glm_rad(cam->perspective.pitch));
+    // cam->direction[2] = sin(glm_rad(cam->perspective.yaw)) * cos(glm_rad(cam->perspective.pitch));
+    // glm_vec3_normalize(cam->direction);
+    //
+    // glm_vec3_cross(cam->direction, cam->up, cam->right);
+    // glm_vec3_cross(cam->right, cam->direction, cam->up);
+    //
+    // vec3 center;
+    // glm_vec3_add(cam->position, cam->direction, center);
+
     glm_mat4_identity(cam->view);
     glm_translate(cam->view, (vec3){-cam->position[0], -cam->position[1], -cam->position[2]});
+
+    // glm_lookat(cam->position, center, cam->up, cam->view);
 }
 
 void camera_orthogongal_update(camera *cam) {

@@ -9,8 +9,8 @@ int win_init_glfw(void) {
         return -1;
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     return 0;
@@ -51,8 +51,16 @@ void win_loop(window *win) {
 
     void (*custom_loop)(void*arg) = win->custom_loop;
 
+    float last_frame = 0.0f;
+    float delta_time = 0.0f;
+
     while (!glfwWindowShouldClose(win->handle)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        float current_frame = glfwGetTime();
+        delta_time = current_frame - last_frame;
+        last_frame = current_frame;
+        win->delta_time = delta_time;
 
         if (custom_loop != NULL) (*custom_loop)(win->custom_args);
 
