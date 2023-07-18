@@ -9,8 +9,11 @@ chunk* chunk_new(float pos[3]) {
     for (int x = 0; x < CHUNK_SIZE; x++) {
         for (int y = 0; y < CHUNK_SIZE; y++) {
             for (int z = 0; z < CHUNK_SIZE; z++) {
-                enum block_type type = GRASS;
-                if (y >= 0) type = AIR;
+                enum block_type type = AIR;
+                if (y <= 0) {
+                    type = GRASS;
+                    c->solid_blocks_count++;
+                }
 
                 c->blocks[x][y][z] = block_new(type, (vec3){x, y, z});
             }

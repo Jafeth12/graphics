@@ -12,8 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define GAME_WIDTH 800
-#define GAME_HEIGHT 600
+#define GAME_WIDTH 1920
+#define GAME_HEIGHT 1080
 
 enum SHADER_TYPE {
     SHADER_DEFAULT = 0,

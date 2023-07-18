@@ -6,10 +6,13 @@
 #include "list.h"
 #include "shader.h"
 
+#define MAX_CHUNKS 10
+
 typedef struct world {
     size_t block_count;
     list *blockmeshes;
-    list *chunkmeshes;
+    // list *chunkmeshes;
+    chunkmesh* chunkmeshes[10][10];
 } world;
 
 world* world_new();

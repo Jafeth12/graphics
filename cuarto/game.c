@@ -10,22 +10,31 @@ game *game_init() {
     }
     win_mouse_set_grabbed(g->win, 1);
 
+    glEnable(GL_DEBUG_OUTPUT);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // normal
+
     game_load_shaders(g);
 
-    g->cam = camera_create_perspective(45.0f, 0.1f, 100.0f, (float)GAME_WIDTH / (float)GAME_HEIGHT);
+    g->cam = camera_create_perspective(70.0f, 0.1f, 100.0f, (float)GAME_WIDTH / (float)GAME_HEIGHT);
 
     g->world = world_new();
     g->pl = player_new((vec3){0.0f, 0.0f, 0.0f});
     g->needs_redraw = 1;
 
     // world_add_block(g->world, GRASS, (float[3]){0.0f, 0.0f, 0.0f});
-    // world_add_chunk(g->world, (float[3]){0.0f, 0.0f, 0.0f});
+    world_add_chunk(g->world, (float[3]){0.0f, 0.0f, 0.0f});
 
-    for (int x = 0; x < CHUNK_SIZE; x++) {
-        for (int z = 0; z < CHUNK_SIZE; ++z) {
-            world_add_block(g->world, GRASS, (float[3]){x, 0.0f, z});
-        }
-    }
+    // for (int x = 0; x < CHUNK_SIZE; x++) {
+    //     for (int y = 0; y < CHUNK_SIZE; ++y) {
+    //         for (int z = 0; z < CHUNK_SIZE; ++z) {
+    //             enum block_type type = GRASS;
+    //             if (y > 0) type = AIR;
+    //
+    //             world_add_block(g->world, type, (float[3]){x, y, z});
+    //         }
+    //     }
+    // }
 
     return g;
 }
@@ -44,6 +53,7 @@ void game_update_first_person_camera(game *g) {
     camera_set_position(g->cam, g->pl->position);
     camera_update(g->cam);
 
+    shader_bind(g->shaders[SHADER_DEFAULT]);
     shader_set_mat4(g->shaders[SHADER_DEFAULT], "view", g->cam->view);
     shader_set_mat4(g->shaders[SHADER_DEFAULT], "projection", g->cam->projection);
 }

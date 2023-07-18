@@ -77,8 +77,8 @@ void camera_perspective_update(camera *cam) {
     // vec3 center;
     // glm_vec3_add(cam->position, cam->direction, center);
 
-    glm_mat4_identity(cam->view);
-    glm_translate(cam->view, (vec3){-cam->position[0], -cam->position[1], -cam->position[2]});
+    // glm_mat4_identity(cam->view);
+    glm_translate_make(cam->view, (vec3){-cam->position[0], -cam->position[1], -cam->position[2]});
 
     // glm_lookat(cam->position, center, cam->up, cam->view);
 }
@@ -88,8 +88,8 @@ void camera_orthogongal_update(camera *cam) {
 
     // M_PI_2 <- existe
 
-    glm_mat4_identity(cam->view);
-    glm_translate(cam->view, (vec3){-cam->position[0], -cam->position[1], -cam->position[2]});
+    // glm_mat4_identity(cam->view);
+    glm_translate_make(cam->view, (vec3){-cam->position[0], -cam->position[1], -cam->position[2]});
 
     // TODO lo demas xdxd
 }

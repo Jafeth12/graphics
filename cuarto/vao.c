@@ -45,7 +45,9 @@ void vao_add_vbo(vao *va, vbo *vb) {
 
         offset += el->count * sizeof_type;
 
-        glEnableVertexAttribArray(i);
+        // glEnableVertexAttribArray(i);
+
+        // printf("error al add elemento (vao_add_vbo) al vao de cmesh: %d\n", glGetError());
         ++i;
     }
 }

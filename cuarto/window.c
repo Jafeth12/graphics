@@ -9,8 +9,12 @@ int win_init_glfw(void) {
         return -1;
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     return 0;
@@ -42,7 +46,7 @@ window *win_create(GLuint width, GLuint height, const char *title, void (*custom
 
 void win_mouse_set_grabbed(window *win, char grabbed) {
     win->mouse_grabbed = grabbed;
-    glfwSetInputMode(win->handle, GLFW_CURSOR, grabbed ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+    // glfwSetInputMode(win->handle, GLFW_CURSOR, grabbed ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
 }
 
 void win_loop(window *win) {
@@ -57,10 +61,10 @@ void win_loop(window *win) {
     while (!glfwWindowShouldClose(win->handle)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        float current_frame = glfwGetTime();
-        delta_time = current_frame - last_frame;
-        last_frame = current_frame;
-        win->delta_time = delta_time;
+        // float current_frame = glfwGetTime();
+        // delta_time = current_frame - last_frame;
+        // last_frame = current_frame;
+        // win->delta_time = delta_time;
 
         if (custom_loop != NULL) (*custom_loop)(win->custom_args);
 

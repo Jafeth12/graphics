@@ -12,6 +12,7 @@ typedef struct chunk {
     // block** blocks;
     block* blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
     float pos[3];
+    unsigned int solid_blocks_count;
 } chunk;
 
 chunk* chunk_new(float pos[3]);
