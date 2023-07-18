@@ -6,10 +6,11 @@
 #include <stdlib.h>
 #include <cglm/cglm.h>
 
-#define CHUNK_SIZE 4
+#define CHUNK_SIZE 16
 
 typedef struct chunk {
-    block** blocks;
+    // block** blocks;
+    block* blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
     float pos[3];
 } chunk;
 

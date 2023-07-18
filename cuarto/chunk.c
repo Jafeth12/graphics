@@ -4,11 +4,15 @@ chunk* chunk_new(float pos[3]) {
     chunk *c = malloc(sizeof(chunk));
     glm_vec3_copy(pos, c->pos);
 
-    c->blocks = malloc(CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * sizeof(block*));
+    // c->blocks = malloc(CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * sizeof(block*));
+
     for (int x = 0; x < CHUNK_SIZE; x++) {
         for (int y = 0; y < CHUNK_SIZE; y++) {
             for (int z = 0; z < CHUNK_SIZE; z++) {
-                c->blocks[x + y * CHUNK_SIZE + z * CHUNK_SIZE * CHUNK_SIZE] = block_new(GRASS, (vec3){x, y, z});
+                enum block_type type = GRASS;
+                if (y >= 0) type = AIR;
+
+                c->blocks[x][y][z] = block_new(type, (vec3){x, y, z});
             }
         }
     }
@@ -17,5 +21,5 @@ chunk* chunk_new(float pos[3]) {
 }
 
 block* chunk_get_block(chunk* c, int x, int y, int z) {
-    return c->blocks[x + y * CHUNK_SIZE + z * CHUNK_SIZE * CHUNK_SIZE];
+    return c->blocks[x][y][z];
 }

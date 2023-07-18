@@ -15,7 +15,8 @@ extern unsigned int BLOCK_VERTICES_COUNT;
 enum block_type {
     GRASS = 0,
     DIRT,
-    STONE
+    STONE,
+    AIR
 };
 
 typedef struct block {

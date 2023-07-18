@@ -12,7 +12,7 @@ SRCS := $(wildcard *.c)
 
 GLAD_OBJ := $(BIN_DIR)/$(GLAD).o
 OBJS := $(GLAD_OBJ) $(addprefix $(BIN_DIR)/,$(SRCS:.c=.o))
-OPTS := -O0
+OPTS := -O3
 CFLAGS := $(OPTS) -g -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-function -Wno-unused-value
 LDLIBS := -lglfw -lGL -lm -lX11 -lXrandr -lpthread -ldl
 
