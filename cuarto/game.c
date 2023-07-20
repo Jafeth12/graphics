@@ -10,31 +10,21 @@ game *game_init() {
     }
     win_mouse_set_grabbed(g->win, 1);
 
-    glEnable(GL_DEBUG_OUTPUT);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
     // glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // normal
 
     game_load_shaders(g);
 
-    g->cam = camera_create_perspective(70.0f, 0.1f, 100.0f, (float)GAME_WIDTH / (float)GAME_HEIGHT);
+    g->pl = player_new((vec3){0.0f, 2.0f, 0.0f});
+    g->cam = camera_create_perspective(70.0f, 0.1f, 100.0f, (float)GAME_WIDTH / (float)GAME_HEIGHT, g->pl->direction);
 
     g->world = world_new();
-    g->pl = player_new((vec3){0.0f, 0.0f, 0.0f});
-    g->needs_redraw = 1;
 
-    // world_add_block(g->world, GRASS, (float[3]){0.0f, 0.0f, 0.0f});
-    world_add_chunk(g->world, (float[3]){0.0f, 0.0f, 0.0f});
-
-    // for (int x = 0; x < CHUNK_SIZE; x++) {
-    //     for (int y = 0; y < CHUNK_SIZE; ++y) {
-    //         for (int z = 0; z < CHUNK_SIZE; ++z) {
-    //             enum block_type type = GRASS;
-    //             if (y > 0) type = AIR;
-    //
-    //             world_add_block(g->world, type, (float[3]){x, y, z});
-    //         }
-    //     }
-    // }
+    for (int i = 0; i < 5; ++i) {
+        for (int j = 0; j < 5; ++j) {
+            world_add_chunk(g->world, i, j);
+        }
+    }
 
     return g;
 }
@@ -53,6 +43,8 @@ void game_update_first_person_camera(game *g) {
     camera_set_position(g->cam, g->pl->position);
     camera_update(g->cam);
 
+    glm_vec3_copy(g->cam->direction, g->pl->direction);
+
     shader_bind(g->shaders[SHADER_DEFAULT]);
     shader_set_mat4(g->shaders[SHADER_DEFAULT], "view", g->cam->view);
     shader_set_mat4(g->shaders[SHADER_DEFAULT], "projection", g->cam->projection);
@@ -65,7 +57,27 @@ void game_process_input(game *g) {
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_P) == GLFW_PRESS) {
+        printf("------------------------\n");
+        // world position
         printf("x: %f, y: %f, z: %f\n", g->pl->position[0], g->pl->position[1], g->pl->position[2]);
+
+        player *p = g->pl;
+        unsigned player_world_pos[3];
+        player_world_pos[0] = floor(player_get_x(p));
+        player_world_pos[1] = floor(player_get_y(p));
+        player_world_pos[2] = floor(player_get_z(p));
+
+        // block position
+        printf("x: %d, y: %d, z: %d\n", player_world_pos[0], player_world_pos[1], player_world_pos[2]);
+
+
+        unsigned offset_x, offset_z;
+        offset_x = player_world_pos[0]/CHUNK_SIZE;
+        offset_z = player_world_pos[2]/CHUNK_SIZE;
+
+        // chunk position
+        printf("x: %d, z: %d\n", offset_x, offset_z);
+        printf("------------------------\n");
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_M) == GLFW_PRESS) {
@@ -96,13 +108,15 @@ void game_process_input(game *g) {
         player_move_down(g->pl);
     }
 
-    // if (glfwGetKey(g->win->handle, GLFW_KEY_LEFT) == GLFW_PRESS) {
-    //     g->cam->perspective.yaw -= 0.5f;
-    // }
-    //
-    // if (glfwGetKey(g->win->handle, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-    //     g->cam->perspective.yaw += 0.5f;
-    // }
+    if (glfwGetKey(g->win->handle, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        g->cam->perspective.yaw -= 0.8f;
+        printf("yaw: %f\n", g->cam->perspective.yaw);
+    }
+
+    if (glfwGetKey(g->win->handle, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+        g->cam->perspective.yaw += 0.8f;
+        printf("yaw: %f\n", g->cam->perspective.yaw);
+    }
     //
     // if (glfwGetKey(g->win->handle, GLFW_KEY_UP) == GLFW_PRESS) {
     //     g->cam->perspective.pitch += 0.5f;
@@ -127,13 +141,51 @@ void game_destroy(game *g) {
     free(g);
 }
 
+void game_world_update(game *g) {
+    world *w = g->world;
+    player *p = g->pl;
+
+    unsigned player_world_pos[3];
+    player_world_pos[0] = floor(player_get_x(p));
+    player_world_pos[1] = floor(player_get_y(p));
+    player_world_pos[2] = floor(player_get_z(p));
+
+    unsigned offset_x, offset_z;
+    offset_x = player_world_pos[0]/CHUNK_SIZE;
+    offset_z = player_world_pos[2]/CHUNK_SIZE;
+
+    if (world_get_chunk(w, offset_x, offset_z) == NULL) world_add_chunk(w, offset_x, offset_z);
+}
+
 // --------------------------------------------------
 
 void game_loop(game *g) {
     game_process_input(g);
     game_update_first_person_camera(g);
-
+    game_world_update(g);
     world_draw(g->world, g->shaders[SHADER_DEFAULT]);
+
+        printf("------------------------\n");
+        // world position
+        printf("x: %f, y: %f, z: %f\n", g->pl->position[0], g->pl->position[1], g->pl->position[2]);
+
+        player *p = g->pl;
+        unsigned player_world_pos[3];
+        player_world_pos[0] = floor(player_get_x(p));
+        player_world_pos[1] = floor(player_get_y(p));
+        player_world_pos[2] = floor(player_get_z(p));
+
+        // block position
+        printf("x: %d, y: %d, z: %d\n", player_world_pos[0], player_world_pos[1], player_world_pos[2]);
+
+
+        unsigned offset_x, offset_z;
+        offset_x = player_world_pos[0]/CHUNK_SIZE;
+        offset_z = player_world_pos[2]/CHUNK_SIZE;
+
+        // chunk position
+        printf("x: %d, z: %d\n", offset_x, offset_z);
+        printf("------------------------\n");
 
 }
 

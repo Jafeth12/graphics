@@ -9,13 +9,12 @@
 #define CHUNK_SIZE 16
 
 typedef struct chunk {
-    // block** blocks;
     block* blocks[CHUNK_SIZE][CHUNK_SIZE][CHUNK_SIZE];
-    float pos[3];
+    float offset[2];
     unsigned int solid_blocks_count;
 } chunk;
 
-chunk* chunk_new(float pos[3]);
+chunk* chunk_new(unsigned offset_x, unsigned offset_z);
 
 block* chunk_get_block(chunk* c, int x, int y, int z);
 

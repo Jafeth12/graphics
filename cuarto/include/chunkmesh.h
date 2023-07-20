@@ -19,7 +19,7 @@ typedef struct chunkmesh {
 
 chunkmesh* cmesh_new(chunk* chunk);
 
-chunkmesh* cmesh_new_chunk(float pos[3]);
+chunkmesh* cmesh_new_chunk(unsigned offset_x, unsigned offset_y);
 
 void cmesh_draw(chunkmesh* chunkmesh, shader* shader);
 

@@ -1,8 +1,10 @@
 #include "chunk.h"
 
-chunk* chunk_new(float pos[3]) {
+chunk* chunk_new(unsigned offset_x, unsigned offset_z) {
     chunk *c = malloc(sizeof(chunk));
-    glm_vec3_copy(pos, c->pos);
+    c->offset[0] = offset_x;
+    c->offset[1] = offset_z;
+    c->solid_blocks_count = 0;
 
     // c->blocks = malloc(CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * sizeof(block*));
 

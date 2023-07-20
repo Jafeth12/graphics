@@ -5,12 +5,19 @@
 
 typedef struct player {
     vec3 position;
+    vec3 direction;
     float speed;
 } player;
 
 player* player_new(vec3 position);
 
 void player_destroy(player *p);
+
+float player_get_x(player *p);
+
+float player_get_y(player *p);
+
+float player_get_z(player *p);
 
 // ---------------
 

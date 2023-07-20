@@ -21,7 +21,9 @@ void world_add_block(world *w, unsigned int id, float pos[3]);
 
 void world_remove_block(world *w, float pos[3]);
 
-void world_add_chunk(world *w, float pos[3]);
+void world_add_chunk(world *w, int offset_x, int offset_y);
+
+chunkmesh* world_get_chunk(world *w, int x, int y);
 
 void world_draw(world *w, shader *s);
 

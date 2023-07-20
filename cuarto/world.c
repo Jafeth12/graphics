@@ -21,13 +21,12 @@ void world_add_block(world *w, unsigned int id, float pos[3]) {
     else list_append(w->blockmeshes, bm);
 }
 
-void world_add_chunk(world *w, float pos[3]) {
-    chunkmesh *cm = cmesh_new_chunk(pos);
+void world_add_chunk(world *w, int offset_x, int offset_z) {
+    if (offset_x >= MAX_CHUNKS || offset_z >= MAX_CHUNKS) return;
+    if (offset_x < 0 || offset_z < 0) return;
 
-    w->chunkmeshes[(int)ceil(pos[0])][(int)ceil(pos[1])] = cm;
-
-    // if (w->chunkmeshes == NULL) w->chunkmeshes = list_new(cm);
-    // else list_append(w->chunkmeshes, cm);
+    chunkmesh *cm = cmesh_new_chunk(offset_x, offset_z);
+    w->chunkmeshes[offset_x][offset_z] = cm;
 }
 
 void world_draw(world *w, shader *sh) {
@@ -37,11 +36,20 @@ void world_draw(world *w, shader *sh) {
         bmesh_draw(bm, sh);
     }
 
+    float r, g, b;
+    r = g = b = 0;
+
     for (int i = 0; i < MAX_CHUNKS; ++i) {
         for (int j = 0; j < MAX_CHUNKS; ++j) {
-            chunkmesh *cm = w->chunkmeshes[i][j];
-            if (cm != NULL) cmesh_draw(cm, sh);
+            r += i*0.001;
+            g += j*0.002;
+            b += j*0.0015;
 
+            chunkmesh *cm = w->chunkmeshes[i][j];
+            shader_bind(sh);
+            shader_set_vec3(sh, "color", (vec3){r, g, b});
+
+            if (cm != NULL) cmesh_draw(cm, sh);
         }
     }
 
@@ -49,6 +57,10 @@ void world_draw(world *w, shader *sh) {
     //     chunkmesh *cm = element->data;
     //     cmesh_draw(cm, sh);
     // }
+}
+
+chunkmesh* world_get_chunk(world *w, int x, int y) {
+    return w->chunkmeshes[x][y];
 }
 
 // TODO XDD

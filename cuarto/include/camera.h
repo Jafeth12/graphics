@@ -53,7 +53,7 @@ typedef struct camera {
 
 camera* camera_create(enum CAMERA_TYPE type);
 
-camera* camera_create_perspective(float fov, float near, float far, float aspect_ratio);
+camera* camera_create_perspective(float fov, float near, float far, float aspect_ratio, vec3 direction);
 
 camera* camera_create_orthogongal(float left, float right, float bottom, float top, float near, float far);
 
