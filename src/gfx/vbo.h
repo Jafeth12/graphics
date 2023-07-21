@@ -2,7 +2,8 @@
 #define VBO_H
 
 #include "vbo_element.h"
-#include "list.h"
+
+#include <utils/list.h>
 
 #include <glad/glad.h>
 

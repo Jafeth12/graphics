@@ -3,8 +3,9 @@
 
 #include "blockmesh.h"
 #include "chunkmesh.h"
-#include "list.h"
-#include "shader.h"
+
+#include <utils/list.h>
+#include <utils/shader.h>
 
 #define MAX_CHUNKS 128
 

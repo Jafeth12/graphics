@@ -2,13 +2,20 @@ CC = gcc
 
 GLAD = glad
 
-INCLUDE = -Iinclude
-INCLUDE_GLAD = -I../glad/include
-SRC_GLAD_DIR = ../glad/src
+SRC_DIR = src
+ENTITY_DIR = $(SRC_DIR)/entity
+GFX_DIR = $(SRC_DIR)/gfx
+UTILS_DIR = $(SRC_DIR)/utils
+WORLD_DIR = $(SRC_DIR)/world
+
+INCLUDE = -I$(SRC_DIR)
+INCLUDE_GLAD = -Iglad/include
+SRC_GLAD_DIR = glad/src
+
 BIN_DIR = bin
 TARGET = $(BIN_DIR)/game
 
-SRCS := $(wildcard *.c)
+SRCS := $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)
 
 GLAD_OBJ := $(BIN_DIR)/$(GLAD).o
 OBJS := $(GLAD_OBJ) $(addprefix $(BIN_DIR)/,$(SRCS:.c=.o))
@@ -26,7 +33,7 @@ $(GLAD_OBJ): $(SRC_GLAD_DIR)/$(GLAD).c | bin
 	$(CC) -c $(CFLAGS) $(INCLUDE_GLAD) $< -o $@
 
 bin: 
-	mkdir -p $(BIN_DIR)
+	mkdir -p $(BIN_DIR) $(BIN_DIR)/$(SRC_DIR) $(BIN_DIR)/$(ENTITY_DIR) $(BIN_DIR)/$(GFX_DIR) $(BIN_DIR)/$(UTILS_DIR) $(BIN_DIR)/$(WORLD_DIR)
 
 run: $(TARGET)
 	$<

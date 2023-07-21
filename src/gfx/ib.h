@@ -1,7 +1,7 @@
 #ifndef IB_H
 #define IB_H
 
-#include "list.h"
+#include <utils/list.h>
 
 #include <glad/glad.h>
 

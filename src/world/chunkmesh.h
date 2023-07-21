@@ -3,10 +3,10 @@
 
 #include "chunk.h"
 
-#include "shader.h"
-#include "vao.h"
-#include "vbo.h"
-#include "ib.h"
+#include <utils/shader.h>
+#include <gfx/vao.h>
+#include <gfx/vbo.h>
+#include <gfx/ib.h>
 
 #include <stdlib.h>
 

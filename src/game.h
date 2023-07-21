@@ -4,10 +4,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "window.h"
-#include "world.h"
-#include "camera.h"
-#include "player.h"
+#include <gfx/window.h>
+#include <world/world.h>
+#include <utils/camera.h>
+#include <entity/player.h>
 
 #include <stdio.h>
 #include <stdlib.h>

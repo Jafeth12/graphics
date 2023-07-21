@@ -1,5 +1,4 @@
 #include "blockmesh.h"
-#include "shader.h"
 
 blockmesh* bmesh_new(block *b) {
     blockmesh *bm = malloc(sizeof(blockmesh));
