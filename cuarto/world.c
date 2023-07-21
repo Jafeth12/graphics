@@ -41,22 +41,21 @@ void world_draw(world *w, shader *sh) {
 
     for (int i = 0; i < MAX_CHUNKS; ++i) {
         for (int j = 0; j < MAX_CHUNKS; ++j) {
+            chunkmesh *cm = w->chunkmeshes[i][j];
+
+            if (cm == NULL) continue;
+
             r += i*0.001;
             g += j*0.002;
             b += j*0.0015;
 
-            chunkmesh *cm = w->chunkmeshes[i][j];
             shader_bind(sh);
             shader_set_vec3(sh, "color", (vec3){r, g, b});
 
-            if (cm != NULL) cmesh_draw(cm, sh);
+            cmesh_draw(cm, sh);
         }
     }
 
-    // list_for_each(element, w->chunkmeshes) {
-    //     chunkmesh *cm = element->data;
-    //     cmesh_draw(cm, sh);
-    // }
 }
 
 chunkmesh* world_get_chunk(world *w, int x, int y) {

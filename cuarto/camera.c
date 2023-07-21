@@ -28,7 +28,7 @@ camera* camera_create_perspective(float fov, float near, float far, float aspect
     cam->perspective.far = far;
     cam->perspective.aspect_ratio = aspect_ratio;
 
-    cam->perspective.yaw = -90.0f;
+    cam->perspective.yaw = 90.0f;
     cam->perspective.pitch = 0.0f;
 
     glm_perspective(fov, aspect_ratio, near, far, cam->projection);
