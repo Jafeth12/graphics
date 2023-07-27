@@ -72,6 +72,8 @@ void camera_perspective_update(camera *cam) {
     cam->direction[2] = sin(glm_rad(cam->perspective.yaw)) * cos(glm_rad(cam->perspective.pitch));
     glm_vec3_normalize(cam->direction);
 
+    glm_vec3_copy((vec3){0.0f, 1.0f, 0.0f}, cam->up);
+
     glm_vec3_cross(cam->direction, cam->up, cam->right);
     glm_vec3_cross(cam->right, cam->direction, cam->up);
 

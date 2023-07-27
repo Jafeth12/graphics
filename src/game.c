@@ -126,14 +126,14 @@ void game_process_input(game *g) {
         g->cam->perspective.yaw += 1.2f;
         printf("yaw: %f\n", g->cam->perspective.yaw);
     }
-    //
-    // if (glfwGetKey(g->win->handle, GLFW_KEY_UP) == GLFW_PRESS) {
-    //     g->cam->perspective.pitch += 0.5f;
-    // }
-    //
-    // if (glfwGetKey(g->win->handle, GLFW_KEY_DOWN) == GLFW_PRESS) {
-    //     g->cam->perspective.pitch -= 0.5f;
-    // }
+
+    if (glfwGetKey(g->win->handle, GLFW_KEY_UP) == GLFW_PRESS) {
+        g->cam->perspective.pitch += 0.5f;
+    }
+
+    if (glfwGetKey(g->win->handle, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        g->cam->perspective.pitch -= 0.5f;
+    }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_B) == GLFW_PRESS) {
         world_add_block(g->world, GRASS, floor(player_get_x(g->pl)), floor(player_get_y(g->pl)), floor(player_get_z(g->pl)));
