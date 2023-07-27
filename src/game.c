@@ -151,14 +151,16 @@ void game_world_update(game *g) {
     world *w = g->world;
     player *p = g->pl;
 
-    unsigned player_world_pos[3];
+    int player_world_pos[3];
     player_world_pos[0] = floor(player_get_x(p));
     player_world_pos[1] = floor(player_get_y(p));
     player_world_pos[2] = floor(player_get_z(p));
 
-    unsigned offset_x, offset_z;
+    int offset_x, offset_z;
     offset_x = player_world_pos[0]/CHUNK_SIZE;
     offset_z = player_world_pos[2]/CHUNK_SIZE;
+
+    if (offset_x < 0 || offset_z < 0) return;
 
     if (world_get_chunk(w, offset_x, offset_z) == NULL) world_add_chunk(w, offset_x, offset_z);
 }
