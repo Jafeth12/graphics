@@ -14,7 +14,7 @@ typedef struct chunk {
     unsigned int solid_blocks_count;
 } chunk;
 
-chunk* chunk_new(unsigned offset_x, unsigned offset_z);
+chunk* chunk_new(int offset_x, int offset_z);
 
 block* chunk_get_block(chunk* c, int x, int y, int z);
 

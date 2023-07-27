@@ -58,15 +58,14 @@ unsigned int BLOCK_INDICES[] = {
 };
 
 unsigned int RIGHT_FACE_INDICES[] = {
-    0, 1, 4,
-    1, 5, 4
+    1, 0, 4,
+    1, 4, 5
 };
 
 unsigned int LEFT_FACE_INDICES[] = {
     3, 2, 6,
     3, 6, 7
 };
-
 
 unsigned int FRONT_FACE_INDICES[] = {
     2, 1, 5,

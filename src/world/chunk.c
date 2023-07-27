@@ -1,6 +1,6 @@
 #include "chunk.h"
 
-chunk* chunk_new(unsigned offset_x, unsigned offset_z) {
+chunk* chunk_new(int offset_x, int offset_z) {
     chunk *c = malloc(sizeof(chunk));
     c->offset[0] = offset_x;
     c->offset[1] = offset_z;
@@ -24,5 +24,9 @@ chunk* chunk_new(unsigned offset_x, unsigned offset_z) {
 }
 
 block* chunk_get_block(chunk* c, int x, int y, int z) {
+    if (x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_SIZE || z < 0 || z >= CHUNK_SIZE) {
+        return NULL;
+    }
+
     return c->blocks[x][y][z];
 }
