@@ -12,6 +12,8 @@ game *game_init() {
 
     g->wireframe = 0;
 
+    glEnable(GL_CULL_FACE);
+
     game_load_shaders(g);
 
     g->pl = player_new((vec3){0.0f, 2.0f, 0.0f});

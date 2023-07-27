@@ -32,27 +32,59 @@ float BLOCK_VERTICES[] = {
 };
 
 unsigned int BLOCK_INDICES[] = {
-    // Face looking east
-    0, 1, 4,
-    1, 5, 4,
+    // Right face
+    1, 0, 4,
+    1, 4, 5,
 
-    // Face looking south
-    2, 1, 5,
-    2, 5, 6,
-
-    // Face looking west
+    // Left face
     3, 2, 6,
     3, 6, 7,
 
-    // Face looking north
-    3, 0, 4,
-    3, 4, 7,
+    // Front face
+    2, 1, 5,
+    2, 5, 6,
 
-    // Face looking down
-    3, 0, 1,
-    3, 1, 2,
+    // Back face 
+    0, 3, 7,
+    0, 7, 4,
 
-    // Face looking up
-    7, 4, 5,
-    7, 5, 6
+    // Top face
+    6, 5, 4,
+    6, 4, 7,
+
+    // Bottom face
+    1, 2, 3,
+    1, 3, 0,
 };
+
+unsigned int RIGHT_FACE_INDICES[] = {
+    0, 1, 4,
+    1, 5, 4
+};
+
+unsigned int LEFT_FACE_INDICES[] = {
+    3, 2, 6,
+    3, 6, 7
+};
+
+
+unsigned int FRONT_FACE_INDICES[] = {
+    2, 1, 5,
+    2, 5, 6
+};
+
+unsigned int BACK_FACE_INDICES[] = {
+    0, 3, 7,
+    0, 7, 4
+};
+
+unsigned int TOP_FACE_INDICES[] = {
+    6, 5, 4,
+    6, 4, 7
+};
+
+unsigned int BOTTOM_FACE_INDICES[] = {
+    1, 2, 3,
+    1, 3, 0
+};
+

@@ -1,4 +1,5 @@
 #include "chunkmesh.h"
+#include "world/block.h"
 
 chunkmesh* cmesh_new(chunk* chunk) {
     chunkmesh* cm = malloc(sizeof(chunkmesh));
@@ -69,6 +70,32 @@ chunkmesh* cmesh_new(chunk* chunk) {
 chunkmesh* cmesh_new_chunk(unsigned offset_x, unsigned offset_z) {
     chunk* c = chunk_new(offset_x, offset_z);
     return cmesh_new(c);
+}
+ 
+void cmesh_add_face(chunkmesh *cm, enum block_face face, int x, int y, int z) {
+    unsigned *FACE_INDICES = FRONT_FACE_INDICES;
+
+    switch (face) {
+        case BACK:
+            FACE_INDICES = BACK_FACE_INDICES;
+            break;
+        case LEFT:
+            FACE_INDICES = LEFT_FACE_INDICES;
+            break;
+        case RIGHT:
+            FACE_INDICES = RIGHT_FACE_INDICES;
+            break;
+        case TOP:
+            FACE_INDICES = TOP_FACE_INDICES;
+            break;
+        case BOTTOM:
+            FACE_INDICES = BOTTOM_FACE_INDICES;
+            break;
+        default:
+            break;
+    }
+
+
 }
 
 void cmesh_draw(chunkmesh* cm, shader* sh) {

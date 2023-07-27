@@ -21,6 +21,8 @@ chunkmesh* cmesh_new(chunk* chunk);
 
 chunkmesh* cmesh_new_chunk(unsigned offset_x, unsigned offset_y);
 
+void cmesh_add_face(chunkmesh *cm, enum block_face face, int x, int y, int z);
+
 void cmesh_draw(chunkmesh* chunkmesh, shader* shader);
 
 #endif

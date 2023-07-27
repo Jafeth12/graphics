@@ -6,8 +6,6 @@ chunk* chunk_new(unsigned offset_x, unsigned offset_z) {
     c->offset[1] = offset_z;
     c->solid_blocks_count = 0;
 
-    // c->blocks = malloc(CHUNK_SIZE * CHUNK_SIZE * CHUNK_SIZE * sizeof(block*));
-
     for (int x = 0; x < CHUNK_SIZE; x++) {
         for (int y = 0; y < CHUNK_SIZE; y++) {
             for (int z = 0; z < CHUNK_SIZE; z++) {
