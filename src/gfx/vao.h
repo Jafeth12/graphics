@@ -31,6 +31,8 @@ void vao_add_vbo(vao *va, vbo *vb);
 
 void vao_add_ib(vao *va, ib *i_b);
 
+void vao_delete_vbo(vao *va, vbo *vb);
+
 void vao_attr(GLuint index, GLint size, GLenum type, char normalized, GLsizei stride, const void *offset);
 
 #endif

@@ -18,7 +18,7 @@ chunk* chunk_new(int offset_x, int offset_z);
 
 block* chunk_get_block(chunk* c, int x, int y, int z);
 
-//void chunk_set_block(chunk* c, int x, int y, int z, block* b);
+char chunk_set_block(chunk* c, int x, int y, int z, enum block_type type);
 
 void chunk_destroy(chunk* c);
 

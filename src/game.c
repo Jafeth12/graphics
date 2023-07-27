@@ -1,4 +1,5 @@
 #include "game.h"
+#include "world/world.h"
 
 game *game_init() {
     game *g = malloc(sizeof(game));
@@ -135,7 +136,7 @@ void game_process_input(game *g) {
     // }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_B) == GLFW_PRESS) {
-        world_add_block(g->world, GRASS, (float[3]){ceil(g->pl->position[0]), ceil(g->pl->position[1])-1, ceil(g->pl->position[2])});
+        world_add_block(g->world, GRASS, floor(player_get_x(g->pl)), floor(player_get_y(g->pl)), floor(player_get_z(g->pl)));
     }
 
 }
@@ -180,7 +181,7 @@ void game_loop(game *g) {
         printf("x: %f, y: %f, z: %f\n", g->pl->position[0], g->pl->position[1], g->pl->position[2]);
 
         player *p = g->pl;
-        unsigned player_world_pos[3];
+        int player_world_pos[3];
         player_world_pos[0] = floor(player_get_x(p));
         player_world_pos[1] = floor(player_get_y(p));
         player_world_pos[2] = floor(player_get_z(p));
@@ -189,7 +190,7 @@ void game_loop(game *g) {
         printf("x: %d, y: %d, z: %d\n", player_world_pos[0], player_world_pos[1], player_world_pos[2]);
 
 
-        unsigned offset_x, offset_z;
+        int offset_x, offset_z;
         offset_x = player_world_pos[0]/CHUNK_SIZE;
         offset_z = player_world_pos[2]/CHUNK_SIZE;
 

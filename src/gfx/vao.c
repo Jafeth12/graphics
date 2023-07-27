@@ -1,4 +1,5 @@
 #include "vao.h"
+#include "gfx/vbo.h"
 
 void vao_gen(vao *va) {
     glGenVertexArrays(1, &va->handle);
@@ -50,6 +51,23 @@ void vao_add_vbo(vao *va, vbo *vb) {
         // printf("error al add elemento (vao_add_vbo) al vao de cmesh: %d\n", glGetError());
         ++i;
     }
+}
+
+void vao_delete_vbo(vao *va, vbo *vb) {
+    vao_bind(va);
+
+    list *e;
+    int i = 0;
+    void* offset = 0;
+    list_for_each(e, vb->elements) {
+        vbo_element *el = e->data;
+
+        glDisableVertexAttribArray(i);
+
+        ++i;
+    }
+
+    vbo_destroy(vb);
 }
 
 void vao_add_ib(vao *va, ib *i_b) {

@@ -19,71 +19,47 @@ unsigned int BLOCK_VERTICES_SIZE = 24 * sizeof(float);
 unsigned int BLOCK_INDICES_SIZE = 36 * sizeof(unsigned int);
 
 float BLOCK_VERTICES[] = {
-    1, 0, 0,        // 0 -> North east at Y=0 (arriba derecha)
-    1, 0, 1,        // 1 -> South east at Y=0 (abajo derecha)
-    0, 0, 1,        // 2 -> South west at Y=0 (abajo izquierda)
-    0, 0, 0,        // 3 -> North west at Y=0 (arriba izquierda)
+    0, 0, 0,        // 0 -> North west at Y=0 (arriba izquierda)
+    1, 0, 0,        // 1 -> North east at Y=0 (arriba derecha)
+    1, 1, 0,        // 2 -> North east at Y=1 (arriba derecha)
+    0, 1, 0,        // 3 -> North west at Y=1 (arriba izquierda)
 
-    // same but Y=1
-    1, 1, 0,        // 4
-    1, 1, 1,        // 5
-    0, 1, 1,        // 6
-    0, 1, 0,        // 7
+    0, 0, 1,        // 4 -> South west at Y=0 (abajo izquierda)
+    1, 0, 1,        // 5 -> South east at Y=0 (abajo derecha)
+    1, 1, 1,        // 6 -> South east at Y=1 (abajo derecha)
+    0, 1, 1,        // 7 -> South west at Y=1 (abajo izquierda)
 };
 
-unsigned int BLOCK_INDICES[] = {
-    // Right face
-    1, 0, 4,
-    1, 4, 5,
-
-    // Left face
-    3, 2, 6,
-    3, 6, 7,
-
-    // Front face
-    2, 1, 5,
-    2, 5, 6,
-
-    // Back face 
-    0, 3, 7,
-    0, 7, 4,
-
-    // Top face
-    6, 5, 4,
-    6, 4, 7,
-
-    // Bottom face
-    1, 2, 3,
-    1, 3, 0,
+unsigned BLOCK_INDICES[] = {
+    1, 0, 3, 1, 3, 2, // north (-z)
+    4, 5, 6, 4, 6, 7, // south (+z)
+    5, 1, 2, 5, 2, 6, // east (+x)
+    0, 4, 7, 0, 7, 3, // west (-x)
+    2, 3, 7, 2, 7, 6, // top (+y)
+    5, 4, 0, 5, 0, 1, // bottom (-y)
 };
 
 unsigned int RIGHT_FACE_INDICES[] = {
-    1, 0, 4,
-    1, 4, 5
+    5, 1, 2, 5, 2, 6
 };
 
 unsigned int LEFT_FACE_INDICES[] = {
-    3, 2, 6,
-    3, 6, 7
+    0, 4, 7, 0, 7, 3
 };
 
 unsigned int FRONT_FACE_INDICES[] = {
-    2, 1, 5,
-    2, 5, 6
+    4, 5, 6, 4, 6, 7
 };
 
 unsigned int BACK_FACE_INDICES[] = {
-    0, 3, 7,
-    0, 7, 4
+    1, 0, 3, 1, 3, 2
 };
 
 unsigned int TOP_FACE_INDICES[] = {
-    6, 5, 4,
-    6, 4, 7
+    2, 3, 7, 2, 7, 6
 };
 
 unsigned int BOTTOM_FACE_INDICES[] = {
-    1, 2, 3,
-    1, 3, 0
+    5, 4, 0, 5, 0, 1
 };
 

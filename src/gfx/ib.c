@@ -25,3 +25,8 @@ void ib_unbind() {
 void ib_data(ib *i_b, unsigned int count, const GLuint *data) {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, count*sizeof(GLuint), data, i_b->dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 }
+
+void ib_destroy(ib *i_b) {
+    glDeleteBuffers(1, &i_b->handle);
+    free(i_b);
+}

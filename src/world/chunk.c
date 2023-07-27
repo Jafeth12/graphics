@@ -30,3 +30,19 @@ block* chunk_get_block(chunk* c, int x, int y, int z) {
 
     return c->blocks[x][y][z];
 }
+
+char chunk_set_block(chunk* c, int x, int y, int z, enum block_type type) {
+    if (x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_SIZE || z < 0 || z >= CHUNK_SIZE) {
+        return -1;
+    }
+
+    if (c->blocks[x][y][z]->type == AIR && type != AIR) {
+        c->solid_blocks_count++;
+    } else if (c->blocks[x][y][z]->type != AIR && type == AIR) {
+        c->solid_blocks_count--;
+    }
+
+    c->blocks[x][y][z]->type = type;
+
+    return 0;
+}

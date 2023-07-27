@@ -5,6 +5,7 @@ chunkmesh* cmesh_new(chunk* chunk) {
     chunkmesh* cm = malloc(sizeof(chunkmesh));
     cm->chunk = chunk;
 
+    cm->vao = vao_new();
     cmesh_mesh(cm);
 
     return cm;
@@ -14,38 +15,15 @@ chunkmesh* cmesh_new_chunk(int offset_x, int offset_z) {
     chunk* c = chunk_new(offset_x, offset_z);
     return cmesh_new(c);
 }
- 
-void cmesh_add_face(chunkmesh *cm, enum block_face face, int x, int y, int z, unsigned *indices, unsigned initial_vertex_index, unsigned *index_offset) {
-    unsigned *FACE_INDICES = FRONT_FACE_INDICES;
 
-    switch (face) {
-        case FRONT:
-            FACE_INDICES = TOP_FACE_INDICES;
-            break;
-        case BACK:
-            FACE_INDICES = BACK_FACE_INDICES;
-            break;
-        case LEFT:
-            FACE_INDICES = LEFT_FACE_INDICES;
-            break;
-        case RIGHT:
-            FACE_INDICES = RIGHT_FACE_INDICES;
-            break;
-        case TOP:
-            FACE_INDICES = TOP_FACE_INDICES;
-            break;
-        case BOTTOM:
-            FACE_INDICES = BOTTOM_FACE_INDICES;
-            break;
-        default:
-            break;
-    }
+void cmesh_update(chunkmesh *cm) {
+    // discard vbo and ibo
+    // create new ones with new data with cmesh_mesh
+    vao_delete_vbo(cm->vao, cm->vbo);
+    ib_destroy(cm->ib);
 
-    for (unsigned i = 0; i < 6; ++i) {
-        indices[*index_offset] = FACE_INDICES[i] + initial_vertex_index;
-        *index_offset = *index_offset + 1;
-    }
-
+    cm->vao = vao_new();
+    cmesh_mesh(cm);
 }
 
 void cmesh_mesh(chunkmesh *cm) {
@@ -54,7 +32,6 @@ void cmesh_mesh(chunkmesh *cm) {
     unsigned int total_vertices_size = BLOCK_VERTICES_SIZE * chunk->solid_blocks_count;
     unsigned int total_indices_size = BLOCK_INDICES_SIZE * chunk->solid_blocks_count;
 
-    unsigned int total_vertices_count = BLOCK_VERTICES_COUNT * chunk->solid_blocks_count;
     unsigned int total_indices_count = BLOCK_INDICES_COUNT * chunk->solid_blocks_count;
 
     float *vertices = malloc(total_vertices_size);
@@ -79,6 +56,10 @@ void cmesh_mesh(chunkmesh *cm) {
                 }
 
                 // create indices
+                // for (unsigned ii = 0; ii < BLOCK_INDICES_COUNT; ++ii) {
+                //     indices[index_offset++] = BLOCK_INDICES[ii] + initial_vertex_index;
+                // }
+
                 block *test;
 
                 test = chunk_get_block(chunk, i+1, j, k);
@@ -93,12 +74,12 @@ void cmesh_mesh(chunkmesh *cm) {
 
                 test = chunk_get_block(chunk, i, j, k-1);
                 if (test == NULL || test->type == AIR) {
-                    cmesh_add_face(cm, FRONT, i, j, k, indices, initial_vertex_index, &index_offset);
+                    cmesh_add_face(cm, BACK, i, j, k, indices, initial_vertex_index, &index_offset);
                 }
 
                 test = chunk_get_block(chunk, i, j, k+1);
                 if (test == NULL || test->type == AIR) {
-                    cmesh_add_face(cm, BACK, i, j, k, indices, initial_vertex_index, &index_offset);
+                    cmesh_add_face(cm, FRONT, i, j, k, indices, initial_vertex_index, &index_offset);
                 }
 
                 test = chunk_get_block(chunk, i, j+1, k);
@@ -115,7 +96,6 @@ void cmesh_mesh(chunkmesh *cm) {
         }
     }
 
-    cm->vao = vao_new();
     vao_bind(cm->vao);
     cm->vbo = vbo_new(0, total_vertices_size, vertices);
     vbo_add_element(cm->vbo, 3, GL_FLOAT, 0, 0); // position
@@ -125,6 +105,40 @@ void cmesh_mesh(chunkmesh *cm) {
 
     free(vertices);
     free(indices);
+}
+
+void cmesh_add_face(chunkmesh *cm, enum block_face face, int x, int y, int z, unsigned *indices, unsigned initial_vertex_index, unsigned *index_offset) {
+    unsigned *FACE_INDICES;
+
+    switch (face) {
+        case FRONT:
+            FACE_INDICES = TOP_FACE_INDICES;
+            break;
+        case BACK:
+            FACE_INDICES = BACK_FACE_INDICES;
+            break;
+        case LEFT:
+            FACE_INDICES = LEFT_FACE_INDICES;
+            break;
+        case RIGHT:
+            FACE_INDICES = RIGHT_FACE_INDICES;
+            break;
+        case TOP:
+            FACE_INDICES = TOP_FACE_INDICES;
+            break;
+        case BOTTOM:
+            FACE_INDICES = BOTTOM_FACE_INDICES;
+            break;
+        default:
+            FACE_INDICES = TOP_FACE_INDICES;
+            break;
+    }
+
+    for (unsigned i = 0; i < 6; ++i) {
+        indices[*index_offset] = FACE_INDICES[i] + initial_vertex_index;
+        *index_offset = *index_offset + 1;
+    }
+
 }
 
 void cmesh_draw(chunkmesh* cm, shader* sh) {

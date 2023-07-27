@@ -12,11 +12,16 @@ world* world_new() {
     return w;
 }
 
-void world_add_block(world *w, unsigned int id, float pos[3]) {
-    // blockmesh *bm = bmesh_new_block(id, pos);
+void world_add_block(world *w, enum block_type type, int x, int y, int z) {
+    int offset_x, offset_z;
+    offset_x = x/CHUNK_SIZE;
+    offset_z = z/CHUNK_SIZE;
 
-    // if (w->blockmeshes == NULL) w->blockmeshes = list_new(bm);
-    // else list_append(w->blockmeshes, bm);
+    if (offset_x < 0 || offset_z < 0) return;
+
+    chunkmesh *cm = w->chunkmeshes[offset_x][offset_z];
+    chunk_set_block(cm->chunk, x, y, z, type);
+    cmesh_update(cm);
 }
 
 void world_add_chunk(world *w, int offset_x, int offset_z) {

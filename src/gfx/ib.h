@@ -21,4 +21,6 @@ void ib_unbind();
 
 void ib_data(ib *i_b, unsigned int count, const GLuint *data);
 
+void ib_destroy(ib *i_b);
+
 #endif

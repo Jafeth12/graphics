@@ -23,6 +23,18 @@ void vbo_unbind() {
     glBindBuffer(0, 0);
 }
 
+void vbo_destroy(vbo *vb) {
+    glDeleteBuffers(1, &vb->handle);
+
+    list *e;
+    list_for_each(e, vb->elements) {
+        vbo_element *el = e->data;
+        free(el);
+    }
+
+    free(vb);
+}
+
 void vbo_data(vbo *vb, unsigned int size, const GLvoid *data) {
     glBufferData(GL_ARRAY_BUFFER, size, data, vb->dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 }
