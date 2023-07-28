@@ -32,8 +32,6 @@ void cmesh_mesh(chunkmesh *cm) {
     unsigned int total_vertices_size = BLOCK_VERTICES_SIZE * chunk->solid_blocks_count;
     unsigned int total_indices_size = BLOCK_INDICES_SIZE * chunk->solid_blocks_count;
 
-    unsigned int total_indices_count = BLOCK_INDICES_COUNT * chunk->solid_blocks_count;
-
     float *vertices = malloc(total_vertices_size);
     unsigned int *indices = malloc(total_indices_size);
 
@@ -101,18 +99,18 @@ void cmesh_mesh(chunkmesh *cm) {
     vbo_add_element(cm->vbo, 3, GL_FLOAT, 0, 0); // position
     vao_add_vbo(cm->vao, cm->vbo);
 
-    cm->ib = ib_new(0, total_indices_count, indices);
+    cm->ib = ib_new(0, index_offset, indices);
 
     free(vertices);
     free(indices);
 }
 
 void cmesh_add_face(chunkmesh *cm, enum block_face face, int x, int y, int z, unsigned *indices, unsigned initial_vertex_index, unsigned *index_offset) {
-    unsigned *FACE_INDICES;
+    unsigned *FACE_INDICES = TOP_FACE_INDICES;
 
     switch (face) {
         case FRONT:
-            FACE_INDICES = TOP_FACE_INDICES;
+            FACE_INDICES = FRONT_FACE_INDICES;
             break;
         case BACK:
             FACE_INDICES = BACK_FACE_INDICES;
@@ -123,14 +121,10 @@ void cmesh_add_face(chunkmesh *cm, enum block_face face, int x, int y, int z, un
         case RIGHT:
             FACE_INDICES = RIGHT_FACE_INDICES;
             break;
-        case TOP:
-            FACE_INDICES = TOP_FACE_INDICES;
-            break;
         case BOTTOM:
             FACE_INDICES = BOTTOM_FACE_INDICES;
             break;
-        default:
-            FACE_INDICES = TOP_FACE_INDICES;
+        case TOP:
             break;
     }
 
@@ -160,4 +154,10 @@ void cmesh_draw(chunkmesh* cm, shader* sh) {
     glDrawElements(GL_TRIANGLES, cm->ib->count, GL_UNSIGNED_INT, 0);
 
     glBindVertexArray(0);
+}
+
+void cmesh_destroy(chunkmesh* cm) {
+    chunk_destroy(cm->chunk);
+    vao_destroy(cm->vao);
+    free(cm);
 }

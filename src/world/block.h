@@ -42,4 +42,6 @@ typedef struct block {
 
 block* block_new(enum block_type type, float pos[3]);
 
+void block_destroy(block* b);
+
 #endif

@@ -13,6 +13,9 @@ chunk* chunk_new(int offset_x, int offset_z) {
                 if (y <= 0) {
                     type = GRASS;
                     c->solid_blocks_count++;
+                } else if (x == CHUNK_SIZE/2 && y == 2 && z == CHUNK_SIZE/2) {
+                    type = GRASS;
+                    c->solid_blocks_count++;
                 }
 
                 c->blocks[x][y][z] = block_new(type, (vec3){x, y, z});
@@ -45,4 +48,17 @@ char chunk_set_block(chunk* c, int x, int y, int z, enum block_type type) {
     c->blocks[x][y][z]->type = type;
 
     return 0;
+}
+ 
+void chunk_destroy(chunk* c) {
+    for (int x = 0; x < CHUNK_SIZE; x++) {
+        for (int y = 0; y < CHUNK_SIZE; y++) {
+            for (int z = 0; z < CHUNK_SIZE; z++) {
+                block_destroy(c->blocks[x][y][z]);
+            }
+        }
+    }
+
+    free(c);
+
 }

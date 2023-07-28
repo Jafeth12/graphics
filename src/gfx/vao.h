@@ -12,6 +12,7 @@
 
 typedef struct vao {
     GLuint handle; 
+
     size_t vb_count;
     list *vbos;
 
@@ -34,5 +35,7 @@ void vao_add_ib(vao *va, ib *i_b);
 void vao_delete_vbo(vao *va, vbo *vb);
 
 void vao_attr(GLuint index, GLint size, GLenum type, char normalized, GLsizei stride, const void *offset);
+
+void vao_destroy(vao *va);
 
 #endif

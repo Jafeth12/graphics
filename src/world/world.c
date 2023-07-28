@@ -20,7 +20,9 @@ void world_add_block(world *w, enum block_type type, int x, int y, int z) {
     if (offset_x < 0 || offset_z < 0) return;
 
     chunkmesh *cm = w->chunkmeshes[offset_x][offset_z];
-    chunk_set_block(cm->chunk, x, y, z, type);
+
+    // TODO more checks for the position stuff????
+    chunk_set_block(cm->chunk, x%CHUNK_SIZE, y, z%CHUNK_SIZE, type);
     cmesh_update(cm);
 }
 
@@ -62,5 +64,15 @@ chunkmesh* world_get_chunk(world *w, int x, int y) {
 // TODO XDD
 void world_destroy(world *w) {
 
+    for (int i = 0; i < MAX_CHUNKS; ++i) {
+        for (int j = 0; j < MAX_CHUNKS; ++j) {
+            chunkmesh *cm = w->chunkmeshes[i][j];
+            if (cm == NULL) continue;
+
+            cmesh_destroy(cm);
+        }
+    }
+
+    free(w);
 }
 

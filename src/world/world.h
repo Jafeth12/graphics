@@ -11,8 +11,6 @@
 
 typedef struct world {
     size_t block_count;
-    list *blockmeshes;
-    // list *chunkmeshes;
     chunkmesh* chunkmeshes[MAX_CHUNKS][MAX_CHUNKS];
 } world;
 

@@ -40,4 +40,6 @@ void cmesh_mesh(chunkmesh* cm);
 
 void cmesh_draw(chunkmesh* chunkmesh, shader* shader);
 
+void cmesh_destroy(chunkmesh* cm);
+
 #endif

@@ -1,3 +1,5 @@
+OPTS := -O3
+
 CC = gcc
 
 GLAD = glad
@@ -19,7 +21,6 @@ TARGET = $(BIN_DIR)/game
 SRCS := $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)
 
 OBJS := $(addprefix $(BIN_DIR)/,$(SRCS:.c=.o))
-OPTS := -O3
 CFLAGS := $(OPTS) -g -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-function -Wno-unused-value
 LDLIBS := -lglfw -lGL -lm -lX11 -lXrandr -lpthread -ldl
 

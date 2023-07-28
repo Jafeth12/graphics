@@ -11,7 +11,10 @@ game *game_init() {
     }
     win_mouse_set_grabbed(g->win, 1);
 
-    g->wireframe = 0;
+    g->wireframe = 1;
+
+    if (g->wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
+    else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // normal
 
     glEnable(GL_CULL_FACE);
 

@@ -99,3 +99,16 @@ void vao_attr(GLuint index, GLint size, GLenum type, char normalized, GLsizei st
     glEnableVertexAttribArray(index);
 }
 
+
+void vao_destroy(vao *va) {
+    vao_bind(va);
+
+    list *e;
+    list_for_each(e, va->vbos) {
+        vbo *vb = e->data;
+        vao_delete_vbo(va, vb);
+    }
+
+    glDeleteVertexArrays(1, &va->handle);
+    free(va);
+}
