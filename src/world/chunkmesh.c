@@ -38,60 +38,56 @@ void cmesh_mesh(chunkmesh *cm) {
     unsigned int vertex_offset, index_offset;
     vertex_offset = index_offset = 0;
 
-    for (int i = 0; i < CHUNK_SIZE; i++) {
-        for (int j = 0; j < CHUNK_SIZE; j++) {
-            for (int k = 0; k < CHUNK_SIZE; k++) {
-                block* b = chunk_get_block(chunk, i, j, k);
-                if (b->type == AIR) continue;
+    for_each_chunk_block() {
+        block* b = chunk_get_block(chunk, i, j, k);
+        if (b->type == AIR) continue;
 
-                unsigned int initial_vertex_index = vertex_offset/3;
+        unsigned int initial_vertex_index = vertex_offset/3;
 
-                // create vertices
-                for (unsigned ii = 0; ii < BLOCK_VERTICES_COUNT; ii += 3) {
-                    vertices[vertex_offset++] = BLOCK_VERTICES[ii] + i;
-                    vertices[vertex_offset++] = BLOCK_VERTICES[ii+1] + j;
-                    vertices[vertex_offset++] = BLOCK_VERTICES[ii+2] + k;
-                }
-
-                // create indices
-                // for (unsigned ii = 0; ii < BLOCK_INDICES_COUNT; ++ii) {
-                //     indices[index_offset++] = BLOCK_INDICES[ii] + initial_vertex_index;
-                // }
-
-                block *test;
-
-                test = chunk_get_block(chunk, i+1, j, k);
-                if (test == NULL || test->type == AIR) {
-                    cmesh_add_face(cm, RIGHT, i, j, k, indices, initial_vertex_index, &index_offset);
-                }
-
-                test = chunk_get_block(chunk, i-1, j, k);
-                if (test == NULL || test->type == AIR) {
-                    cmesh_add_face(cm, LEFT, i, j, k, indices, initial_vertex_index, &index_offset);
-                }
-
-                test = chunk_get_block(chunk, i, j, k-1);
-                if (test == NULL || test->type == AIR) {
-                    cmesh_add_face(cm, BACK, i, j, k, indices, initial_vertex_index, &index_offset);
-                }
-
-                test = chunk_get_block(chunk, i, j, k+1);
-                if (test == NULL || test->type == AIR) {
-                    cmesh_add_face(cm, FRONT, i, j, k, indices, initial_vertex_index, &index_offset);
-                }
-
-                test = chunk_get_block(chunk, i, j+1, k);
-                if (test == NULL || test->type == AIR) {
-                    cmesh_add_face(cm, TOP, i, j, k, indices, initial_vertex_index, &index_offset);
-                }
-
-                test = chunk_get_block(chunk, i, j-1, k);
-                if (test == NULL || test->type == AIR) {
-                    cmesh_add_face(cm, BOTTOM, i, j, k, indices, initial_vertex_index, &index_offset);
-                }
-
-            }
+        // create vertices
+        for (unsigned ii = 0; ii < BLOCK_VERTICES_COUNT; ii += 3) {
+            vertices[vertex_offset++] = BLOCK_VERTICES[ii] + i;
+            vertices[vertex_offset++] = BLOCK_VERTICES[ii+1] + j;
+            vertices[vertex_offset++] = BLOCK_VERTICES[ii+2] + k;
         }
+
+        // create indices
+        // for (unsigned ii = 0; ii < BLOCK_INDICES_COUNT; ++ii) {
+        //     indices[index_offset++] = BLOCK_INDICES[ii] + initial_vertex_index;
+        // }
+
+        block *test;
+
+        test = chunk_get_block(chunk, i+1, j, k);
+        if (test == NULL || test->type == AIR) {
+            cmesh_add_face(cm, RIGHT, i, j, k, indices, initial_vertex_index, &index_offset);
+        }
+
+        test = chunk_get_block(chunk, i-1, j, k);
+        if (test == NULL || test->type == AIR) {
+            cmesh_add_face(cm, LEFT, i, j, k, indices, initial_vertex_index, &index_offset);
+        }
+
+        test = chunk_get_block(chunk, i, j, k-1);
+        if (test == NULL || test->type == AIR) {
+            cmesh_add_face(cm, BACK, i, j, k, indices, initial_vertex_index, &index_offset);
+        }
+
+        test = chunk_get_block(chunk, i, j, k+1);
+        if (test == NULL || test->type == AIR) {
+            cmesh_add_face(cm, FRONT, i, j, k, indices, initial_vertex_index, &index_offset);
+        }
+
+        test = chunk_get_block(chunk, i, j+1, k);
+        if (test == NULL || test->type == AIR) {
+            cmesh_add_face(cm, TOP, i, j, k, indices, initial_vertex_index, &index_offset);
+        }
+
+        test = chunk_get_block(chunk, i, j-1, k);
+        if (test == NULL || test->type == AIR) {
+            cmesh_add_face(cm, BOTTOM, i, j, k, indices, initial_vertex_index, &index_offset);
+        }
+
     }
 
     vao_bind(cm->vao);

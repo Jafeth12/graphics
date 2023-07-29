@@ -13,13 +13,12 @@ world* world_new() {
 }
 
 void world_add_block(world *w, enum block_type type, int x, int y, int z) {
-    int offset_x, offset_z;
-    offset_x = x/CHUNK_SIZE;
-    offset_z = z/CHUNK_SIZE;
+    int offset[2];
+    world_get_offset_from_pos(x, z, offset);
 
-    if (offset_x < 0 || offset_z < 0) return;
+    if (offset[0] < 0 || offset[1] < 0) return;
 
-    chunkmesh *cm = w->chunkmeshes[offset_x][offset_z];
+    chunkmesh *cm = w->chunkmeshes[offset[0]][offset[1]];
 
     // TODO more checks for the position stuff????
     chunk_set_block(cm->chunk, x%CHUNK_SIZE, y, z%CHUNK_SIZE, type);

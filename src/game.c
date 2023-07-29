@@ -69,27 +69,7 @@ void game_process_input(game *g) {
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_P) == GLFW_PRESS) {
-        printf("------------------------\n");
-        // world position
-        printf("x: %f, y: %f, z: %f\n", g->pl->position[0], g->pl->position[1], g->pl->position[2]);
 
-        player *p = g->pl;
-        unsigned player_world_pos[3];
-        player_world_pos[0] = floor(player_get_x(p));
-        player_world_pos[1] = floor(player_get_y(p));
-        player_world_pos[2] = floor(player_get_z(p));
-
-        // block position
-        printf("x: %d, y: %d, z: %d\n", player_world_pos[0], player_world_pos[1], player_world_pos[2]);
-
-
-        unsigned offset_x, offset_z;
-        offset_x = player_world_pos[0]/CHUNK_SIZE;
-        offset_z = player_world_pos[2]/CHUNK_SIZE;
-
-        // chunk position
-        printf("x: %d, z: %d\n", offset_x, offset_z);
-        printf("------------------------\n");
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_M) == GLFW_PRESS) {
@@ -157,18 +137,12 @@ void game_world_update(game *g) {
     world *w = g->world;
     player *p = g->pl;
 
-    int player_world_pos[3];
-    player_world_pos[0] = floor(player_get_x(p));
-    player_world_pos[1] = floor(player_get_y(p));
-    player_world_pos[2] = floor(player_get_z(p));
+    int offset[2];
+    world_get_offset_from_pos(floor(player_get_x(p)), floor(player_get_z(p)), offset);
 
-    int offset_x, offset_z;
-    offset_x = player_world_pos[0]/CHUNK_SIZE;
-    offset_z = player_world_pos[2]/CHUNK_SIZE;
+    if (offset[0] < 0 || offset[1] < 0) return;
 
-    if (offset_x < 0 || offset_z < 0) return;
-
-    if (world_get_chunk(w, offset_x, offset_z) == NULL) world_add_chunk(w, offset_x, offset_z);
+    if (world_get_chunk(w, offset[0], offset[1]) == NULL) world_add_chunk(w, offset[0], offset[1]);
 }
 
 // --------------------------------------------------
@@ -179,28 +153,25 @@ void game_loop(game *g) {
     game_world_update(g);
     world_draw(g->world, g->shaders[SHADER_DEFAULT]);
 
-        printf("------------------------\n");
-        // world position
-        printf("x: %f, y: %f, z: %f\n", g->pl->position[0], g->pl->position[1], g->pl->position[2]);
+    printf("------------------------\n");
+    // world position
+    printf("x: %f, y: %f, z: %f\n", g->pl->position[0], g->pl->position[1], g->pl->position[2]);
 
-        player *p = g->pl;
-        int player_world_pos[3];
-        player_world_pos[0] = floor(player_get_x(p));
-        player_world_pos[1] = floor(player_get_y(p));
-        player_world_pos[2] = floor(player_get_z(p));
+    player *p = g->pl;
+    int player_world_pos[3];
+    player_world_pos[0] = floor(player_get_x(p));
+    player_world_pos[1] = floor(player_get_y(p));
+    player_world_pos[2] = floor(player_get_z(p));
 
-        // block position
-        printf("x: %d, y: %d, z: %d\n", player_world_pos[0], player_world_pos[1], player_world_pos[2]);
+    // block position
+    printf("x: %d, y: %d, z: %d\n", player_world_pos[0], player_world_pos[1], player_world_pos[2]);
 
+    int offset[2];
+    world_get_offset_from_pos(player_world_pos[0], player_world_pos[2], offset);
 
-        int offset_x, offset_z;
-        offset_x = player_world_pos[0]/CHUNK_SIZE;
-        offset_z = player_world_pos[2]/CHUNK_SIZE;
-
-        // chunk position
-        printf("x: %d, z: %d\n", offset_x, offset_z);
-        printf("------------------------\n");
-
+    // chunk position
+    printf("x: %d, z: %d\n", offset[0], offset[1]);
+    printf("------------------------\n");
 }
 
 // --------------------------------------------------

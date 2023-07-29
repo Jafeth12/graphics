@@ -28,4 +28,8 @@ void world_draw(world *w, shader *s);
 
 void world_destroy(world *w);
 
+#define world_get_offset_from_pos(_x, _z, _offset) \
+    (_offset)[0] = (_x)/CHUNK_SIZE; \
+    (_offset)[1] = (_z)/CHUNK_SIZE;
+
 #endif

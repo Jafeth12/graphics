@@ -6,28 +6,24 @@ chunk* chunk_new(int offset_x, int offset_z) {
     c->offset[1] = offset_z;
     c->solid_blocks_count = 0;
 
-    for (int x = 0; x < CHUNK_SIZE; x++) {
-        for (int y = 0; y < CHUNK_SIZE; y++) {
-            for (int z = 0; z < CHUNK_SIZE; z++) {
-                enum block_type type = AIR;
-                if (y <= 0) {
-                    type = GRASS;
-                    c->solid_blocks_count++;
-                } else if (x == CHUNK_SIZE/2 && y == 2 && z == CHUNK_SIZE/2) {
-                    type = GRASS;
-                    c->solid_blocks_count++;
-                }
-
-                c->blocks[x][y][z] = block_new(type, (vec3){x, y, z});
-            }
+    for_each_chunk_block() {
+        enum block_type type = AIR;
+        if (j <= 0) {
+            type = GRASS;
+            c->solid_blocks_count++;
+        } else if (i == CHUNK_SIZE/2 && j == 2 && k == CHUNK_SIZE/2) {
+            type = GRASS;
+            c->solid_blocks_count++;
         }
+
+        c->blocks[i][j][k] = block_new(type, (vec3){i, j, k});
     }
 
     return c;
 }
 
 block* chunk_get_block(chunk* c, int x, int y, int z) {
-    if (x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_SIZE || z < 0 || z >= CHUNK_SIZE) {
+    if (x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_HEIGHT || z < 0 || z >= CHUNK_SIZE) {
         return NULL;
     }
 
@@ -35,7 +31,7 @@ block* chunk_get_block(chunk* c, int x, int y, int z) {
 }
 
 char chunk_set_block(chunk* c, int x, int y, int z, enum block_type type) {
-    if (x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_SIZE || z < 0 || z >= CHUNK_SIZE) {
+    if (x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_HEIGHT || z < 0 || z >= CHUNK_SIZE) {
         return -1;
     }
 
@@ -51,14 +47,9 @@ char chunk_set_block(chunk* c, int x, int y, int z, enum block_type type) {
 }
  
 void chunk_destroy(chunk* c) {
-    for (int x = 0; x < CHUNK_SIZE; x++) {
-        for (int y = 0; y < CHUNK_SIZE; y++) {
-            for (int z = 0; z < CHUNK_SIZE; z++) {
-                block_destroy(c->blocks[x][y][z]);
-            }
-        }
+    for_each_chunk_block() {
+        block_destroy(c->blocks[i][j][k]);
     }
 
     free(c);
-
 }
