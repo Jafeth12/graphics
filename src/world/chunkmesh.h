@@ -32,7 +32,7 @@ chunkmesh* cmesh_new(chunk* chunk);
 
 chunkmesh* cmesh_new_chunk(int offset_x, int offset_y);
 
-void cmesh_add_face(chunkmesh *cm, enum block_face face, int x, int y, int z, unsigned *indices, unsigned initial_vertex_index, unsigned *index_offset);
+void cmesh_add_face(chunkmesh *cm, enum block_face face, unsigned *indices, unsigned initial_vertex_index, unsigned *index_offset);
 
 void cmesh_update(chunkmesh *cm);
 

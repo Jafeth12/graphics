@@ -16,7 +16,7 @@ blockmesh* bmesh_new(block *b) {
         return bm;
     }
 
-    bm->vbo = vbo_new(0, BLOCK_VERTICES_SIZE, BLOCK_VERTICES);
+    bm->vbo = vbo_new(0, BLOCK_VERTICES_SIZE, BLOCK_VERTICES_POS);
     // printf("error al crear vbo de bmesh: %d\n", glGetError());
 
     // 0 EN STRIDE (ultimo parametro) PORQUE ESTAN TIGHTLY PACKED

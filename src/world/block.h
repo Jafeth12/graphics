@@ -3,7 +3,9 @@
 
 #include <stdlib.h>
 
-extern float BLOCK_VERTICES[];
+extern float BLOCK_VERTICES_POS[];
+extern float BLOCK_VERTICES_NORMALS[];
+
 extern unsigned int BLOCK_INDICES[];
 
 extern unsigned int BLOCK_VERTICES_SIZE;

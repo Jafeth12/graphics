@@ -19,46 +19,91 @@ void block_destroy(block* b) {
 unsigned int BLOCK_INDICES_COUNT = 36;
 unsigned int BLOCK_VERTICES_COUNT = 24;
 
-unsigned int BLOCK_VERTICES_SIZE = 24 * sizeof(float);
+unsigned int BLOCK_VERTICES_SIZE = 3 * 24 * sizeof(float);
 unsigned int BLOCK_INDICES_SIZE = 36 * sizeof(unsigned int);
 
-float BLOCK_VERTICES[] = {
-    1, 0, 0,        // 0 -> North east at Y=0 (arriba derecha)
-    1, 0, 1,        // 1 -> South east at Y=0 (abajo derecha)
-    0, 0, 1,        // 2 -> South west at Y=0 (abajo izquierda)
-    0, 0, 0,        // 3 -> North west at Y=0 (arriba izquierda)
+float BLOCK_VERTICES_NORMALS[] = {
+    // Right face
+    1, 0, 0,
 
-    // same but Y=1
-    1, 1, 0,        // 4
-    1, 1, 1,        // 5
-    0, 1, 1,        // 6
-    0, 1, 0,        // 7
+    // Left face
+    -1, 0, 0,
+
+    // Front face
+    0, 0, 1,
+
+    // Back face
+    0, 0, -1,
+
+    // Top face
+    0, 1, 0,
+
+    // Bottom face
+    0, -1, 0
+};
+
+float BLOCK_VERTICES_POS[] = {
+    // Right face
+    1, 0, 1,    // 0
+    1, 0, 0,    // 1
+    1, 1, 0,    // 2
+    1, 1, 1,    // 3
+
+    // Left face
+    0, 0, 0,    // 4
+    0, 0, 1,    // 5
+    0, 1, 1,    // 6
+    0, 1, 0,    // 7
+
+    // Front face
+    0, 0, 1,    // 8
+    1, 0, 1,    // 9
+    1, 1, 1,    // 10
+    0, 1, 1,    // 11
+
+    // Back face
+    1, 0, 0,    // 12
+    0, 0, 0,    // 13
+    0, 1, 0,    // 14
+    1, 1, 0,    // 15
+
+    // Top face
+    0, 1, 1,    // 16
+    1, 1, 1,    // 17
+    1, 1, 0,    // 18
+    0, 1, 0,    // 19
+
+    // Bottom face
+    1, 0, 1,    // 20
+    0, 0, 1,    // 21
+    0, 0, 0,    // 22
+    1, 0, 0,    // 23
 };
 
 unsigned int BLOCK_INDICES[] = {
     // Right face
-    1, 0, 4,
-    1, 4, 5,
+    0, 1, 2,
+    0, 2, 3,
 
     // Left face
-    3, 2, 6,
-    3, 6, 7,
+    4, 5, 6,
+    4, 6, 7,
 
     // Front face
-    2, 1, 5,
-    2, 5, 6,
+    8, 9, 10,
+    8, 10, 11,
 
     // Back face 
-    0, 3, 7,
-    0, 7, 4,
+    12, 13, 14,
+    12, 14, 15,
 
     // Top face
-    6, 5, 4,
-    6, 4, 7,
+    16, 17, 18,
+    16, 18, 19,
 
     // Bottom face
-    1, 2, 3,
-    1, 3, 0,
+    20, 21, 22,
+    20, 22, 23
 };
 
 unsigned int RIGHT_FACE_INDICES[] = {
