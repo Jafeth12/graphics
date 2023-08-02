@@ -28,9 +28,7 @@ void vao_bind(vao *v);
 
 void vao_unbind();
 
-void vao_add_vbo(vao *va, vbo *vb);
-
-void vao_add_ib(vao *va, ib *i_b);
+void vao_add_vbo(vao *va, vbo *vb, GLsizei stride);
 
 void vao_delete_vbo(vao *va, vbo *vb);
 

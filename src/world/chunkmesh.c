@@ -28,7 +28,7 @@ void cmesh_update(chunkmesh *cm) {
 void cmesh_mesh(chunkmesh *cm) {
     chunk *chunk = cm->chunk;
 
-    unsigned int total_vertices_size = (BLOCK_VERTICES_SIZE * chunk->solid_blocks_count);
+    unsigned int total_vertices_size = ((3+3+2)*sizeof(float) * 24) * chunk->solid_blocks_count;
     unsigned int total_indices_size = BLOCK_INDICES_SIZE * chunk->solid_blocks_count;
 
     float *vertices = malloc(total_vertices_size);
@@ -41,75 +41,80 @@ void cmesh_mesh(chunkmesh *cm) {
         block* b = chunk_get_block(chunk, i, j, k);
         if (b->type == AIR) continue;
 
-        unsigned int initial_vertex_index = vertex_offset/(3);
+        unsigned int initial_vertex_index = vertex_offset/(3+3+2);
 
         // create vertices
         for (unsigned ii = 0; ii < BLOCK_VERTICES_COUNT; ii++) {
             unsigned ii_pos = ii * 3;
+            unsigned ii_normal = ii/4;
+
+            // size of a vertex is 3 floats for position, 3 floats for normal, 2 floats for uv
 
             // positions
             vertices[vertex_offset++] = BLOCK_VERTICES_POS[ii_pos] + i;
             vertices[vertex_offset++] = BLOCK_VERTICES_POS[ii_pos+1] + j;
             vertices[vertex_offset++] = BLOCK_VERTICES_POS[ii_pos+2] + k;
             
-            // // normals
-            // vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii];
-            // vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii];
-            // vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii];
-            //
-            // // uvs
-            // vertices[vertex_offset++] = 0;
-            // vertices[vertex_offset++] = 0;
+            // normals
+            vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii_normal];
+            vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii_normal+1];
+            vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii_normal+2];
+
+            // uvs
+            vertices[vertex_offset++] = 0;
+            vertices[vertex_offset++] = 0;
         }
 
-        // create indices
-        for (unsigned ii = 0; ii < BLOCK_INDICES_COUNT; ++ii) {
-            // indices[index_offset++] = BLOCK_INDICES[ii] + initial_vertex_index;
-            indices[index_offset++] = BLOCK_INDICES[ii] + initial_vertex_index;
+        // // create indices
+        // for (unsigned ii = 0; ii < BLOCK_INDICES_COUNT; ++ii) {
+        //     // indices[index_offset++] = BLOCK_INDICES[ii] + initial_vertex_index;
+        //     indices[index_offset++] = BLOCK_INDICES[ii] + initial_vertex_index;
+        // }
+
+        block *test;
+
+        test = chunk_get_block(chunk, i+1, j, k);
+        if (test == NULL || test->type == AIR) {
+            cmesh_add_face(cm, RIGHT, indices, initial_vertex_index, &index_offset);
         }
 
-        // block *test;
-        //
-        // test = chunk_get_block(chunk, i+1, j, k);
-        // if (test == NULL || test->type == AIR) {
-        //     cmesh_add_face(cm, RIGHT, indices, initial_vertex_index, &index_offset);
-        // }
-        //
-        // test = chunk_get_block(chunk, i-1, j, k);
-        // if (test == NULL || test->type == AIR) {
-        //     cmesh_add_face(cm, LEFT, indices, initial_vertex_index, &index_offset);
-        // }
-        //
-        // test = chunk_get_block(chunk, i, j, k-1);
-        // if (test == NULL || test->type == AIR) {
-        //     cmesh_add_face(cm, BACK, indices, initial_vertex_index, &index_offset);
-        // }
-        //
-        // test = chunk_get_block(chunk, i, j, k+1);
-        // if (test == NULL || test->type == AIR) {
-        //     cmesh_add_face(cm, FRONT, indices, initial_vertex_index, &index_offset);
-        // }
-        //
-        // test = chunk_get_block(chunk, i, j+1, k);
-        // if (test == NULL || test->type == AIR) {
-        //     cmesh_add_face(cm, TOP, indices, initial_vertex_index, &index_offset);
-        // }
-        //
-        // test = chunk_get_block(chunk, i, j-1, k);
-        // if (test == NULL || test->type == AIR) {
-        //     cmesh_add_face(cm, BOTTOM, indices, initial_vertex_index, &index_offset);
-        // }
+        test = chunk_get_block(chunk, i-1, j, k);
+        if (test == NULL || test->type == AIR) {
+            cmesh_add_face(cm, LEFT, indices, initial_vertex_index, &index_offset);
+        }
+
+        test = chunk_get_block(chunk, i, j, k-1);
+        if (test == NULL || test->type == AIR) {
+            cmesh_add_face(cm, BACK, indices, initial_vertex_index, &index_offset);
+        }
+
+        test = chunk_get_block(chunk, i, j, k+1);
+        if (test == NULL || test->type == AIR) {
+            cmesh_add_face(cm, FRONT, indices, initial_vertex_index, &index_offset);
+        }
+
+        test = chunk_get_block(chunk, i, j+1, k);
+        if (test == NULL || test->type == AIR) {
+            cmesh_add_face(cm, TOP, indices, initial_vertex_index, &index_offset);
+        }
+
+        test = chunk_get_block(chunk, i, j-1, k);
+        if (test == NULL || test->type == AIR) {
+            cmesh_add_face(cm, BOTTOM, indices, initial_vertex_index, &index_offset);
+        }
 
     }
 
     vao_bind(cm->vao);
     cm->vbo = vbo_new(0, total_vertices_size, vertices);
 
-    vbo_add_element(cm->vbo, 3, GL_FLOAT, 0, 0); // position
-    // vbo_add_element(cm->vbo, 3, GL_FLOAT, 0, 3); // normal
-    // vbo_add_element(cm->vbo, 2, GL_FLOAT, 0, 6); // uvs
+    float stride = 8*sizeof(GLfloat);
 
-    vao_add_vbo(cm->vao, cm->vbo);
+    vbo_add_element(cm->vbo, 3, GL_FLOAT, 0); // position
+    vbo_add_element(cm->vbo, 3, GL_FLOAT, 0); // normal
+    vbo_add_element(cm->vbo, 2, GL_FLOAT, 0); // uvs
+
+    vao_add_vbo(cm->vao, cm->vbo, stride);
 
     cm->ib = ib_new(0, index_offset, indices);
 

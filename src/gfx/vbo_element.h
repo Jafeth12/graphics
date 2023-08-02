@@ -6,15 +6,12 @@
 #include <stdlib.h>
 
 typedef struct vbo_element {
-    // GLuint index;
     GLint count;
     GLenum type;
     char normalized;
-    GLsizei stride;
-    // const GLvoid *offset;
 } vbo_element;
 
-vbo_element* vbo_el_new(GLint count, GLenum type, char normalized, GLsizei stride);
+vbo_element* vbo_el_new(GLint count, GLenum type, char normalized);
 
 void vbo_element_free(vbo_element *e);
 

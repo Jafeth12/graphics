@@ -1,11 +1,10 @@
 #include "vbo_element.h"
 
-vbo_element* vbo_el_new(GLint count, GLenum type, char normalized, GLsizei stride) {
+vbo_element* vbo_el_new(GLint count, GLenum type, char normalized) {
     vbo_element *e = malloc(sizeof(vbo_element));
     e->count = count;
     e->type = type;
     e->normalized = normalized;
-    e->stride = stride;
 
     return e;
 }

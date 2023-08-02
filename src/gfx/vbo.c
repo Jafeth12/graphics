@@ -39,12 +39,11 @@ void vbo_data(vbo *vb, unsigned int size, const GLvoid *data) {
     glBufferData(GL_ARRAY_BUFFER, size, data, vb->dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 }
 
-void vbo_add_element(vbo *vb, GLint count, GLenum type, char normalized, GLsizei stride) {
+void vbo_add_element(vbo *vb, GLint count, GLenum type, char normalized) {
     vbo_element *el = malloc(sizeof(vbo_element));
     el->count = count;
     el->type = type;
     el->normalized = normalized;
-    el->stride = stride;
 
     if (vb->elements == NULL) vb->elements = list_new(el);
     else list_append(vb->elements, el);

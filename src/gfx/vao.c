@@ -21,7 +21,7 @@ void vao_unbind() {
     glBindVertexArray(0);
 }
 
-void vao_add_vbo(vao *va, vbo *vb) {
+void vao_add_vbo(vao *va, vbo *vb, GLsizei stride) {
     vao_bind(va);
     vbo_bind(vb);
 
@@ -36,7 +36,7 @@ void vao_add_vbo(vao *va, vbo *vb) {
     list_for_each(e, vb->elements) {
         vbo_element *el = e->data;
 
-        vao_attr(i, el->count, el->type, el->normalized, el->stride, (void*)offset);
+        vao_attr(i, el->count, el->type, el->normalized, stride, (void*)offset);
 
         int sizeof_type = vbo_el_sizeof(el->type);
         if (sizeof_type == 0) {
@@ -74,25 +74,25 @@ void vao_add_ib(vao *va, ib *i_b) {
 }
 
 void vao_attr(GLuint index, GLint size, GLenum type, char normalized, GLsizei stride, const void *offset) {
+    glVertexAttribPointer(index, size, type, normalized ? GL_TRUE : GL_FALSE, stride, (void *) offset);
 
     // NOTE: glVertexAttribPointer will AUTO-CONVERT integer values to floating point.
     // Integer vertex attributes must be specified with glVertexAttribIPointer.
     // THIS IS EVIL. OpenGL is bad. Who designed this to fail silently?
-    switch (type) {
-        case GL_BYTE:
-        case GL_UNSIGNED_BYTE:
-        case GL_SHORT:
-        case GL_UNSIGNED_SHORT:
-        case GL_INT:
-        case GL_UNSIGNED_INT:
-        case GL_INT_2_10_10_10_REV:
-        case GL_UNSIGNED_INT_2_10_10_10_REV:
-            glVertexAttribIPointer(index, size, type, stride, (void *) offset);
-            break;
-        default:
-            glVertexAttribPointer(index, size, type, normalized ? GL_TRUE : GL_FALSE, stride, (void *) offset);
-            break;
-    }
+    // switch (type) {
+    //     case GL_BYTE:
+    //     case GL_UNSIGNED_BYTE:
+    //     case GL_SHORT:
+    //     case GL_UNSIGNED_SHORT:
+    //     case GL_INT:
+    //     case GL_UNSIGNED_INT:
+    //     case GL_INT_2_10_10_10_REV:
+    //     case GL_UNSIGNED_INT_2_10_10_10_REV:
+    //         glVertexAttribIPointer(index, size, type, stride, (void *) offset);
+    //         break;
+    //     default:
+    //         break;
+    // }
 
     glEnableVertexAttribArray(index);
 }

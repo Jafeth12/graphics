@@ -107,31 +107,31 @@ unsigned int BLOCK_INDICES[] = {
 };
 
 unsigned int RIGHT_FACE_INDICES[] = {
-    1, 0, 4,
-    1, 4, 5
+    0, 1, 2,
+    0, 2, 3,
 };
 
 unsigned int LEFT_FACE_INDICES[] = {
-    3, 2, 6,
-    3, 6, 7
+    4, 5, 6,
+    4, 6, 7,
 };
 
 unsigned int FRONT_FACE_INDICES[] = {
-    2, 1, 5,
-    2, 5, 6
+    8, 9, 10,
+    8, 10, 11,
 };
 
 unsigned int BACK_FACE_INDICES[] = {
-    0, 3, 7,
-    0, 7, 4
+    12, 13, 14,
+    12, 14, 15,
 };
 
 unsigned int TOP_FACE_INDICES[] = {
-    6, 5, 4,
-    6, 4, 7
+    16, 17, 18,
+    16, 18, 19,
 };
 
 unsigned int BOTTOM_FACE_INDICES[] = {
-    1, 2, 3,
-    1, 3, 0
+    20, 21, 22,
+    20, 22, 23
 };

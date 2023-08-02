@@ -28,6 +28,6 @@ void vbo_destroy(vbo *vb);
 
 void vbo_data(vbo *vb, unsigned int size, const GLvoid *data);
 
-void vbo_add_element(vbo *vb, GLint size, GLenum type, char normalized, GLsizei stride);
+void vbo_add_element(vbo *vb, GLint size, GLenum type, char normalized);
 
 #endif
