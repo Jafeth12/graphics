@@ -1,5 +1,4 @@
 #include "game.h"
-#include "world/world.h"
 
 game *game_init() {
     game *g = malloc(sizeof(game));
@@ -119,7 +118,7 @@ void game_process_input(game *g) {
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_B) == GLFW_PRESS) {
-        world_add_block(g->world, GRASS, floor(player_get_x(g->pl)), floor(player_get_y(g->pl)), floor(player_get_z(g->pl)));
+        world_place_block(g->world, GRASS, floor(player_get_x(g->pl)), floor(player_get_y(g->pl)), floor(player_get_z(g->pl)));
     }
 
 }

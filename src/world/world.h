@@ -16,7 +16,7 @@ typedef struct world {
 
 world* world_new();
 
-void world_add_block(world *w, enum block_type type, int x, int y, int z);
+void world_place_block(world *w, enum block_type type, int x, int y, int z);
 
 void world_remove_block(world *w, int x, int y, int z);
 

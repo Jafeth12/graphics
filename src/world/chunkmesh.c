@@ -1,5 +1,4 @@
 #include "chunkmesh.h"
-#include "world/block.h"
 
 chunkmesh* cmesh_new(chunk* chunk) {
     chunkmesh* cm = malloc(sizeof(chunkmesh));
