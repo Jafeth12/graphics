@@ -9,6 +9,8 @@ world* world_new() {
         }
     }
 
+    w->terrain_texture = tex_new(GL_TEXTURE_2D, "res/images/terrain.png");
+
     return w;
 }
 
@@ -37,6 +39,9 @@ void world_add_chunk(world *w, int offset_x, int offset_z) {
 }
 
 void world_draw(world *w, shader *sh) {
+    tex_bind(w->terrain_texture, 0);
+    shader_set_int(sh, "tex", 0);
+
     for (int i = 0; i < MAX_CHUNKS; ++i) {
         for (int j = 0; j < MAX_CHUNKS; ++j) {
             chunkmesh *cm = w->chunkmeshes[i][j];

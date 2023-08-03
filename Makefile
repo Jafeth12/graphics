@@ -1,4 +1,4 @@
-OPTS := -O3
+OPTS := -O2
 
 CC = gcc
 

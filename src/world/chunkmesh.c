@@ -1,4 +1,5 @@
 #include "chunkmesh.h"
+#include <stdio.h>
 
 chunkmesh* cmesh_new(chunk* chunk) {
     chunkmesh* cm = malloc(sizeof(chunkmesh));
@@ -28,7 +29,8 @@ void cmesh_update(chunkmesh *cm) {
 void cmesh_mesh(chunkmesh *cm) {
     chunk *chunk = cm->chunk;
 
-    unsigned int total_vertices_size = ((3+3+2)*sizeof(float) * 24) * chunk->solid_blocks_count;
+    // 3 floats for position, 3 floats for normal, 2 floats for uv
+    unsigned int total_vertices_size = ((3+3+2)*sizeof(float) * BLOCK_VERTICES_COUNT) * chunk->solid_blocks_count;
     unsigned int total_indices_size = BLOCK_INDICES_SIZE * chunk->solid_blocks_count;
 
     float *vertices = malloc(total_vertices_size);
@@ -43,12 +45,13 @@ void cmesh_mesh(chunkmesh *cm) {
 
         unsigned int initial_vertex_index = vertex_offset/(3+3+2);
 
+        unsigned ii_uvs = 0;
+        unsigned grass_uvs_index = 0;
+
         // create vertices
         for (unsigned ii = 0; ii < BLOCK_VERTICES_COUNT; ii++) {
-            unsigned ii_pos = ii * 3;
+            unsigned ii_pos = ii*3;
             unsigned ii_normal = ii/4;
-
-            // size of a vertex is 3 floats for position, 3 floats for normal, 2 floats for uv
 
             // positions
             vertices[vertex_offset++] = BLOCK_VERTICES_POS[ii_pos] + i;
@@ -61,8 +64,11 @@ void cmesh_mesh(chunkmesh *cm) {
             vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii_normal+2];
 
             // uvs
-            vertices[vertex_offset++] = 0;
-            vertices[vertex_offset++] = 0;
+            vertices[vertex_offset++] = (BLOCK_VERTICES_UV[ii_uvs]+1)/16;
+            vertices[vertex_offset++] = (BLOCK_VERTICES_UV[ii_uvs+1]+15)/16;
+
+            ii_uvs += 2;
+            if (ii_uvs >= 8) ii_uvs = 0;
         }
 
         // // create indices
@@ -71,35 +77,35 @@ void cmesh_mesh(chunkmesh *cm) {
         //     indices[index_offset++] = BLOCK_INDICES[ii] + initial_vertex_index;
         // }
 
-        block *test;
+        block *neighbor;
 
-        test = chunk_get_block(chunk, i+1, j, k);
-        if (test == NULL || test->type == AIR) {
+        neighbor = chunk_get_block(chunk, i+1, j, k);
+        if (neighbor == NULL || neighbor->type == AIR) {
             cmesh_add_face(cm, RIGHT, indices, initial_vertex_index, &index_offset);
         }
 
-        test = chunk_get_block(chunk, i-1, j, k);
-        if (test == NULL || test->type == AIR) {
+        neighbor = chunk_get_block(chunk, i-1, j, k);
+        if (neighbor == NULL || neighbor->type == AIR) {
             cmesh_add_face(cm, LEFT, indices, initial_vertex_index, &index_offset);
         }
 
-        test = chunk_get_block(chunk, i, j, k-1);
-        if (test == NULL || test->type == AIR) {
+        neighbor = chunk_get_block(chunk, i, j, k-1);
+        if (neighbor == NULL || neighbor->type == AIR) {
             cmesh_add_face(cm, BACK, indices, initial_vertex_index, &index_offset);
         }
 
-        test = chunk_get_block(chunk, i, j, k+1);
-        if (test == NULL || test->type == AIR) {
+        neighbor = chunk_get_block(chunk, i, j, k+1);
+        if (neighbor == NULL || neighbor->type == AIR) {
             cmesh_add_face(cm, FRONT, indices, initial_vertex_index, &index_offset);
         }
 
-        test = chunk_get_block(chunk, i, j+1, k);
-        if (test == NULL || test->type == AIR) {
+        neighbor = chunk_get_block(chunk, i, j+1, k);
+        if (neighbor == NULL || neighbor->type == AIR) {
             cmesh_add_face(cm, TOP, indices, initial_vertex_index, &index_offset);
         }
 
-        test = chunk_get_block(chunk, i, j-1, k);
-        if (test == NULL || test->type == AIR) {
+        neighbor = chunk_get_block(chunk, i, j-1, k);
+        if (neighbor == NULL || neighbor->type == AIR) {
             cmesh_add_face(cm, BOTTOM, indices, initial_vertex_index, &index_offset);
         }
 

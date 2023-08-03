@@ -12,6 +12,7 @@
 typedef struct world {
     size_t block_count;
     chunkmesh* chunkmeshes[MAX_CHUNKS][MAX_CHUNKS];
+    texture* terrain_texture;
 } world;
 
 world* world_new();

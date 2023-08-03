@@ -10,7 +10,7 @@ game *game_init() {
     }
     win_mouse_set_grabbed(g->win, 1);
 
-    g->wireframe = 1;
+    g->wireframe = 0;
 
     if (g->wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
     else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // normal
@@ -38,7 +38,10 @@ void game_run(game *g) {
 }
 
 void game_load_shaders(game *g) {
-    g->shaders[SHADER_DEFAULT] = shader_init("shaders/vs.glsl", "shaders/fs.glsl");
+    g->shaders[SHADER_DEFAULT] = shader_init("res/shaders/vs.glsl", "res/shaders/fs.glsl");
+    if (g->shaders[SHADER_DEFAULT] == NULL) {
+        exit(1);
+    }
 
     // more to be added if needed
 }
@@ -101,12 +104,12 @@ void game_process_input(game *g) {
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_LEFT) == GLFW_PRESS) {
         g->cam->perspective.yaw -= 1.2f;
-        printf("yaw: %f\n", g->cam->perspective.yaw);
+        // printf("yaw: %f\n", g->cam->perspective.yaw);
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_RIGHT) == GLFW_PRESS) {
         g->cam->perspective.yaw += 1.2f;
-        printf("yaw: %f\n", g->cam->perspective.yaw);
+        // printf("yaw: %f\n", g->cam->perspective.yaw);
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_UP) == GLFW_PRESS) {

@@ -22,6 +22,14 @@ unsigned int BLOCK_VERTICES_COUNT = 24;
 unsigned int BLOCK_VERTICES_SIZE = 3 * 24 * sizeof(float);
 unsigned int BLOCK_INDICES_SIZE = 36 * sizeof(unsigned int);
 
+float BLOCK_VERTICES_UV[] = {
+    // Right face
+    0, 0,
+    1, 0,
+    1, 1,
+    0, 1,
+};
+
 float BLOCK_VERTICES_NORMALS[] = {
     // Right face
     1, 0, 0,

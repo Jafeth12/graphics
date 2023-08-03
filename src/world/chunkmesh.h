@@ -4,6 +4,7 @@
 #include "chunk.h"
 
 #include <utils/shader.h>
+#include <gfx/texture.h>
 #include <gfx/vao.h>
 #include <gfx/vbo.h>
 #include <gfx/ib.h>

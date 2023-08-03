@@ -40,16 +40,41 @@ shader* shader_init(
     glShaderSource(vertex_shader, 1, &vs_source, NULL);
     glCompileShader(vertex_shader);
 
+    GLint success;
+    glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        char info_log[512];
+        glGetShaderInfoLog(vertex_shader, 512, NULL, info_log);
+        printf("Failed to compile vertex shader: %s\n", info_log);
+        return NULL;
+    }
+
     unsigned int fragment_shader;
     fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment_shader, 1, &fs_source, NULL);
     glCompileShader(fragment_shader);
+
+    glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        char info_log[512];
+        glGetShaderInfoLog(fragment_shader, 512, NULL, info_log);
+        printf("Failed to compile fragment shader: %s\n", info_log);
+        return NULL;
+    }
 
     sh->shader_program = glCreateProgram();
 
     glAttachShader(sh->shader_program, vertex_shader);
     glAttachShader(sh->shader_program, fragment_shader);
     glLinkProgram(sh->shader_program);
+
+    glGetProgramiv(sh->shader_program, GL_LINK_STATUS, &success);
+    if (!success) {
+        char info_log[512];
+        glGetProgramInfoLog(sh->shader_program, 512, NULL, info_log);
+        printf("Failed to link shader program: %s\n", info_log);
+        return NULL;
+    }
 
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);

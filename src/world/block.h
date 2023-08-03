@@ -5,6 +5,7 @@
 
 extern float BLOCK_VERTICES_POS[];
 extern float BLOCK_VERTICES_NORMALS[];
+extern float BLOCK_VERTICES_UV[];
 
 extern unsigned int BLOCK_INDICES[];
 
