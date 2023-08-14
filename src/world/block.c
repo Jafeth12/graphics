@@ -1,11 +1,8 @@
 #include "block.h"
 
-block* block_new(enum block_type type, float pos[3]) {
+block* block_new(enum block_type type) {
     block *b = malloc(sizeof(block));
     b->type = type;
-    b->pos[0] = pos[0];
-    b->pos[1] = pos[1];
-    b->pos[2] = pos[2];
 
     return b;
 }

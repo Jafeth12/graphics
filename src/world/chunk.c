@@ -24,7 +24,7 @@ chunk* chunk_new(int offset_x, int offset_z) {
             }
         }
 
-        c->blocks[i][j][k] = block_new(type, (vec3){i, j, k});
+        c->blocks[i][j][k] = block_new(type);
     }
 
     return c;

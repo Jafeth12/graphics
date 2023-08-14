@@ -40,10 +40,9 @@ enum block_face {
 
 typedef struct block {
     enum block_type type;
-    float pos[3];
 } block;
 
-block* block_new(enum block_type type, float pos[3]);
+block* block_new(enum block_type type);
 
 void block_destroy(block* b);
 
