@@ -21,13 +21,20 @@ enum SHADER_TYPE {
     // to be continued... 
 };
 
+typedef struct settings {
+    char render_distance;
+    char fov;
+    char wireframe;
+} settings;
+
 typedef struct game {
     window *win;
     world *world;
     player *pl;
     camera *cam;
     shader *shaders[SHADER_COUNT];
-    char wireframe;
+
+    settings settings;
 } game;
 
 game *game_init();

@@ -10,25 +10,27 @@ game *game_init() {
     }
     win_mouse_set_grabbed(g->win, 1);
 
-    g->wireframe = 0;
+    g->settings.wireframe = 0;
+    g->settings.fov = 70.0f;
+    g->settings.render_distance = 8;
 
-    if (g->wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
+    if (g->settings.wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
     else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // normal
 
     glEnable(GL_CULL_FACE);
 
     game_load_shaders(g);
 
-    g->pl = player_new((vec3){0.0f, 2.0f, 0.0f});
-    g->cam = camera_create_perspective(70.0f, 0.1f, 100.0f, (float)GAME_WIDTH / (float)GAME_HEIGHT, g->pl->direction);
+    g->pl = player_new((vec3){0.0f, 3.0f, 0.0f});
+    g->cam = camera_create_perspective(70.0f, 0.1f, 300.0f, (float)GAME_WIDTH / (float)GAME_HEIGHT, g->pl->direction);
 
     g->world = world_new();
 
-    for (int i = 0; i < 5; ++i) {
-        for (int j = 0; j < 5; ++j) {
-            world_add_chunk(g->world, i, j);
-        }
-    }
+    // for (int i = 0; i < 5; ++i) {
+    //     for (int j = 0; j < 5; ++j) {
+    //         world_add_chunk(g->world, i, j);
+    //     }
+    // }
 
     return g;
 }
@@ -64,9 +66,9 @@ void game_process_input(game *g) {
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_T) == GLFW_PRESS) {
-        g->wireframe = !g->wireframe;
+        g->settings.wireframe = !g->settings.wireframe;
 
-        if (g->wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
+        if (g->settings.wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
         else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // normal
     }
 
@@ -144,7 +146,15 @@ void game_world_update(game *g) {
 
     if (offset[0] < 0 || offset[1] < 0) return;
 
-    if (world_get_chunk(w, offset[0], offset[1]) == NULL) world_add_chunk(w, offset[0], offset[1]);
+    // render distance into account: radius of (render distance) chunks must be loaded
+    // if a chunk is out of the radius, unload it
+    for (int i = offset[0] - g->settings.render_distance; i < offset[0] + g->settings.render_distance; ++i) {
+        for (int j = offset[1] - g->settings.render_distance; j < offset[1] + g->settings.render_distance; ++j) {
+            if (i < 0 || j < 0) continue;
+            if (!world_is_chunk_loaded(w, i, j)) world_add_chunk(w, i, j);
+            // if (world_get_chunk(w, i, j) == NULL) world_add_chunk(w, i, j);
+        }
+    }
 }
 
 // --------------------------------------------------

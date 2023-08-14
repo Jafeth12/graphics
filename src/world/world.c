@@ -34,8 +34,39 @@ void world_add_chunk(world *w, int offset_x, int offset_z) {
     if (offset_x >= MAX_CHUNKS || offset_z >= MAX_CHUNKS) return;
     if (offset_x < 0 || offset_z < 0) return;
 
-    chunkmesh *cm = cmesh_new_chunk(offset_x, offset_z);
-    w->chunkmeshes[offset_x][offset_z] = cm;
+    chunkmesh *cm = w->chunkmeshes[offset_x][offset_z];
+
+    if (cm == NULL) {
+        chunkmesh *cm = cmesh_new_chunk(offset_x, offset_z);
+        w->chunkmeshes[offset_x][offset_z] = cm;
+    } else {
+        cmesh_update(cm);
+    }
+}
+
+void world_remove_chunk(world *w, int offset_x, int offset_y) {
+    if (offset_x >= MAX_CHUNKS || offset_y >= MAX_CHUNKS) return;
+    if (offset_x < 0 || offset_y < 0) return;
+
+    chunkmesh *cm = w->chunkmeshes[offset_x][offset_y];
+    if (cm == NULL) return;
+
+    if (cm->is_meshed) {
+        cmesh_destroy_mesh(cm);
+    }
+
+    // w->chunkmeshes[offset_x][offset_y] = NULL;
+}
+
+char world_is_chunk_loaded(world *w, int offset_x, int offset_y) {
+    if (offset_x >= MAX_CHUNKS || offset_y >= MAX_CHUNKS) return -1;
+    if (offset_x < 0 || offset_y < 0) return -1;
+
+    chunkmesh *cm = w->chunkmeshes[offset_x][offset_y];
+
+    if (cm == NULL) return 0;
+
+    return cm->is_meshed;
 }
 
 void world_draw(world *w, shader *sh) {

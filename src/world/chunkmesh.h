@@ -27,6 +27,7 @@ typedef struct chunkmesh {
     vao* vao;
     vbo* vbo;
     ib* ib;
+    char is_meshed;
 } chunkmesh;
 
 chunkmesh* cmesh_new(chunk* chunk);
@@ -42,5 +43,7 @@ void cmesh_mesh(chunkmesh* cm);
 void cmesh_draw(chunkmesh* chunkmesh, shader* shader);
 
 void cmesh_destroy(chunkmesh* cm);
+
+void cmesh_destroy_mesh(chunkmesh* cm);
 
 #endif

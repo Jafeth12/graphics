@@ -4,6 +4,7 @@
 chunkmesh* cmesh_new(chunk* chunk) {
     chunkmesh* cm = malloc(sizeof(chunkmesh));
     cm->chunk = chunk;
+    cm->is_meshed = 1;
 
     cm->vao = vao_new();
     cmesh_mesh(cm);
@@ -19,11 +20,14 @@ chunkmesh* cmesh_new_chunk(int offset_x, int offset_z) {
 void cmesh_update(chunkmesh *cm) {
     // discard vbo and ibo
     // create new ones with new data with cmesh_mesh
-    vao_delete_vbo(cm->vao, cm->vbo);
-    ib_destroy(cm->ib);
+    if (cm->is_meshed) {
+        cmesh_destroy_mesh(cm);
+    }
 
     cm->vao = vao_new();
     cmesh_mesh(cm);
+
+    cm->is_meshed = 1;
 }
 
 void cmesh_mesh(chunkmesh *cm) {
@@ -182,5 +186,13 @@ void cmesh_draw(chunkmesh* cm, shader* sh) {
 void cmesh_destroy(chunkmesh* cm) {
     chunk_destroy(cm->chunk);
     vao_destroy(cm->vao);
+    ib_destroy(cm->ib);
     free(cm);
+}
+
+void cmesh_destroy_mesh(chunkmesh* cm) {
+    vao_destroy(cm->vao);
+    ib_destroy(cm->ib);
+
+    cm->is_meshed = 0;
 }

@@ -8,12 +8,20 @@ chunk* chunk_new(int offset_x, int offset_z) {
 
     for_each_chunk_block() {
         enum block_type type = AIR;
-        if (j <= 0) {
-            type = GRASS;
-            c->solid_blocks_count++;
-        } else if (i == CHUNK_SIZE/2 && j == 2 && k == CHUNK_SIZE/2) {
-            type = GRASS;
-            c->solid_blocks_count++;
+
+        if (offset_x == 0 && offset_z == 0) {
+            if (i == CHUNK_SIZE/2 && j <= 10 && k == CHUNK_SIZE/2) {
+                type = GRASS;
+                c->solid_blocks_count++;
+            }
+        } else {
+            if (j <= 0) {
+                type = GRASS;
+                c->solid_blocks_count++;
+            } else if (i == CHUNK_SIZE/2 && j <= 3 && k == CHUNK_SIZE/2) {
+                type = GRASS;
+                c->solid_blocks_count++;
+            }
         }
 
         c->blocks[i][j][k] = block_new(type, (vec3){i, j, k});

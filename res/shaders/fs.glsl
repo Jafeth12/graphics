@@ -11,5 +11,10 @@ void main() {
     // FragColor = vec4(color, 1.0f);
     // FragColor = vec4(frontColor, 1.0f);
 
-    FragColor = texture(tex, texCoord);
+    vec4 texColor = texture(tex, texCoord);
+
+    if (texColor.a < 0.1)
+        discard;
+
+    FragColor = texColor;
 }
