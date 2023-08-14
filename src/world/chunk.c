@@ -6,7 +6,7 @@ chunk* chunk_new(int offset_x, int offset_z) {
     c->offset[1] = offset_z;
     c->solid_blocks_count = 0;
 
-    for_each_chunk_block() {
+    chunk_for_each_block() {
         enum block_type type = AIR;
 
         if (offset_x == 0 && offset_z == 0) {
@@ -55,7 +55,7 @@ char chunk_set_block(chunk* c, int x, int y, int z, enum block_type type) {
 }
  
 void chunk_destroy(chunk* c) {
-    for_each_chunk_block() {
+    chunk_for_each_block() {
         block_destroy(c->blocks[i][j][k]);
     }
 

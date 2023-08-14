@@ -23,7 +23,7 @@ char chunk_set_block(chunk* c, int x, int y, int z, enum block_type type);
 
 void chunk_destroy(chunk* c);
 
-#define for_each_chunk_block() \
+#define chunk_for_each_block() \
     for (int i = 0; i < CHUNK_SIZE; i++) \
         for (int j = 0; j < CHUNK_HEIGHT; j++) \
             for (int k = 0; k < CHUNK_SIZE; k++)

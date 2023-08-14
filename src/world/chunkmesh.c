@@ -43,7 +43,7 @@ void cmesh_mesh(chunkmesh *cm) {
     unsigned int vertex_offset, index_offset;
     vertex_offset = index_offset = 0;
 
-    for_each_chunk_block() {
+    chunk_for_each_block() {
         block* b = chunk_get_block(chunk, i, j, k);
         if (b->type == AIR) continue;
 
