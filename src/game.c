@@ -12,7 +12,7 @@ game *game_init() {
 
     g->settings.wireframe = 0;
     g->settings.fov = 70.0f;
-    g->settings.render_distance = 8;
+    g->settings.render_distance = 3;
 
     if (g->settings.wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
     else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // normal
@@ -81,27 +81,27 @@ void game_process_input(game *g) {
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_W) == GLFW_PRESS) {
-        player_move_forward(g->pl);
+        player_move_forward(g->pl, g->win->delta_time);
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_S) == GLFW_PRESS) {
-        player_move_backward(g->pl);
+        player_move_backward(g->pl, g->win->delta_time);
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_A) == GLFW_PRESS) {
-        player_move_left(g->pl);
+        player_move_left(g->pl, g->win->delta_time);
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_D) == GLFW_PRESS) {
-        player_move_right(g->pl);
+        player_move_right(g->pl, g->win->delta_time);
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_SPACE) == GLFW_PRESS) {
-        player_move_up(g->pl);
+        player_move_up(g->pl, g->win->delta_time);
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-        player_move_down(g->pl);
+        player_move_down(g->pl, g->win->delta_time);
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_LEFT) == GLFW_PRESS) {
@@ -137,34 +137,8 @@ void game_destroy(game *g) {
     free(g);
 }
 
-void game_world_update(game *g) {
-    world *w = g->world;
-    player *p = g->pl;
-
-    int offset[2];
-    chunk_get_offset_from_pos(floor(player_get_x(p)), floor(player_get_z(p)), offset);
-
-    if (offset[0] < 0 || offset[1] < 0) return;
-
-    // render distance into account: radius of (render distance) chunks must be loaded
-    // if a chunk is out of the radius, unload it
-    for (int i = offset[0] - g->settings.render_distance; i < offset[0] + g->settings.render_distance; ++i) {
-        for (int j = offset[1] - g->settings.render_distance; j < offset[1] + g->settings.render_distance; ++j) {
-            if (i < 0 || j < 0) continue;
-            if (!world_is_chunk_loaded(w, i, j)) world_add_chunk(w, i, j);
-            // if (world_get_chunk(w, i, j) == NULL) world_add_chunk(w, i, j);
-        }
-    }
-}
-
 // --------------------------------------------------
-
-void game_loop(game *g) {
-    game_process_input(g);
-    game_update_first_person_camera(g);
-    game_world_update(g);
-    world_draw(g->world, g->shaders[SHADER_DEFAULT]);
-
+void print_player_pos(game *g) {
     printf("------------------------\n");
     // world position
     printf("x: %f, y: %f, z: %f\n", g->pl->position[0], g->pl->position[1], g->pl->position[2]);
@@ -185,5 +159,20 @@ void game_loop(game *g) {
     printf("x: %d, z: %d\n", offset[0], offset[1]);
     printf("------------------------\n");
 }
+
+void game_loop(game *g) {
+    game_process_input(g);
+    game_update_first_person_camera(g);
+    world_update_render_distance(g->world, g->pl->position, g->settings.render_distance);
+    world_draw(g->world, g->shaders[SHADER_DEFAULT]);
+
+    GLenum err;
+    if ((err = glGetError()) != GL_NO_ERROR) {
+        printf("GL ERROR: %d\n", err);
+    }
+
+    // print_player_pos(g);
+}
+
 
 // --------------------------------------------------

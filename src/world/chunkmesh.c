@@ -185,8 +185,12 @@ void cmesh_draw(chunkmesh* cm, shader* sh) {
 
 void cmesh_destroy(chunkmesh* cm) {
     chunk_destroy(cm->chunk);
-    vao_destroy(cm->vao);
-    ib_destroy(cm->ib);
+
+    if (cm->is_meshed) {
+        vao_destroy(cm->vao);
+        ib_destroy(cm->ib);
+    }
+
     free(cm);
 }
 

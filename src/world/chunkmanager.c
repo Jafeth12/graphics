@@ -23,7 +23,7 @@ void chunk_man_destroy(chunk_manager* cm) {
         }
     }
 
-    list_destroy(cm->chunks_to_load);
+    if (cm->chunks_to_load != NULL) list_destroy(cm->chunks_to_load);
 
     free(cm);
 }
@@ -35,7 +35,7 @@ void chunk_man_place_block(chunk_manager *cm, enum block_type type, int x, int y
     if (y < 0 || y >= CHUNK_HEIGHT) return;
 
     int offset[2];
-    chunk_man_get_offset_from_pos(x, z, offset);
+    chunk_get_offset_from_pos(x, z, offset);
 
     if (offset[0] < 0 || offset[1] < 0) return;
 
@@ -103,6 +103,7 @@ void chunk_man_draw(chunk_manager *cm, shader* sh) {
         for (int j = 0; j < MAX_CHUNKS; ++j) {
             chunkmesh *cmesh = cm->chunkmeshes[i][j];
             if (cmesh == NULL) continue;
+            if (cmesh->is_meshed == 0) continue;
 
             cmesh_draw(cmesh, sh);
         }

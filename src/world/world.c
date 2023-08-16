@@ -27,6 +27,42 @@ chunkmesh* world_get_chunk(world *w, int x, int y) {
     return chunk_man_get_chunk(w->chunk_manager, x, y);
 }
 
+void world_load_chunks(world *w) {
+
+}
+
+void world_update_render_distance(world *w, vec3 pos, char render_distance) {
+    int offset[2];
+    chunk_get_offset_from_pos(floor(pos[0]), floor(pos[2]), offset);
+
+    // iterate through only chunks inside of render distance + 2
+    for (int x = offset[0] - render_distance - 2; x <= offset[0] + render_distance + 2; x++) {
+        for (int z = offset[1] - render_distance - 2; z <= offset[1] + render_distance + 2; z++) {
+            // load chunks inside of render distance
+            if (abs(x - offset[0]) <= render_distance && abs(z - offset[1]) <= render_distance) {
+                if (!world_is_chunk_loaded(w, x, z)) world_add_chunk(w, x, z);
+            }
+
+            // unload chunks outside of render distance 
+            if (abs(x - offset[0]) > render_distance || abs(z - offset[1]) > render_distance) {
+                if (world_is_chunk_loaded(w, x, z)) world_remove_chunk(w, x, z);
+            }
+        }
+    }
+
+
+        // // load chunks inside of render distance
+        // if (abs(x - offset[0]) <= render_distance && abs(z - offset[1]) <= render_distance) {
+        //     if (!world_is_chunk_loaded(w, x, z)) world_add_chunk(w, x, z);
+        // }
+        //
+        // // unload chunks outside of render distance 
+        // if (abs(x - offset[0]) > render_distance || abs(z - offset[1]) > render_distance) {
+        //     if (world_is_chunk_loaded(w, x, z)) world_remove_chunk(w, x, z);
+        // }
+    // }
+}
+
 // --- Block management ---
 
 void world_place_block(world *w, enum block_type type, int x, int y, int z) {
@@ -42,13 +78,7 @@ void world_draw(world *w, shader *sh) {
     chunk_man_draw(w->chunk_manager, sh);
 }
 
-
-void world_update(world *w, vec3 pos) {
-
-}
-
 void world_destroy(world *w) {
-
     chunk_man_destroy(w->chunk_manager);
     // TODO destroy texture
 

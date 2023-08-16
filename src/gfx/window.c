@@ -61,10 +61,10 @@ void win_loop(window *win) {
     while (!glfwWindowShouldClose(win->handle)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // float current_frame = glfwGetTime();
-        // delta_time = current_frame - last_frame;
-        // last_frame = current_frame;
-        // win->delta_time = delta_time;
+        float current_frame = glfwGetTime();
+        delta_time = current_frame - last_frame;
+        last_frame = current_frame;
+        win->delta_time = delta_time;
 
         if (custom_loop != NULL) (*custom_loop)(win->custom_args);
 

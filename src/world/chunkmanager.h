@@ -9,9 +9,7 @@
 
 typedef struct chunk_manager {
     chunkmesh* chunkmeshes[MAX_CHUNKS][MAX_CHUNKS];
-
     list* chunks_to_load;
-
 } chunk_manager;
 
 // ---
@@ -39,14 +37,6 @@ chunkmesh* chunk_man_get_chunk(chunk_manager *cm, int x, int y);
 
 void chunk_man_update_chunks(chunk_manager *cm);
 
-#define chunk_man_get_offset_from_pos(_x, _z, _offset) \
-    (_offset)[0] = (_x)/CHUNK_SIZE; \
-    (_offset)[1] = (_z)/CHUNK_SIZE; \
-
-#define chunk_for_each(_w) \
-    for (int _x = 0; _x < MAX_CHUNKS; _x++) \
-        for (int _z = 0; _z < MAX_CHUNKS; _z++) \
-
 // --- Drawing ---
 
 void chunk_man_draw(chunk_manager *cm, shader* sh);
@@ -57,8 +47,8 @@ void chunk_man_draw(chunk_manager *cm, shader* sh);
     (_offset)[0] = (_x)/CHUNK_SIZE; \
     (_offset)[1] = (_z)/CHUNK_SIZE; \
 
-#define chunk_for_each(_w) \
-    for (int _x = 0; _x < MAX_CHUNKS; _x++) \
-        for (int _z = 0; _z < MAX_CHUNKS; _z++) \
+#define chunk_for_each() \
+    for (int x = 0; x < MAX_CHUNKS; x++) \
+        for (int z = 0; z < MAX_CHUNKS; z++) \
 
 #endif
