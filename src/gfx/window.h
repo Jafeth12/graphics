@@ -11,6 +11,7 @@ typedef struct window {
     GLFWwindow *handle;
     GLuint width;
     GLuint height;
+    double elapsed_time;
     float delta_time;
     const char *title;
     char mouse_grabbed;

@@ -34,6 +34,8 @@ typedef struct game {
     camera *cam;
     shader *shaders[SHADER_COUNT];
 
+    double processed_time;
+
     settings settings;
 } game;
 

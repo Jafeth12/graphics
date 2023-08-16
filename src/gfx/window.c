@@ -66,6 +66,8 @@ void win_loop(window *win) {
         last_frame = current_frame;
         win->delta_time = delta_time;
 
+        win->elapsed_time += delta_time;
+
         if (custom_loop != NULL) (*custom_loop)(win->custom_args);
 
         // swap front and back buffers

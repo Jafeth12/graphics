@@ -14,6 +14,8 @@ game *game_init() {
     g->settings.fov = 70.0f;
     g->settings.render_distance = 3;
 
+    g->processed_time = 0;
+
     float zfar = (g->settings.render_distance * CHUNK_SIZE) + 2*CHUNK_SIZE;
 
     if (g->settings.wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
@@ -162,20 +164,25 @@ void print_player_pos(game *g) {
     printf("------------------------\n");
 }
 
+double MS_PER_TICK = 1000.0 / 55.0;
+
 void game_loop(game *g) {
-    game_process_input(g);
     game_update_first_person_camera(g);
 
-    world_load_chunks(g->world);
-    world_update_render_distance(g->world, g->pl->position, g->settings.render_distance);
     world_draw(g->world, g->shaders[SHADER_DEFAULT]);
+
+    while ((g->processed_time + MS_PER_TICK) < (glfwGetTime()*1000)) {
+        game_process_input(g);
+        // world_load_chunks(g->world);
+        world_update_render_distance(g->world, g->pl->position, g->settings.render_distance);
+        g->processed_time += MS_PER_TICK;
+        // print_player_pos(g);
+    }
 
     GLenum err;
     if ((err = glGetError()) != GL_NO_ERROR) {
         printf("GL ERROR: %d\n", err);
     }
-
-    // print_player_pos(g);
 }
 
 
