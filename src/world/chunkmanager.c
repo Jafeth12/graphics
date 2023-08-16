@@ -1,4 +1,5 @@
 #include "chunkmanager.h" 
+#include "utils/list.h"
 
 chunk_manager* chunk_man_new() {
     chunk_manager *cm = malloc(sizeof(chunk_manager));
@@ -76,6 +77,25 @@ void chunk_man_unload_chunk(chunk_manager *cm, int offset_x, int offset_z) {
     if (cmesh->is_meshed) {
         cmesh_destroy_mesh(cmesh);
     }
+}
+
+void chunk_man_add_chunk_to_queue(chunk_manager *cm, int offset_x, int offset_z) {
+    if (offset_x >= MAX_CHUNKS || offset_z >= MAX_CHUNKS) return;
+    if (offset_x < 0 || offset_z < 0) return;
+
+    chunkmesh *cmesh = cm->chunkmeshes[offset_x][offset_z];
+
+    if (cm->chunks_to_load == NULL) {
+        cm->chunks_to_load = list_new((void*)cmesh);
+    } else {
+        list_append(cm->chunks_to_load, (void*)cmesh);
+    }
+}
+
+void chunk_man_load_chunk_from_queue(chunk_manager *cm) {
+    if (cm->chunks_to_load == NULL) return;
+
+    list *l = cm->chunks_to_load;
 }
 
 char chunk_man_is_chunk_loaded(chunk_manager *cm, int offset_x, int offset_z) {

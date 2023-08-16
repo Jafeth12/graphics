@@ -14,6 +14,8 @@ list* list_new(void *data);
 
 void list_append(list *l, void *data);
 
+void list_pop(list *l);
+
 void list_prepend(list *l, void *data);
 
 void list_insert(list *l, void *data, int index);

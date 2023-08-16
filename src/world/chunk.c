@@ -8,21 +8,38 @@ chunk* chunk_new(int offset_x, int offset_z) {
 
     chunk_for_each_block() {
         enum block_type type = AIR;
+        
+        if (j == 0) {
+            type = BEDROCK;
+            c->solid_blocks_count++;
+        } else if (j >= 40) {
+            type = AIR;
+        } else if (j <= 10) {
+            type = STONE;
+            c->solid_blocks_count++;
+        } else if (j <= 20) {
+            type = DIRT;
+            c->solid_blocks_count++;
+        } else if (j <= 30) {
 
-        if (offset_x == 0 && offset_z == 0) {
-            if (i == CHUNK_SIZE/2 && j <= 10 && k == CHUNK_SIZE/2) {
-                type = GRASS;
-                c->solid_blocks_count++;
-            }
-        } else {
-            if (j <= 0) {
-                type = GRASS;
-                c->solid_blocks_count++;
-            } else if (i == CHUNK_SIZE/2 && j <= 3 && k == CHUNK_SIZE/2) {
-                type = GRASS;
-                c->solid_blocks_count++;
-            }
+            type = rand() % AIR;
+            c->solid_blocks_count++;
         }
+
+        // if (offset_x == 0 && offset_z == 0) {
+        //     if (i == CHUNK_SIZE/2 && j <= 10 && k == CHUNK_SIZE/2) {
+        //         type = GRASS;
+        //         c->solid_blocks_count++;
+        //     }
+        // } else {
+        //     if (j <= 0) {
+        //         type = GRASS;
+        //         c->solid_blocks_count++;
+        //     } else if (i == CHUNK_SIZE/2 && j <= 3 && k == CHUNK_SIZE/2) {
+        //         type = GRASS;
+        //         c->solid_blocks_count++;
+        //     }
+        // }
 
         c->blocks[i][j][k] = block_new(type);
     }

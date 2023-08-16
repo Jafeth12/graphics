@@ -67,9 +67,12 @@ void cmesh_mesh(chunkmesh *cm) {
             vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii_normal+1];
             vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii_normal+2];
 
+            float u = BLOCK_UVS[b->type].u;
+            float v = BLOCK_UVS[b->type].v;
+
             // uvs
-            vertices[vertex_offset++] = (BLOCK_VERTICES_UV[ii_uvs]+1)/16;
-            vertices[vertex_offset++] = (BLOCK_VERTICES_UV[ii_uvs+1]+15)/16;
+            vertices[vertex_offset++] = (BLOCK_VERTICES_UV[ii_uvs]+u)/16;
+            vertices[vertex_offset++] = (BLOCK_VERTICES_UV[ii_uvs+1]+v)/16;
 
             ii_uvs += 2;
             if (ii_uvs >= 8) ii_uvs = 0;

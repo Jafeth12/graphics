@@ -14,6 +14,8 @@ game *game_init() {
     g->settings.fov = 70.0f;
     g->settings.render_distance = 3;
 
+    float zfar = (g->settings.render_distance * CHUNK_SIZE) + 2*CHUNK_SIZE;
+
     if (g->settings.wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
     else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // normal
 
@@ -22,7 +24,7 @@ game *game_init() {
     game_load_shaders(g);
 
     g->pl = player_new((vec3){0.0f, 3.0f, 0.0f});
-    g->cam = camera_create_perspective(70.0f, 0.1f, 300.0f, (float)GAME_WIDTH / (float)GAME_HEIGHT, g->pl->direction);
+    g->cam = camera_create_perspective(70.0f, 0.1f, zfar, (float)GAME_WIDTH / (float)GAME_HEIGHT, g->pl->direction);
 
     g->world = world_new();
 
@@ -163,6 +165,8 @@ void print_player_pos(game *g) {
 void game_loop(game *g) {
     game_process_input(g);
     game_update_first_person_camera(g);
+
+    world_load_chunks(g->world);
     world_update_render_distance(g->world, g->pl->position, g->settings.render_distance);
     world_draw(g->world, g->shaders[SHADER_DEFAULT]);
 

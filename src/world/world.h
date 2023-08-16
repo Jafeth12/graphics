@@ -23,6 +23,8 @@ char world_is_chunk_loaded(world *w, int offset_x, int offset_y);
 
 chunkmesh* world_get_chunk(world *w, int x, int y);
 
+void world_load_chunks(world *w);
+
 void world_update_render_distance(world *w, vec3 pos, char render_distance);
 
 // --- Block management ---

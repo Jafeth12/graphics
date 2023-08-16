@@ -22,10 +22,23 @@ extern unsigned int BACK_FACE_INDICES[];
 extern unsigned int TOP_FACE_INDICES[];
 extern unsigned int BOTTOM_FACE_INDICES[];
 
+struct uv {
+    char u;
+    char v;
+};
+
+extern struct uv BLOCK_UVS[];
+
 enum block_type {
     GRASS = 0,
     DIRT,
     STONE,
+    SAND,
+    GRAVEL,
+    BEDROCK,
+    WOOD,
+    BRICK,
+    COBBLESTONE,
     AIR
 };
 
@@ -43,6 +56,8 @@ typedef struct block {
 } block;
 
 block* block_new(enum block_type type);
+
+void blocks_init();
 
 void block_destroy(block* b);
 

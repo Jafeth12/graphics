@@ -33,6 +33,17 @@ void list_prepend(list *l, void *data) {
     new->next = first;
 }
 
+void list_pop(list *l) {
+    list *last = l;
+
+    while (last->next != NULL) {
+        last = last->next;
+    }
+
+    last->prev->next = NULL;
+    free(last);
+}
+
 // void list_insert(list *l, void *data, int index) {
 //     list *new = list_new(data);
 //     list *current = l;

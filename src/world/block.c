@@ -11,6 +11,60 @@ void block_destroy(block* b) {
     free(b);
 }
 
+// AIR is the last block type, so it's the size of the array
+// plus the uvs of an AIR block are non existent so its two birds in one stone even though its kinda ugly
+struct uv BLOCK_UVS[AIR]; 
+
+void blocks_init() {
+    // GRASS = 0,
+    // DIRT,
+    // STONE,
+    // SAND,
+    // GRAVEL,
+    // BEDROCK,
+    // WOOD,
+    // BRICK,
+    // COBBLESTONE,
+    // AIR
+
+    // GRASS
+    BLOCK_UVS[GRASS].u = 2; // original is 3
+    BLOCK_UVS[GRASS].v = 15;
+
+    // DIRT
+    BLOCK_UVS[DIRT].u = 2;
+    BLOCK_UVS[DIRT].v = 15;
+
+    // STONE
+    BLOCK_UVS[STONE].u = 1;
+    BLOCK_UVS[STONE].v = 15;
+
+    // SAND
+    BLOCK_UVS[SAND].u = 2;
+    BLOCK_UVS[SAND].v = 14;
+
+    // GRAVEL
+    BLOCK_UVS[GRAVEL].u = 3;
+    BLOCK_UVS[GRAVEL].v = 14;
+
+    // BEDROCK
+    BLOCK_UVS[BEDROCK].u = 1;
+    BLOCK_UVS[BEDROCK].v = 14;
+
+    // WOOD
+    BLOCK_UVS[WOOD].u = 4;
+    BLOCK_UVS[WOOD].v = 15;
+
+    // BRICK
+    BLOCK_UVS[BRICK].u = 7;
+    BLOCK_UVS[BRICK].v = 15;
+
+    // COBBLESTONE
+    BLOCK_UVS[COBBLESTONE].u = 0;
+    BLOCK_UVS[COBBLESTONE].v = 14;
+}
+
+
 //---------
  
 unsigned int BLOCK_INDICES_COUNT = 36;

@@ -6,6 +6,8 @@ world* world_new() {
     w->terrain_texture = tex_new(GL_TEXTURE_2D, "res/images/terrain.png");
     w->chunk_manager = chunk_man_new();
 
+    blocks_init();
+
     return w;
 }
 
