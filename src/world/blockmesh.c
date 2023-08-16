@@ -33,7 +33,7 @@ blockmesh* bmesh_new(block *b) {
 }
 
 blockmesh* bmesh_new_block(enum block_type type, float pos[3]) {
-    block *b = block_new(type, pos);
+    block *b = block_new(type);
     return bmesh_new(b);
 }
 
@@ -41,9 +41,9 @@ void bmesh_draw(blockmesh *bm, shader *sh) {
     // TODO poner todo esto en el renderer para hacer renderer_draw(vao, ib, shader)
     shader_bind(sh);
 
-    mat4 mat;
-    glm_translate_make(mat, bm->block->pos);
-    shader_set_mat4(sh, "model", mat);
+    // mat4 mat;
+    // glm_translate_make(mat, bm->block->pos);
+    // shader_set_mat4(sh, "model", mat);
 
     float color[3] = {0.0f, 0.7f, 0.0f};
     shader_set_vec3(sh, "color", color);

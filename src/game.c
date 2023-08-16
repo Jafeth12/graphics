@@ -142,7 +142,7 @@ void game_world_update(game *g) {
     player *p = g->pl;
 
     int offset[2];
-    world_get_offset_from_pos(floor(player_get_x(p)), floor(player_get_z(p)), offset);
+    chunk_get_offset_from_pos(floor(player_get_x(p)), floor(player_get_z(p)), offset);
 
     if (offset[0] < 0 || offset[1] < 0) return;
 
@@ -179,7 +179,7 @@ void game_loop(game *g) {
     printf("x: %d, y: %d, z: %d\n", player_world_pos[0], player_world_pos[1], player_world_pos[2]);
 
     int offset[2];
-    world_get_offset_from_pos(player_world_pos[0], player_world_pos[2], offset);
+    chunk_get_offset_from_pos(player_world_pos[0], player_world_pos[2], offset);
 
     // chunk position
     printf("x: %d, z: %d\n", offset[0], offset[1]);
