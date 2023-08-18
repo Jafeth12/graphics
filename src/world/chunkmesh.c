@@ -55,8 +55,8 @@ void cmesh_mesh(chunkmesh *cm) {
     vertex_offset = index_offset = 0;
 
     chunk_for_each_block() {
-        block* b = chunk_get_block(chunk, i, j, k);
-        if (b->type == AIR) continue;
+        enum block_type type = chunk_get_block(chunk, i, j, k);
+        if (type == AIR) continue;
 
         unsigned int initial_vertex_index = vertex_offset/(3+3+2);
 
@@ -81,13 +81,13 @@ void cmesh_mesh(chunkmesh *cm) {
             float u = 0;
             float v = 0;
 
-            if (b->type == GRASS && ii >= 16 && ii <= 19) {
+            if (type == GRASS && ii >= 16 && ii <= 19) {
                 // top face
                 u = 0;
                 v = 15;
             } else {
-                u = BLOCK_UVS[b->type].u;
-                v = BLOCK_UVS[b->type].v;
+                u = BLOCK_UVS[type].u;
+                v = BLOCK_UVS[type].v;
             }
 
             // uvs
@@ -104,35 +104,35 @@ void cmesh_mesh(chunkmesh *cm) {
         //     indices[index_offset++] = BLOCK_INDICES[ii] + initial_vertex_index;
         // }
 
-        block *neighbor;
+        enum block_type neighbor;
 
         neighbor = chunk_get_block(chunk, i+1, j, k);
-        if (neighbor == NULL || neighbor->type == AIR) {
+        if (neighbor == AIR) {
             cmesh_add_face(cm, RIGHT, indices, initial_vertex_index, &index_offset);
         }
 
         neighbor = chunk_get_block(chunk, i-1, j, k);
-        if (neighbor == NULL || neighbor->type == AIR) {
+        if (neighbor == AIR) {
             cmesh_add_face(cm, LEFT, indices, initial_vertex_index, &index_offset);
         }
 
         neighbor = chunk_get_block(chunk, i, j, k-1);
-        if (neighbor == NULL || neighbor->type == AIR) {
+        if (neighbor == AIR) {
             cmesh_add_face(cm, BACK, indices, initial_vertex_index, &index_offset);
         }
 
         neighbor = chunk_get_block(chunk, i, j, k+1);
-        if (neighbor == NULL || neighbor->type == AIR) {
+        if (neighbor == AIR) {
             cmesh_add_face(cm, FRONT, indices, initial_vertex_index, &index_offset);
         }
 
         neighbor = chunk_get_block(chunk, i, j+1, k);
-        if (neighbor == NULL || neighbor->type == AIR) {
+        if (neighbor == AIR) {
             cmesh_add_face(cm, TOP, indices, initial_vertex_index, &index_offset);
         }
 
         neighbor = chunk_get_block(chunk, i, j-1, k);
-        if (neighbor == NULL || neighbor->type == AIR) {
+        if (neighbor == AIR) {
             cmesh_add_face(cm, BOTTOM, indices, initial_vertex_index, &index_offset);
         }
 

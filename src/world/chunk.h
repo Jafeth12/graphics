@@ -10,14 +10,14 @@
 #define CHUNK_HEIGHT 256
 
 typedef struct chunk {
-    block* blocks[CHUNK_SIZE][CHUNK_HEIGHT][CHUNK_SIZE];
+    enum block_type blocks[CHUNK_SIZE][CHUNK_HEIGHT][CHUNK_SIZE];
     float offset[2];
     unsigned int solid_blocks_count;
 } chunk;
 
 chunk* chunk_new(int offset_x, int offset_z);
 
-block* chunk_get_block(chunk* c, int x, int y, int z);
+enum block_type chunk_get_block(chunk* c, int x, int y, int z);
 
 char chunk_set_block(chunk* c, int x, int y, int z, enum block_type type);
 
