@@ -11,6 +11,7 @@ chunk_manager* chunk_man_new() {
     }
 
     cm->chunks_to_load = NULL;
+    cm->chunks_to_load_count = 0;
 
     return cm;
 }
@@ -79,23 +80,43 @@ void chunk_man_unload_chunk(chunk_manager *cm, int offset_x, int offset_z) {
     }
 }
 
+// deprecated
 void chunk_man_add_chunk_to_queue(chunk_manager *cm, int offset_x, int offset_z) {
     if (offset_x >= MAX_CHUNKS || offset_z >= MAX_CHUNKS) return;
     if (offset_x < 0 || offset_z < 0) return;
 
     chunkmesh *cmesh = cm->chunkmeshes[offset_x][offset_z];
+    if (cmesh == NULL) {
+        cmesh = cmesh_new_chunk_no_mesh(offset_x, offset_z);
+        cm->chunkmeshes[offset_x][offset_z] = cmesh;
+    }
 
     if (cm->chunks_to_load == NULL) {
         cm->chunks_to_load = list_new((void*)cmesh);
     } else {
         list_append(cm->chunks_to_load, (void*)cmesh);
     }
+
+    cm->chunks_to_load_count += 1;
 }
 
+// deprecated
 void chunk_man_load_chunk_from_queue(chunk_manager *cm) {
-    if (cm->chunks_to_load == NULL) return;
-
     list *l = cm->chunks_to_load;
+
+    if (l == NULL || l->data == NULL) return;
+
+    chunkmesh *cmesh = (chunkmesh*)l->data;
+    if (chunk_man_is_chunk_loaded(cm, cmesh->chunk->offset[0], cmesh->chunk->offset[1])) return;
+
+    chunk_man_load_chunk(cm, cmesh->chunk->offset[0], cmesh->chunk->offset[1]);
+    list_pop_front(l);
+
+    cm->chunks_to_load_count -= 1;
+    if (cm->chunks_to_load_count == 0) {
+        list_destroy(cm->chunks_to_load);
+        cm->chunks_to_load = NULL;
+    }
 }
 
 char chunk_man_is_chunk_loaded(chunk_manager *cm, int offset_x, int offset_z) {

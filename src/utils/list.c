@@ -44,6 +44,17 @@ void list_pop(list *l) {
     free(last);
 }
 
+void list_pop_front(list *l) {
+    list *first = l;
+
+    while (first->prev != NULL) {
+        first = first->prev;
+    }
+
+    first->next->prev = NULL;
+    free(first);
+}
+
 // void list_insert(list *l, void *data, int index) {
 //     list *new = list_new(data);
 //     list *current = l;

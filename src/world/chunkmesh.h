@@ -34,6 +34,8 @@ chunkmesh* cmesh_new(chunk* chunk);
 
 chunkmesh* cmesh_new_chunk(int offset_x, int offset_y);
 
+chunkmesh* cmesh_new_chunk_no_mesh(int offset_x, int offset_z);
+
 void cmesh_add_face(chunkmesh *cm, enum block_face face, unsigned *indices, unsigned initial_vertex_index, unsigned *index_offset);
 
 void cmesh_update(chunkmesh *cm);

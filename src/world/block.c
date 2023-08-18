@@ -28,7 +28,7 @@ void blocks_init() {
     // AIR
 
     // GRASS
-    BLOCK_UVS[GRASS].u = 2; // original is 3
+    BLOCK_UVS[GRASS].u = 3; // original is 3
     BLOCK_UVS[GRASS].v = 15;
 
     // DIRT

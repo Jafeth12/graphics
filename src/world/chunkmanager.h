@@ -10,6 +10,7 @@
 typedef struct chunk_manager {
     chunkmesh* chunkmeshes[MAX_CHUNKS][MAX_CHUNKS];
     list* chunks_to_load;
+    size_t chunks_to_load_count;
 } chunk_manager;
 
 // ---
@@ -36,6 +37,10 @@ char chunk_man_is_chunk_loaded(chunk_manager *cm, int offset_x, int offset_y);
 chunkmesh* chunk_man_get_chunk(chunk_manager *cm, int x, int y);
 
 void chunk_man_update_chunks(chunk_manager *cm);
+
+void chunk_man_add_chunk_to_queue(chunk_manager *cm, int offset_x, int offset_z);
+
+void chunk_man_load_chunk_from_queue(chunk_manager *cm);
 
 // --- Drawing ---
 

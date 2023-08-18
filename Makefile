@@ -21,7 +21,7 @@ TARGET = $(BIN_DIR)/game
 SRCS := $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)
 
 OBJS := $(addprefix $(BIN_DIR)/,$(SRCS:.c=.o))
-CFLAGS := $(OPTS) -g -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-function -Wno-unused-value
+CFLAGS := $(OPTS) -g -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-function -Wno-unused-value -pg
 LDLIBS := -lglfw -lGL -lm -lX11 -lXrandr -lpthread -ldl
 
 $(TARGET): $(OBJS)

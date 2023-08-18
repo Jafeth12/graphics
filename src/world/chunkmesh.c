@@ -17,6 +17,15 @@ chunkmesh* cmesh_new_chunk(int offset_x, int offset_z) {
     return cmesh_new(c);
 }
 
+chunkmesh* cmesh_new_chunk_no_mesh(int offset_x, int offset_z) {
+    chunk* c = chunk_new(offset_x, offset_z);
+    chunkmesh* cm = malloc(sizeof(chunkmesh));
+    cm->chunk = c;
+    cm->is_meshed = 0;
+
+    return cm;
+}
+
 void cmesh_update(chunkmesh *cm) {
     // discard vbo and ibo
     // create new ones with new data with cmesh_mesh
@@ -37,8 +46,10 @@ void cmesh_mesh(chunkmesh *cm) {
     unsigned int total_vertices_size = ((3+3+2)*sizeof(float) * BLOCK_VERTICES_COUNT) * chunk->solid_blocks_count;
     unsigned int total_indices_size = BLOCK_INDICES_SIZE * chunk->solid_blocks_count;
 
-    float *vertices = malloc(total_vertices_size);
-    unsigned int *indices = malloc(total_indices_size);
+    // float *vertices = malloc(total_vertices_size);
+    // unsigned int *indices = malloc(total_indices_size);
+    float vertices[total_vertices_size/sizeof(float)];
+    unsigned int indices[total_indices_size/sizeof(unsigned int)];
 
     unsigned int vertex_offset, index_offset;
     vertex_offset = index_offset = 0;
@@ -67,8 +78,17 @@ void cmesh_mesh(chunkmesh *cm) {
             vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii_normal+1];
             vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii_normal+2];
 
-            float u = BLOCK_UVS[b->type].u;
-            float v = BLOCK_UVS[b->type].v;
+            float u = 0;
+            float v = 0;
+
+            if (b->type == GRASS && ii >= 16 && ii <= 19) {
+                // top face
+                u = 0;
+                v = 15;
+            } else {
+                u = BLOCK_UVS[b->type].u;
+                v = BLOCK_UVS[b->type].v;
+            }
 
             // uvs
             vertices[vertex_offset++] = (BLOCK_VERTICES_UV[ii_uvs]+u)/16;
@@ -131,8 +151,8 @@ void cmesh_mesh(chunkmesh *cm) {
 
     cm->ib = ib_new(0, index_offset, indices);
 
-    free(vertices);
-    free(indices);
+    // free(vertices);
+    // free(indices);
 }
 
 void cmesh_add_face(chunkmesh *cm, enum block_face face, unsigned *indices, unsigned initial_vertex_index, unsigned *index_offset) {

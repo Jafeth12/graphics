@@ -166,15 +166,19 @@ void print_player_pos(game *g) {
 
 double MS_PER_TICK = 1000.0 / 55.0;
 
+void game_tick(game *g) {
+    game_process_input(g);
+    world_update_render_distance(g->world, g->pl->position, g->settings.render_distance);
+    // world_load_chunks(g->world);
+}
+
 void game_loop(game *g) {
     game_update_first_person_camera(g);
 
     world_draw(g->world, g->shaders[SHADER_DEFAULT]);
 
     while ((g->processed_time + MS_PER_TICK) < (glfwGetTime()*1000)) {
-        game_process_input(g);
-        // world_load_chunks(g->world);
-        world_update_render_distance(g->world, g->pl->position, g->settings.render_distance);
+        game_tick(g);
         g->processed_time += MS_PER_TICK;
         // print_player_pos(g);
     }

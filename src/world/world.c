@@ -15,6 +15,7 @@ world* world_new() {
 
 void world_add_chunk(world *w, int offset_x, int offset_z) {
     chunk_man_load_chunk(w->chunk_manager, offset_x, offset_z);
+    // chunk_man_add_chunk_to_queue(w->chunk_manager, offset_x, offset_z);
 }
 
 void world_remove_chunk(world *w, int offset_x, int offset_y) {
@@ -30,7 +31,7 @@ chunkmesh* world_get_chunk(world *w, int x, int y) {
 }
 
 void world_load_chunks(world *w) {
-
+    chunk_man_load_chunk_from_queue(w->chunk_manager);
 }
 
 void world_update_render_distance(world *w, vec3 pos, char render_distance) {
@@ -51,18 +52,6 @@ void world_update_render_distance(world *w, vec3 pos, char render_distance) {
             }
         }
     }
-
-
-        // // load chunks inside of render distance
-        // if (abs(x - offset[0]) <= render_distance && abs(z - offset[1]) <= render_distance) {
-        //     if (!world_is_chunk_loaded(w, x, z)) world_add_chunk(w, x, z);
-        // }
-        //
-        // // unload chunks outside of render distance 
-        // if (abs(x - offset[0]) > render_distance || abs(z - offset[1]) > render_distance) {
-        //     if (world_is_chunk_loaded(w, x, z)) world_remove_chunk(w, x, z);
-        // }
-    // }
 }
 
 // --- Block management ---
