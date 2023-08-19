@@ -16,7 +16,7 @@ game *game_init() {
 
     g->processed_time = 0;
 
-    float zfar = (g->settings.render_distance * CHUNK_SIZE) + 2*CHUNK_SIZE;
+    float zfar = (g->settings.render_distance * CHUNK_SIZE) + 3*CHUNK_SIZE;
 
     if (g->settings.wireframe) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe
     else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // normal
@@ -127,7 +127,11 @@ void game_process_input(game *g) {
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_B) == GLFW_PRESS) {
-        world_place_block(g->world, GRASS, floor(player_get_x(g->pl)), floor(player_get_y(g->pl)), floor(player_get_z(g->pl)));
+        world_place_block(g->world, WOOD, floor(player_get_x(g->pl)), floor(player_get_y(g->pl)), floor(player_get_z(g->pl)));
+    }
+
+    if (glfwGetKey(g->win->handle, GLFW_KEY_N) == GLFW_PRESS) {
+        world_remove_block(g->world, floor(player_get_x(g->pl)), floor(player_get_y(g->pl)), floor(player_get_z(g->pl)));
     }
 
 }

@@ -1,20 +1,21 @@
 #include "chunkmesh.h"
+#include "world/block.h"
 #include <stdio.h>
 
-chunkmesh* cmesh_new(chunk* chunk) {
+chunkmesh* cmesh_new(chunk* chunk, chunkmesh*** chunks) {
     chunkmesh* cm = malloc(sizeof(chunkmesh));
     cm->chunk = chunk;
     cm->is_meshed = 1;
 
     cm->vao = vao_new();
-    cmesh_mesh(cm);
+    cmesh_mesh(cm, chunks);
 
     return cm;
 }
 
-chunkmesh* cmesh_new_chunk(int offset_x, int offset_z) {
+chunkmesh* cmesh_new_chunk(int offset_x, int offset_z, chunkmesh*** chunks) {
     chunk* c = chunk_new(offset_x, offset_z);
-    return cmesh_new(c);
+    return cmesh_new(c, chunks);
 }
 
 chunkmesh* cmesh_new_chunk_no_mesh(int offset_x, int offset_z) {
@@ -26,7 +27,7 @@ chunkmesh* cmesh_new_chunk_no_mesh(int offset_x, int offset_z) {
     return cm;
 }
 
-void cmesh_update(chunkmesh *cm) {
+void cmesh_update(chunkmesh *cm, chunkmesh*** chunks) {
     // discard vbo and ibo
     // create new ones with new data with cmesh_mesh
     if (cm->is_meshed) {
@@ -34,22 +35,25 @@ void cmesh_update(chunkmesh *cm) {
     }
 
     cm->vao = vao_new();
-    cmesh_mesh(cm);
+    cmesh_mesh(cm, chunks);
 
     cm->is_meshed = 1;
 }
 
-void cmesh_mesh(chunkmesh *cm) {
+void cmesh_mesh(chunkmesh *cm, chunkmesh*** chunks) {
     chunk *chunk = cm->chunk;
+
+    int offset_x = chunk->offset[0];
+    int offset_z = chunk->offset[1];
 
     // 3 floats for position, 3 floats for normal, 2 floats for uv
     unsigned int total_vertices_size = ((3+3+2)*sizeof(float) * BLOCK_VERTICES_COUNT) * chunk->solid_blocks_count;
     unsigned int total_indices_size = BLOCK_INDICES_SIZE * chunk->solid_blocks_count;
 
-    // float *vertices = malloc(total_vertices_size);
-    // unsigned int *indices = malloc(total_indices_size);
-    float vertices[total_vertices_size/sizeof(float)];
-    unsigned int indices[total_indices_size/sizeof(unsigned int)];
+    float *vertices = malloc(total_vertices_size);
+    unsigned int *indices = malloc(total_indices_size);
+    // float vertices[total_vertices_size/sizeof(float)];
+    // unsigned int indices[total_indices_size/sizeof(unsigned int)];
 
     unsigned int vertex_offset, index_offset;
     vertex_offset = index_offset = 0;
@@ -109,6 +113,17 @@ void cmesh_mesh(chunkmesh *cm) {
         neighbor = chunk_get_block(chunk, i+1, j, k);
         if (neighbor.type == AIR) {
             cmesh_add_face(cm, RIGHT, indices, initial_vertex_index, &index_offset);
+        } else if (neighbor.type == OUT_OF_BOUNDS) {
+            // cmesh_add_face(cm, RIGHT, indices, initial_vertex_index, &index_offset);
+
+            // chunkmesh* neighbor_cmesh = chunks[offset_x+1][offset_z];
+            // if (neighbor_cmesh != NULL) {
+            //     neighbor = chunk_get_block(neighbor_cmesh->chunk, 0, 0, 0);
+            //     if (neighbor.type == AIR) {
+            //         printf("right\n");
+            //         // cmesh_add_face(cm, RIGHT, indices, initial_vertex_index, &index_offset);
+            //     }
+            // }
         }
 
         neighbor = chunk_get_block(chunk, i-1, j, k);
@@ -151,8 +166,8 @@ void cmesh_mesh(chunkmesh *cm) {
 
     cm->ib = ib_new(0, index_offset, indices);
 
-    // free(vertices);
-    // free(indices);
+    free(vertices);
+    free(indices);
 }
 
 void cmesh_add_face(chunkmesh *cm, enum block_face face, unsigned *indices, unsigned initial_vertex_index, unsigned *index_offset) {

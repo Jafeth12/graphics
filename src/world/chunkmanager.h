@@ -24,7 +24,7 @@ void chunk_man_destroy(chunk_manager* cm);
 
 void chunk_man_place_block(chunk_manager *cm, enum block_type type, int x, int y, int z);
 
-// void chunk_man_remove_block(chunk_manager *cm, int x, int y, int z);
+void chunk_man_remove_block(chunk_manager *cm, int x, int y, int z);
 
 // --- Chunks ---
 

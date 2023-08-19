@@ -39,6 +39,7 @@ void chunk_man_place_block(chunk_manager *cm, enum block_type type, int x, int y
     int offset[2];
     chunk_get_offset_from_pos(x, z, offset);
 
+    if (offset[0] >= MAX_CHUNKS || offset[1] >= MAX_CHUNKS) return;
     if (offset[0] < 0 || offset[1] < 0) return;
 
     chunkmesh *cmesh = cm->chunkmeshes[offset[0]][offset[1]];
@@ -46,10 +47,24 @@ void chunk_man_place_block(chunk_manager *cm, enum block_type type, int x, int y
 
     // TODO more checks for the position stuff????
     chunk_set_block(cmesh->chunk, x%CHUNK_SIZE, y, z%CHUNK_SIZE, type);
-    cmesh_update(cmesh);
+    cmesh_update(cmesh, (chunkmesh***)cm->chunkmeshes);
 }
 
-// void chunk_man_remove_block(chunk_manager *cm, int x, int y, int z);
+void chunk_man_remove_block(chunk_manager *cm, int x, int y, int z) {
+    if (y < 0 || y >= CHUNK_HEIGHT) return;
+
+    int offset[2];
+    chunk_get_offset_from_pos(x, z, offset);
+
+    if (offset[0] >= MAX_CHUNKS || offset[1] >= MAX_CHUNKS) return;
+    if (offset[0] < 0 || offset[1] < 0) return;
+
+    chunkmesh *cmesh = cm->chunkmeshes[offset[0]][offset[1]];
+    if (cmesh == NULL) return;
+
+    chunk_set_block(cmesh->chunk, x%CHUNK_SIZE, y, z%CHUNK_SIZE, AIR);
+    cmesh_update(cmesh, (chunkmesh***)cm->chunkmeshes);
+}
 
 // --- Chunks ---
 
@@ -60,10 +75,10 @@ void chunk_man_load_chunk(chunk_manager *cm, int offset_x, int offset_z) {
     chunkmesh *cmesh = cm->chunkmeshes[offset_x][offset_z];
 
     if (cmesh == NULL) {
-        chunkmesh *cmesh = cmesh_new_chunk(offset_x, offset_z);
+        chunkmesh *cmesh = cmesh_new_chunk(offset_x, offset_z, (chunkmesh***)cm->chunkmeshes);
         cm->chunkmeshes[offset_x][offset_z] = cmesh;
     } else {
-        cmesh_update(cmesh);
+        cmesh_update(cmesh, (chunkmesh***)cm->chunkmeshes);
     }
 
 }

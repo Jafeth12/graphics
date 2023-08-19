@@ -39,7 +39,8 @@ enum block_type {
     WOOD,
     BRICK,
     COBBLESTONE,
-    AIR
+    AIR,
+    OUT_OF_BOUNDS
 };
 
 enum block_face {

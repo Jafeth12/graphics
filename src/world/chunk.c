@@ -1,5 +1,31 @@
 #include "chunk.h"
 
+enum block_type gen_block_type(chunk* c, int x, int y, int z) {
+    if (y == 0) {
+        c->solid_blocks_count++;
+        return BEDROCK;
+    }
+
+    float frequency = 0.1f;
+    float amplitude = 2.0f;
+
+    float xOffset = sin(x * frequency) * amplitude;
+    float zOffset = sin(z * frequency) * amplitude;
+
+    float surfaceY = 10 + xOffset + zOffset;
+    if ((float)y < surfaceY) {
+        c->solid_blocks_count++;
+
+        if (y >= (surfaceY - 2)) {
+            return GRASS;
+        }
+
+        return STONE;
+    }
+
+    return AIR;
+}
+
 chunk* chunk_new(int offset_x, int offset_z) {
     chunk *c = malloc(sizeof(chunk));
     c->offset[0] = offset_x;
@@ -7,41 +33,8 @@ chunk* chunk_new(int offset_x, int offset_z) {
     c->solid_blocks_count = 0;
 
     chunk_for_each_block() {
-        enum block_type type = AIR;
-        
-        if (j == 0) {
-            type = BEDROCK;
-            c->solid_blocks_count++;
-        } else if (j >= 40) {
-            type = AIR;
-        } else if (j <= 10) {
-            type = STONE;
-            c->solid_blocks_count++;
-        } else if (j <= 20) {
-            type = DIRT;
-            c->solid_blocks_count++;
-        } else if (j <= 30) {
-            type = rand() % AIR;
-            c->solid_blocks_count++;
-        }
-
-        // if (offset_x == 0 && offset_z == 0) {
-        //     if (i == CHUNK_SIZE/2 && j <= 10 && k == CHUNK_SIZE/2) {
-        //         type = GRASS;
-        //         c->solid_blocks_count++;
-        //     }
-        // } else {
-        //     if (j <= 0) {
-        //         type = GRASS;
-        //         c->solid_blocks_count++;
-        //     } else if (i == CHUNK_SIZE/2 && j <= 3 && k == CHUNK_SIZE/2) {
-        //         type = GRASS;
-        //         c->solid_blocks_count++;
-        //     }
-        // }
-
         c->blocks[i][j][k] = (block) {
-            .type = type
+            .type = gen_block_type(c, i+(offset_x*CHUNK_SIZE), j, k+(offset_z*CHUNK_SIZE))
         };
     }
 
@@ -51,6 +44,7 @@ chunk* chunk_new(int offset_x, int offset_z) {
 block chunk_get_block(chunk* c, int x, int y, int z) {
     if (x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_HEIGHT || z < 0 || z >= CHUNK_SIZE) {
         return (block) { 
+            // .type = OUT_OF_BOUNDS
             .type = AIR
         };
     }

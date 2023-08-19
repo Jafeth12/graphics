@@ -60,6 +60,10 @@ void world_place_block(world *w, enum block_type type, int x, int y, int z) {
     chunk_man_place_block(w->chunk_manager, type, x, y, z);
 }
 
+void world_remove_block(world *w, int x, int y, int z) {
+    chunk_man_remove_block(w->chunk_manager, x, y, z);
+}
+
 // ------------------------
 
 void world_draw(world *w, shader *sh) {
