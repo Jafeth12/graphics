@@ -21,7 +21,6 @@ chunk* chunk_new(int offset_x, int offset_z) {
             type = DIRT;
             c->solid_blocks_count++;
         } else if (j <= 30) {
-
             type = rand() % AIR;
             c->solid_blocks_count++;
         }
@@ -41,15 +40,19 @@ chunk* chunk_new(int offset_x, int offset_z) {
         //     }
         // }
 
-        c->blocks[i][j][k] = type;
+        c->blocks[i][j][k] = (block) {
+            .type = type
+        };
     }
 
     return c;
 }
 
-enum block_type chunk_get_block(chunk* c, int x, int y, int z) {
+block chunk_get_block(chunk* c, int x, int y, int z) {
     if (x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_HEIGHT || z < 0 || z >= CHUNK_SIZE) {
-        return AIR;
+        return (block) { 
+            .type = AIR
+        };
     }
 
     return c->blocks[x][y][z];
@@ -60,13 +63,13 @@ char chunk_set_block(chunk* c, int x, int y, int z, enum block_type type) {
         return -1;
     }
 
-    if (c->blocks[x][y][z] == AIR && type != AIR) {
+    if (c->blocks[x][y][z].type == AIR && type != AIR) {
         c->solid_blocks_count++;
-    } else if (c->blocks[x][y][z] != AIR && type == AIR) {
+    } else if (c->blocks[x][y][z].type != AIR && type == AIR) {
         c->solid_blocks_count--;
     }
 
-    c->blocks[x][y][z] = type;
+    c->blocks[x][y][z].type = type;
 
     return 0;
 }
