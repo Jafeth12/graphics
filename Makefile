@@ -22,7 +22,7 @@ SRCS := $(wildcard $(SRC_DIR)/*.c) $(wildcard $(SRC_DIR)/**/*.c)
 
 OBJS := $(addprefix $(BIN_DIR)/,$(SRCS:.c=.o))
 CFLAGS := $(OPTS) -g -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-function -Wno-unused-value
-LDLIBS := -lglfw -lGL -lm -lX11 -lXrandr -lpthread -ldl
+LDLIBS := -lglfw -lm
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(INCLUDE) $(CFLAGS) -o $@ $^ $(LDLIBS)

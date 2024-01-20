@@ -47,7 +47,7 @@ void cmesh_mesh(chunkmesh *cm, chunkmesh*** chunks) {
     int offset_z = chunk->offset[1];
 
     // 3 floats for position, 3 floats for normal, 2 floats for uv
-    unsigned int total_vertices_size = ((3+3+2)*sizeof(float) * BLOCK_VERTICES_COUNT) * chunk->solid_blocks_count;
+    unsigned int total_vertices_size = ((3+2)*sizeof(float) * BLOCK_VERTICES_COUNT) * chunk->solid_blocks_count;
     unsigned int total_indices_size = BLOCK_INDICES_SIZE * chunk->solid_blocks_count;
 
     float *vertices = malloc(total_vertices_size);
@@ -62,7 +62,7 @@ void cmesh_mesh(chunkmesh *cm, chunkmesh*** chunks) {
         block bl = chunk_get_block(chunk, i, j, k);
         if (bl.type == AIR) continue;
 
-        unsigned int initial_vertex_index = vertex_offset/(3+3+2);
+        unsigned int initial_vertex_index = vertex_offset/(3+2);
 
         unsigned ii_uvs = 0;
         unsigned grass_uvs_index = 0;
@@ -78,9 +78,9 @@ void cmesh_mesh(chunkmesh *cm, chunkmesh*** chunks) {
             vertices[vertex_offset++] = BLOCK_VERTICES_POS[ii_pos+2] + k;
             
             // normals
-            vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii_normal];
-            vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii_normal+1];
-            vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii_normal+2];
+            // vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii_normal];
+            // vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii_normal+1];
+            // vertices[vertex_offset++] = BLOCK_VERTICES_NORMALS[ii_normal+2];
 
             float u = 0;
             float v = 0;
@@ -156,10 +156,10 @@ void cmesh_mesh(chunkmesh *cm, chunkmesh*** chunks) {
     vao_bind(cm->vao);
     cm->vbo = vbo_new(0, total_vertices_size, vertices);
 
-    float stride = 8*sizeof(GLfloat);
+    float stride = 5*sizeof(GLfloat); // 8 = 3 + 3 + 2
 
     vbo_add_element(cm->vbo, 3, GL_FLOAT, 0); // position
-    vbo_add_element(cm->vbo, 3, GL_FLOAT, 0); // normal
+    // vbo_add_element(cm->vbo, 3, GL_FLOAT, 0); // normal
     vbo_add_element(cm->vbo, 2, GL_FLOAT, 0); // uvs
 
     vao_add_vbo(cm->vao, cm->vbo, stride);

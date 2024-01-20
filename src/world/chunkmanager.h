@@ -4,7 +4,7 @@
 #include "chunkmesh.h"
 #include <utils/list.h>
 
-#define MAX_CHUNKS 64
+#define MAX_CHUNKS 256
 
 
 typedef struct chunk_manager {

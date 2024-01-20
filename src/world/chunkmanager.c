@@ -46,7 +46,7 @@ void chunk_man_place_block(chunk_manager *cm, enum block_type type, int x, int y
     if (cmesh == NULL) return;
 
     // TODO more checks for the position stuff????
-    chunk_set_block(cmesh->chunk, x%CHUNK_SIZE, y, z%CHUNK_SIZE, type);
+    chunk_set_block(cmesh->chunk, x%CHUNK_SIZE, y+3, z%CHUNK_SIZE, type);
     cmesh_update(cmesh, (chunkmesh***)cm->chunkmeshes);
 }
 

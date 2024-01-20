@@ -12,7 +12,8 @@ enum block_type gen_block_type(chunk* c, int x, int y, int z) {
     float xOffset = sin(x * frequency) * amplitude;
     float zOffset = sin(z * frequency) * amplitude;
 
-    float surfaceY = 10 + xOffset + zOffset;
+    // float surfaceY = 30 + xOffset + zOffset;
+    float surfaceY = 3 + xOffset + zOffset;
     if ((float)y < surfaceY) {
         c->solid_blocks_count++;
 

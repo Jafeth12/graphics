@@ -11,8 +11,8 @@ game *game_init() {
     win_mouse_set_grabbed(g->win, 1);
 
     g->settings.wireframe = 0;
-    g->settings.fov = 70.0f;
-    g->settings.render_distance = 3;
+    g->settings.fov = 85.0f;
+    g->settings.render_distance = 16;
 
     g->processed_time = 0;
 
@@ -25,7 +25,7 @@ game *game_init() {
 
     game_load_shaders(g);
 
-    g->pl = player_new((vec3){0.0f, 3.0f, 0.0f});
+    g->pl = player_new((vec3){0.0f, 0.0f, 0.0f});
     g->cam = camera_create_perspective(70.0f, 0.1f, zfar, (float)GAME_WIDTH / (float)GAME_HEIGHT, g->pl->direction);
 
     g->world = world_new();
@@ -53,7 +53,11 @@ void game_load_shaders(game *g) {
 }
 
 void game_update_first_person_camera(game *g) {
-    camera_set_position(g->cam, g->pl->position);
+    vec3 cam_pos;
+    glm_vec3_copy(g->pl->position, cam_pos);
+    cam_pos[1] += 3.0f;
+
+    camera_set_position(g->cam, cam_pos);
     camera_update(g->cam);
 
     glm_vec3_copy(g->cam->direction, g->pl->direction);
@@ -168,7 +172,7 @@ void print_player_pos(game *g) {
     printf("------------------------\n");
 }
 
-double MS_PER_TICK = 1000.0 / 55.0;
+double MS_PER_TICK = 1000.0 / 55.0; // 55 ticks per second
 
 void game_tick(game *g) {
     game_process_input(g);
@@ -179,13 +183,13 @@ void game_tick(game *g) {
 void game_loop(game *g) {
     game_update_first_person_camera(g);
 
-    world_draw(g->world, g->shaders[SHADER_DEFAULT]);
-
     while ((g->processed_time + MS_PER_TICK) < (glfwGetTime()*1000)) {
         game_tick(g);
         g->processed_time += MS_PER_TICK;
-        // print_player_pos(g);
+        print_player_pos(g);
     }
+
+    world_draw(g->world, g->shaders[SHADER_DEFAULT]);
 
     GLenum err;
     if ((err = glGetError()) != GL_NO_ERROR) {

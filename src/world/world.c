@@ -68,7 +68,7 @@ void world_remove_block(world *w, int x, int y, int z) {
 
 void world_draw(world *w, shader *sh) {
     tex_bind(w->terrain_texture, 0);
-    shader_set_int(sh, "tex", 0);
+    shader_set_int(sh, "tex", 0); // 0 is the texture slot. there is only one tho
 
     chunk_man_draw(w->chunk_manager, sh);
 }
