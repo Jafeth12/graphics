@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <glad/glad.h>
+#include <glad.h>
 #include <GLFW/glfw3.h>
 
 #include <gfx/window.h>

@@ -1,7 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <glad/glad.h>
+#include <glad.h>
 #include <cglm/cglm.h>
 
 #include <stdlib.h>

@@ -1,7 +1,7 @@
 #ifndef VBO_ELEMENT_H
 #define VBO_ELEMENT_H
 
-#include <glad/glad.h>
+#include <glad.h>
 
 #include <stdlib.h>
 

@@ -1,7 +1,7 @@
 #ifndef BLOCKMESH_H
 #define BLOCKMESH_H
 
-#include <glad/glad.h>
+#include <glad.h>
 #include <cglm/cglm.h>
 
 #include "block.h"

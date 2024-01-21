@@ -5,7 +5,7 @@
 
 #include <utils/list.h>
 
-#include <glad/glad.h>
+#include <glad.h>
 
 typedef struct vbo {
     GLuint handle;
