@@ -46,5 +46,8 @@ run: $(TARGET)
 gdb: $(TARGET)
 	gdb $<
 
+clean_libs:
+	rm -rf $(LIBS_DIR)/*.o
+
 clean:
 	rm -rf $(BIN_DIR)/

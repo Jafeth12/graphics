@@ -151,9 +151,9 @@ void game_destroy(game *g) {
 
 // --------------------------------------------------
 void print_player_pos(game *g) {
-    printf("------------------------\n");
+    // printf("------------------------\n");
     // world position
-    printf("x: %f, y: %f, z: %f\n", g->pl->position[0], g->pl->position[1], g->pl->position[2]);
+    // printf("x: %f, y: %f, z: %f\n", g->pl->position[0], g->pl->position[1], g->pl->position[2]);
 
     player *p = g->pl;
     int player_world_pos[3];
@@ -162,14 +162,14 @@ void print_player_pos(game *g) {
     player_world_pos[2] = floor(player_get_z(p));
 
     // block position
-    printf("x: %d, y: %d, z: %d\n", player_world_pos[0], player_world_pos[1], player_world_pos[2]);
+    // printf("x: %d, y: %d, z: %d\n", player_world_pos[0], player_world_pos[1], player_world_pos[2]);
 
     int offset[2];
     chunk_get_offset_from_pos(player_world_pos[0], player_world_pos[2], offset);
 
     // chunk position
-    printf("x: %d, z: %d\n", offset[0], offset[1]);
-    printf("------------------------\n");
+    // printf("x: %d, z: %d\n", offset[0], offset[1]);
+    // printf("------------------------\n");
 }
 
 double MS_PER_TICK = 1000.0 / 55.0; // 55 ticks per second

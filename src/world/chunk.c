@@ -1,20 +1,18 @@
 #include "chunk.h"
 
+#include "noise1234.h"
+
 enum block_type gen_block_type(chunk* c, int x, int y, int z) {
     if (y == 0) {
         c->solid_blocks_count++;
         return BEDROCK;
     }
 
-    float frequency = 0.1f;
-    float amplitude = 2.0f;
+    float height = noise2(x * 0.03, z * 0.03) * 10 + 20;
 
-    float xOffset = sin(x * frequency) * amplitude;
-    float zOffset = sin(z * frequency) * amplitude;
+    float surfaceY = height;
 
-    // float surfaceY = 30 + xOffset + zOffset;
-    float surfaceY = 3 + xOffset + zOffset;
-    if ((float)y < surfaceY) {
+    if (y < height) {
         c->solid_blocks_count++;
 
         if (y >= (surfaceY - 2)) {
@@ -25,6 +23,26 @@ enum block_type gen_block_type(chunk* c, int x, int y, int z) {
     }
 
     return AIR;
+
+    // float frequency = 0.1f;
+    // float amplitude = 2.0f;
+    //
+    // float xOffset = sin(x * frequency) * amplitude;
+    // float zOffset = sin(z * frequency) * amplitude;
+    //
+    // // float surfaceY = 30 + xOffset + zOffset;
+    // float surfaceY = 3 + xOffset + zOffset;
+    // if ((float)y < surfaceY) {
+    //     c->solid_blocks_count++;
+    //
+    //     if (y >= (surfaceY - 2)) {
+    //         return GRASS;
+    //     }
+    //
+    //     return STONE;
+    // }
+    //
+    // return AIR;
 }
 
 chunk* chunk_new(int offset_x, int offset_z) {
