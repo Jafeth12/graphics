@@ -103,19 +103,19 @@ float BLOCK_VERTICES_NORMALS[] = {
 
 float BLOCK_VERTICES_BRIGHTNESS[] = {
     // Left face
-    0.8,
+    0.6,
 
     // Right face
     0.9,
 
     // Back face
-    0.8,
-
-    // Front face
     0.7,
 
+    // Front face
+    0.8,
+
     // Top face
-    1.0,
+    0.9,
 
     // Bottom face
     0.5,

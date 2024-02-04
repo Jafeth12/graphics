@@ -18,7 +18,7 @@ enum block_type gen_block_type(chunk* c, int x, int y, int z) {
     }
 
     float height = 0.0f;
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 5; i++) {
         height += noise3((x*0.03), z*0.03, c->seed + 10 * 64) * 2.05 + 3;
     }
 
