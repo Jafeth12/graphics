@@ -7,7 +7,7 @@
 #include <cglm/cglm.h>
 
 #define CHUNK_SIZE 8
-#define CHUNK_HEIGHT 32
+#define CHUNK_HEIGHT 64
 
 typedef struct chunk {
     block blocks[CHUNK_SIZE][CHUNK_HEIGHT][CHUNK_SIZE];

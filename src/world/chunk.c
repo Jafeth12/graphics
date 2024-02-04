@@ -2,13 +2,28 @@
 
 #include "noise1234.h"
 
+// f32 octave_compute(struct Octave *p, f32 seed, f32 x, f32 z) {
+//     f32 u = 1.0f, v = 0.0f;
+//     for (int i = 0; i < p->n; i++) {
+//         v += (1.0f / u) * noise3((x / 1.01f) * u, (z / 1.01f) * u, seed + (p->o * 32));
+//         u *= 2.0f;
+//     }
+//     return v;
+// }
+
 enum block_type gen_block_type(chunk* c, int x, int y, int z) {
     if (y == 0) {
         c->solid_blocks_count++;
         return BEDROCK;
     }
 
-    float height = noise2(x * 0.03, z * 0.03) * 10 + 20;
+    // float height = noise2(x * 0.03, z * 0.03) * 10 + 10;
+
+    float u = 1.0f, height = 0.0f;
+    for (int i = 0; i < 2; i++) {
+        height += noise2((x*0.03), z*0.03) * u * 10.0f + 5;
+        u *= 2.0f;
+    }
 
     float surfaceY = height;
 
