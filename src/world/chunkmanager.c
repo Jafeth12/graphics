@@ -47,7 +47,7 @@ void chunk_man_place_block(chunk_manager *cm, enum block_type type, int x, int y
 
     // TODO more checks for the position stuff????
     chunk_set_block(cmesh->chunk, x%CHUNK_SIZE, y+3, z%CHUNK_SIZE, type);
-    cmesh_update(cmesh, (chunkmesh***)cm->chunkmeshes);
+    cmesh_update(cmesh, MAX_CHUNKS, cm->chunkmeshes);
 }
 
 void chunk_man_remove_block(chunk_manager *cm, int x, int y, int z) {
@@ -63,7 +63,7 @@ void chunk_man_remove_block(chunk_manager *cm, int x, int y, int z) {
     if (cmesh == NULL) return;
 
     chunk_set_block(cmesh->chunk, x%CHUNK_SIZE, y, z%CHUNK_SIZE, AIR);
-    cmesh_update(cmesh, (chunkmesh***)cm->chunkmeshes);
+    cmesh_update(cmesh, MAX_CHUNKS, cm->chunkmeshes);
 }
 
 // --- Chunks ---
@@ -75,10 +75,10 @@ void chunk_man_load_chunk(chunk_manager *cm, int offset_x, int offset_z) {
     chunkmesh *cmesh = cm->chunkmeshes[offset_x][offset_z];
 
     if (cmesh == NULL) {
-        chunkmesh *cmesh = cmesh_new_chunk(offset_x, offset_z, (chunkmesh***)cm->chunkmeshes);
+        chunkmesh *cmesh = cmesh_new_chunk(offset_x, offset_z, MAX_CHUNKS, cm->chunkmeshes);
         cm->chunkmeshes[offset_x][offset_z] = cmesh;
     } else {
-        cmesh_update(cmesh, (chunkmesh***)cm->chunkmeshes);
+        cmesh_update(cmesh, MAX_CHUNKS, cm->chunkmeshes);
     }
 
 }

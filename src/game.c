@@ -12,7 +12,7 @@ game *game_init() {
 
     g->settings.wireframe = 0;
     g->settings.fov = 85.0f;
-    g->settings.render_distance = 16;
+    g->settings.render_distance = 12;
 
     g->processed_time = 0;
 

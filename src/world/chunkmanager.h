@@ -36,7 +36,7 @@ char chunk_man_is_chunk_loaded(chunk_manager *cm, int offset_x, int offset_y);
 
 chunkmesh* chunk_man_get_chunk(chunk_manager *cm, int x, int y);
 
-void chunk_man_update_chunks(chunk_manager *cm);
+void chunk_man_update_chunk(chunk_manager *cm, chunkmesh* cmesh);
 
 void chunk_man_add_chunk_to_queue(chunk_manager *cm, int offset_x, int offset_z);
 

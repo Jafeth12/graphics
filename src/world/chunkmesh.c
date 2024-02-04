@@ -2,20 +2,20 @@
 #include "world/block.h"
 #include <stdio.h>
 
-chunkmesh* cmesh_new(chunk* chunk, chunkmesh*** chunks) {
+chunkmesh* cmesh_new(chunk* chunk, int max_chunks, chunkmesh* chunks[][max_chunks]) {
     chunkmesh* cm = malloc(sizeof(chunkmesh));
     cm->chunk = chunk;
     cm->is_meshed = 1;
 
     cm->vao = vao_new();
-    cmesh_mesh(cm, chunks);
+    cmesh_mesh(cm, max_chunks, chunks);
 
     return cm;
 }
 
-chunkmesh* cmesh_new_chunk(int offset_x, int offset_z, chunkmesh*** chunks) {
+chunkmesh* cmesh_new_chunk(int offset_x, int offset_z, int max_chunks, chunkmesh* chunks[][max_chunks]) {
     chunk* c = chunk_new(offset_x, offset_z);
-    return cmesh_new(c, chunks);
+    return cmesh_new(c, max_chunks, chunks);
 }
 
 chunkmesh* cmesh_new_chunk_no_mesh(int offset_x, int offset_z) {
@@ -27,7 +27,7 @@ chunkmesh* cmesh_new_chunk_no_mesh(int offset_x, int offset_z) {
     return cm;
 }
 
-void cmesh_update(chunkmesh *cm, chunkmesh*** chunks) {
+void cmesh_update(chunkmesh *cm, int max_chunks, chunkmesh* chunks[][max_chunks]) {
     // discard vbo and ibo
     // create new ones with new data with cmesh_mesh
     if (cm->is_meshed) {
@@ -35,12 +35,12 @@ void cmesh_update(chunkmesh *cm, chunkmesh*** chunks) {
     }
 
     cm->vao = vao_new();
-    cmesh_mesh(cm, chunks);
+    cmesh_mesh(cm, max_chunks, chunks);
 
     cm->is_meshed = 1;
 }
 
-void cmesh_mesh(chunkmesh *cm, chunkmesh*** chunks) {
+void cmesh_mesh(chunkmesh *cm, int max_chunks, chunkmesh* chunks[][max_chunks]) {
     chunk *chunk = cm->chunk;
 
     int offset_x = chunk->offset[0];
@@ -109,45 +109,113 @@ void cmesh_mesh(chunkmesh *cm, chunkmesh*** chunks) {
         // }
 
         block neighbor;
+        chunkmesh* neighbor_cmesh;
 
         neighbor = chunk_get_block(chunk, i+1, j, k);
-        if (neighbor.type == AIR) {
-            cmesh_add_face(cm, RIGHT, indices, initial_vertex_index, &index_offset);
-        } else if (neighbor.type == OUT_OF_BOUNDS) {
-            // cmesh_add_face(cm, RIGHT, indices, initial_vertex_index, &index_offset);
-
-            // chunkmesh* neighbor_cmesh = chunks[offset_x+1][offset_z];
-            // if (neighbor_cmesh != NULL) {
-            //     neighbor = chunk_get_block(neighbor_cmesh->chunk, 0, 0, 0);
-            //     if (neighbor.type == AIR) {
-            //         printf("right\n");
-            //         // cmesh_add_face(cm, RIGHT, indices, initial_vertex_index, &index_offset);
-            //     }
-            // }
+        switch (neighbor.type) {
+            case AIR:
+                cmesh_add_face(cm, RIGHT, indices, initial_vertex_index, &index_offset);
+                break;
+            case OUT_OF_BOUNDS:
+                if (offset_x+1 >= max_chunks) {
+                    cmesh_add_face(cm, RIGHT, indices, initial_vertex_index, &index_offset);
+                    break;
+                }
+                neighbor_cmesh = chunks[offset_x+1][offset_z];
+                if (neighbor_cmesh != NULL) {
+                    neighbor = chunk_get_block(neighbor_cmesh->chunk, 0, j, k);
+                    if (neighbor.type == AIR || neighbor.type == OUT_OF_BOUNDS) {
+                        cmesh_add_face(cm, RIGHT, indices, initial_vertex_index, &index_offset);
+                    }
+                } else {
+                    cmesh_add_face(cm, RIGHT, indices, initial_vertex_index, &index_offset);
+                }
+                break;
+            default:
+                break;
         }
 
         neighbor = chunk_get_block(chunk, i-1, j, k);
-        if (neighbor.type == AIR) {
-            cmesh_add_face(cm, LEFT, indices, initial_vertex_index, &index_offset);
+        switch (neighbor.type) {
+            case AIR:
+                cmesh_add_face(cm, LEFT, indices, initial_vertex_index, &index_offset);
+                break;
+            case OUT_OF_BOUNDS:
+                if (offset_x-1 < 0) {
+                    cmesh_add_face(cm, LEFT, indices, initial_vertex_index, &index_offset);
+                    break;
+                }
+
+                neighbor_cmesh = chunks[offset_x-1][offset_z];
+                if (neighbor_cmesh != NULL) {
+                    neighbor = chunk_get_block(neighbor_cmesh->chunk, CHUNK_SIZE-1, j, k);
+                    if (neighbor.type == AIR || neighbor.type == OUT_OF_BOUNDS) {
+                        cmesh_add_face(cm, LEFT, indices, initial_vertex_index, &index_offset);
+                    }
+                } else {
+                    cmesh_add_face(cm, LEFT, indices, initial_vertex_index, &index_offset);
+                }
+                break;
+            default:
+                break;
         }
 
         neighbor = chunk_get_block(chunk, i, j, k-1);
-        if (neighbor.type == AIR) {
-            cmesh_add_face(cm, BACK, indices, initial_vertex_index, &index_offset);
+        switch (neighbor.type) {
+            case AIR:
+                cmesh_add_face(cm, BACK, indices, initial_vertex_index, &index_offset);
+                break;
+            case OUT_OF_BOUNDS:
+                if (offset_z-1 < 0) {
+                    cmesh_add_face(cm, BACK, indices, initial_vertex_index, &index_offset);
+                    break;
+                }
+                neighbor_cmesh = chunks[offset_x][offset_z-1];
+                if (neighbor_cmesh != NULL) {
+                    neighbor = chunk_get_block(neighbor_cmesh->chunk, i, j, CHUNK_SIZE-1);
+                    if (neighbor.type == AIR || neighbor.type == OUT_OF_BOUNDS) {
+                        cmesh_add_face(cm, BACK, indices, initial_vertex_index, &index_offset);
+                    }
+                } else {
+                    cmesh_add_face(cm, BACK, indices, initial_vertex_index, &index_offset);
+                }
+                break;
+            default:
+                break;
         }
 
         neighbor = chunk_get_block(chunk, i, j, k+1);
-        if (neighbor.type == AIR) {
-            cmesh_add_face(cm, FRONT, indices, initial_vertex_index, &index_offset);
+        switch (neighbor.type) {
+            case AIR:
+                cmesh_add_face(cm, FRONT, indices, initial_vertex_index, &index_offset);
+                break;
+            case OUT_OF_BOUNDS:
+                if (offset_z+1 >= max_chunks) {
+                    cmesh_add_face(cm, FRONT, indices, initial_vertex_index, &index_offset);
+                    break;
+                }
+
+                neighbor_cmesh = chunks[offset_x][offset_z+1];
+                if (neighbor_cmesh != NULL) {
+                    neighbor = chunk_get_block(neighbor_cmesh->chunk, i, j, 0);
+                    if (neighbor.type == AIR || neighbor.type == OUT_OF_BOUNDS) {
+                        cmesh_add_face(cm, FRONT, indices, initial_vertex_index, &index_offset);
+                    }
+                } else {
+                    cmesh_add_face(cm, FRONT, indices, initial_vertex_index, &index_offset);
+                }
+                break;
+            default:
+                break;
         }
 
         neighbor = chunk_get_block(chunk, i, j+1, k);
-        if (neighbor.type == AIR) {
+        if (neighbor.type == AIR || neighbor.type == OUT_OF_BOUNDS) {
             cmesh_add_face(cm, TOP, indices, initial_vertex_index, &index_offset);
         }
 
         neighbor = chunk_get_block(chunk, i, j-1, k);
-        if (neighbor.type == AIR) {
+        if (neighbor.type == AIR || neighbor.type == OUT_OF_BOUNDS) {
             cmesh_add_face(cm, BOTTOM, indices, initial_vertex_index, &index_offset);
         }
 
