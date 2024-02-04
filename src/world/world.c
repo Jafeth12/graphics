@@ -3,6 +3,9 @@
 world* world_new() {
     world *w = malloc(sizeof(world));
 
+    srand(NOW());
+
+    w->seed = rand();
     w->terrain_texture = tex_new(GL_TEXTURE_2D, "res/images/terrain.png");
     w->chunk_manager = chunk_man_new();
 
@@ -14,7 +17,7 @@ world* world_new() {
 // --- Chunk management ---
 
 void world_add_chunk(world *w, int offset_x, int offset_z) {
-    chunk_man_load_chunk(w->chunk_manager, offset_x, offset_z);
+    chunk_man_load_chunk(w->chunk_manager, offset_x, offset_z, w->seed);
     // chunk_man_add_chunk_to_queue(w->chunk_manager, offset_x, offset_z);
 }
 
@@ -30,9 +33,9 @@ chunkmesh* world_get_chunk(world *w, int x, int y) {
     return chunk_man_get_chunk(w->chunk_manager, x, y);
 }
 
-void world_load_chunks(world *w) {
-    chunk_man_load_chunk_from_queue(w->chunk_manager);
-}
+// void world_load_chunks(world *w) {
+//     chunk_man_load_chunk_from_queue(w->chunk_manager);
+// }
 
 void world_update_render_distance(world *w, vec3 pos, char render_distance) {
     int offset[2];

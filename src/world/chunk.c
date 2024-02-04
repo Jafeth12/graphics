@@ -2,6 +2,15 @@
 
 #include "noise1234.h"
 
+// f32 octave_compute(struct Octave *p, f32 seed, f32 x, f32 z) {
+//     f32 u = 1.0f, v = 0.0f;
+//     for (int i = 0; i < p->n; i++) {
+//         v += (1.0f / u) * noise3((x / 1.01f) * u, (z / 1.01f) * u, seed + (p->o * 32));
+//         u *= 2.0f;
+//     }
+//     return v;
+// }
+
 enum block_type gen_block_type(chunk* c, int x, int y, int z) {
     if (y == 0) {
         c->solid_blocks_count++;
@@ -10,7 +19,7 @@ enum block_type gen_block_type(chunk* c, int x, int y, int z) {
 
     float height = 0.0f;
     for (int i = 0; i < 6; i++) {
-        height += noise2((x*0.03), z*0.03) * 2.05 + 3;
+        height += noise3((x*0.03), z*0.03, c->seed + 10 * 64) * 2.05 + 3;
     }
 
     float surfaceY = height;
@@ -48,11 +57,12 @@ enum block_type gen_block_type(chunk* c, int x, int y, int z) {
     // return AIR;
 }
 
-chunk* chunk_new(int offset_x, int offset_z) {
+chunk* chunk_new(unsigned seed, int offset_x, int offset_z) {
     chunk *c = malloc(sizeof(chunk));
     c->offset[0] = offset_x;
     c->offset[1] = offset_z;
     c->solid_blocks_count = 0;
+    c->seed = seed;
 
     chunk_for_each_block() {
         c->blocks[i][j][k] = (block) {

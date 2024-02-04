@@ -25,7 +25,8 @@ game *game_init() {
 
     game_load_shaders(g);
 
-    g->pl = player_new((vec3){0.0f, 0.0f, 0.0f});
+    vec3 initial_player_pos = {8.0f, 30.0f, 8.0f};
+    g->pl = player_new(initial_player_pos);
     g->cam = camera_create_perspective(70.0f, 0.1f, zfar, (float)GAME_WIDTH / (float)GAME_HEIGHT, g->pl->direction);
 
     g->world = world_new();

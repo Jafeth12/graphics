@@ -32,9 +32,9 @@ typedef struct chunkmesh {
 
 chunkmesh* cmesh_new(chunk* chunk, int max_chunks, chunkmesh* chunks[][max_chunks]);
 
-chunkmesh* cmesh_new_chunk(int offset_x, int offset_y, int max_chunks, chunkmesh* chunks[][max_chunks]);
+chunkmesh* cmesh_new_chunk(unsigned seed, int offset_x, int offset_y, int max_chunks, chunkmesh* chunks[][max_chunks]);
 
-chunkmesh* cmesh_new_chunk_no_mesh(int offset_x, int offset_z);
+chunkmesh* cmesh_new_chunk_no_mesh(unsigned seed, int offset_x, int offset_z);
 
 void cmesh_add_face(chunkmesh *cm, enum block_face face, unsigned *indices, unsigned initial_vertex_index, unsigned *index_offset);
 

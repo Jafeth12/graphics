@@ -13,13 +13,13 @@ chunkmesh* cmesh_new(chunk* chunk, int max_chunks, chunkmesh* chunks[][max_chunk
     return cm;
 }
 
-chunkmesh* cmesh_new_chunk(int offset_x, int offset_z, int max_chunks, chunkmesh* chunks[][max_chunks]) {
-    chunk* c = chunk_new(offset_x, offset_z);
+chunkmesh* cmesh_new_chunk(unsigned seed, int offset_x, int offset_z, int max_chunks, chunkmesh* chunks[][max_chunks]) {
+    chunk* c = chunk_new(seed, offset_x, offset_z);
     return cmesh_new(c, max_chunks, chunks);
 }
 
-chunkmesh* cmesh_new_chunk_no_mesh(int offset_x, int offset_z) {
-    chunk* c = chunk_new(offset_x, offset_z);
+chunkmesh* cmesh_new_chunk_no_mesh(unsigned seed, int offset_x, int offset_z) {
+    chunk* c = chunk_new(seed, offset_x, offset_z);
     chunkmesh* cm = malloc(sizeof(chunkmesh));
     cm->chunk = c;
     cm->is_meshed = 0;

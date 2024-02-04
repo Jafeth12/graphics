@@ -6,10 +6,12 @@
 
 #include <utils/list.h>
 #include <utils/shader.h>
+#include <utils/time.h>
 
 typedef struct world {
     chunk_manager* chunk_manager;
     texture* terrain_texture;
+    unsigned seed;
 } world;
 
 world* world_new();

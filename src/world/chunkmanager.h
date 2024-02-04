@@ -28,7 +28,7 @@ void chunk_man_remove_block(chunk_manager *cm, int x, int y, int z);
 
 // --- Chunks ---
 
-void chunk_man_load_chunk(chunk_manager *cm, int offset_x, int offset_y);
+void chunk_man_load_chunk(chunk_manager *cm, int offset_x, int offset_y, unsigned seed);
 
 void chunk_man_unload_chunk(chunk_manager *cm, int offset_x, int offset_y);
 
@@ -36,11 +36,8 @@ char chunk_man_is_chunk_loaded(chunk_manager *cm, int offset_x, int offset_y);
 
 chunkmesh* chunk_man_get_chunk(chunk_manager *cm, int x, int y);
 
-void chunk_man_update_chunk(chunk_manager *cm, chunkmesh* cmesh);
-
-void chunk_man_add_chunk_to_queue(chunk_manager *cm, int offset_x, int offset_z);
-
-void chunk_man_load_chunk_from_queue(chunk_manager *cm);
+// void chunk_man_add_chunk_to_queue(chunk_manager *cm, int offset_x, int offset_z);
+// void chunk_man_load_chunk_from_queue(chunk_manager *cm);
 
 // --- Drawing ---
 

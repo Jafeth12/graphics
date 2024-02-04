@@ -13,9 +13,10 @@ typedef struct chunk {
     block blocks[CHUNK_SIZE][CHUNK_HEIGHT][CHUNK_SIZE];
     float offset[2];
     unsigned int solid_blocks_count;
+    unsigned seed;
 } chunk;
 
-chunk* chunk_new(int offset_x, int offset_z);
+chunk* chunk_new(unsigned seed, int offset_x, int offset_z);
 
 block chunk_get_block(chunk* c, int x, int y, int z);
 
