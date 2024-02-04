@@ -7,9 +7,9 @@ void vao_gen(vao *va) {
     va->vb_count = 0;
 }
 
-vao* vao_new() {
-    vao *va = malloc(sizeof(vao));
-    vao_gen(va);
+vao vao_new() {
+    vao va;
+    vao_gen(&va);
     return va;
 }
 
@@ -108,5 +108,5 @@ void vao_destroy(vao *va) {
     }
 
     glDeleteVertexArrays(1, &va->handle);
-    free(va);
+    // free(va);
 }

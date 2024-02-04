@@ -153,16 +153,16 @@ void cmesh_mesh(chunkmesh *cm, chunkmesh*** chunks) {
 
     }
 
-    vao_bind(cm->vao);
+    vao_bind(&cm->vao);
     cm->vbo = vbo_new(0, total_vertices_size, vertices);
 
     float stride = 5*sizeof(GLfloat); // 8 = 3 + 3 + 2
 
-    vbo_add_element(cm->vbo, 3, GL_FLOAT, 0); // position
+    vbo_add_element(&cm->vbo, 3, GL_FLOAT, 0); // position
     // vbo_add_element(cm->vbo, 3, GL_FLOAT, 0); // normal
-    vbo_add_element(cm->vbo, 2, GL_FLOAT, 0); // uvs
+    vbo_add_element(&cm->vbo, 2, GL_FLOAT, 0); // uvs
 
-    vao_add_vbo(cm->vao, cm->vbo, stride);
+    vao_add_vbo(&cm->vao, &cm->vbo, stride);
 
     cm->ib = ib_new(0, index_offset, indices);
 
@@ -213,10 +213,10 @@ void cmesh_draw(chunkmesh* cm, shader* sh) {
     // float color[3] = {1.0f, 0.0f, 0.0f};
     // shader_set_vec3(sh, "color", color);
 
-    vao_bind(cm->vao);
-    ib_bind(cm->ib);
+    vao_bind(&cm->vao);
+    ib_bind(&cm->ib);
 
-    glDrawElements(GL_TRIANGLES, cm->ib->count, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, cm->ib.count, GL_UNSIGNED_INT, 0);
 
     glBindVertexArray(0);
 }
@@ -225,16 +225,16 @@ void cmesh_destroy(chunkmesh* cm) {
     chunk_destroy(cm->chunk);
 
     if (cm->is_meshed) {
-        vao_destroy(cm->vao);
-        ib_destroy(cm->ib);
+        vao_destroy(&cm->vao);
+        ib_destroy(&cm->ib);
     }
 
     free(cm);
 }
 
 void cmesh_destroy_mesh(chunkmesh* cm) {
-    vao_destroy(cm->vao);
-    ib_destroy(cm->ib);
+    vao_destroy(&cm->vao);
+    ib_destroy(&cm->ib);
 
     cm->is_meshed = 0;
 }

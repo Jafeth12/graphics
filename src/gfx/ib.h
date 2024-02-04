@@ -13,7 +13,7 @@ typedef struct ib {
 
 void ib_gen(char dynamic, ib *i_b);
 
-ib* ib_new(char dynamic, unsigned int count, const GLuint *data);
+ib ib_new(char dynamic, unsigned int count, const GLuint *data);
 
 void ib_bind(ib *i_b);
 

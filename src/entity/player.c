@@ -4,7 +4,7 @@ player* player_new(vec3 position) {
     player *p = malloc(sizeof(player));
     glm_vec3_copy(position, p->position);
     glm_vec3_copy((vec3){0.0f, 0.0f, 1.0f}, p->direction);
-    p->speed = 8.0f;
+    p->speed = 10.0f;
 
     return p;
 }

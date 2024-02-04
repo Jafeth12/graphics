@@ -24,9 +24,9 @@ typedef struct chunk_buffer {
 
 typedef struct chunkmesh {
     chunk* chunk;
-    vao* vao;
-    vbo* vbo;
-    ib* ib;
+    vao vao;
+    vbo vbo;
+    ib ib;
     char is_meshed;
 } chunkmesh;
 

@@ -18,7 +18,7 @@ typedef struct vbo {
 
 void vbo_gen(char dynamic, vbo *vb);
 
-vbo* vbo_new(char dynamic, unsigned int size, const GLvoid *data);
+vbo vbo_new(char dynamic, unsigned int size, const GLvoid *data);
 
 void vbo_bind(vbo *vb);
 

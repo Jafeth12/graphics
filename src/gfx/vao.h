@@ -22,7 +22,7 @@ typedef struct vao {
 
 void vao_gen(vao *v);
 
-vao* vao_new();
+vao vao_new();
 
 void vao_bind(vao *v);
 

@@ -7,11 +7,11 @@ void vbo_gen(char dynamic, vbo *vb) {
     vb->element_count = 0;
 }
 
-vbo* vbo_new(char dynamic, unsigned int size, const GLvoid *data) {
-    vbo *vb = malloc(sizeof(vbo));
-    vbo_gen(dynamic, vb);
-    vbo_bind(vb);
-    vbo_data(vb, size, data);
+vbo vbo_new(char dynamic, unsigned int size, const GLvoid *data) {
+    vbo vb;
+    vbo_gen(dynamic, &vb);
+    vbo_bind(&vb);
+    vbo_data(&vb, size, data);
     return vb;
 }
 
@@ -32,7 +32,7 @@ void vbo_destroy(vbo *vb) {
         free(el);
     }
 
-    free(vb);
+    // free(vb);
 }
 
 void vbo_data(vbo *vb, unsigned int size, const GLvoid *data) {
