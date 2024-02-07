@@ -1,6 +1,7 @@
 #include "chunk.h"
 
 #include "noise1234.h"
+#include <stdio.h>
 
 // f32 octave_compute(struct Octave *p, f32 seed, f32 x, f32 z) {
 //     f32 u = 1.0f, v = 0.0f;
@@ -98,6 +99,34 @@ char chunk_set_block(chunk* c, int x, int y, int z, enum block_type type) {
     c->blocks[x][y][z].type = type;
 
     return 0;
+}
+
+char chunk_does_pos_intersect(chunk* c, ivec3 pos) {
+    int x = pos[0];
+    int y = pos[1];
+    int z = pos[2];
+
+    if (x < 0 || x >= CHUNK_SIZE || y < 0 || y >= CHUNK_HEIGHT || z < 0 || z >= CHUNK_SIZE) {
+        return 0;
+    }
+
+    enum block_type type = chunk_get_block(c, x, y, z).type;
+    // print block type
+    // switch (type) {
+    //     case GRASS:
+    //         printf("GRASS\n");
+    //         break;
+    //     case STONE:
+    //         printf("STONE\n");
+    //         break;
+    //     case BEDROCK:
+    //         printf("BEDROCK\n");
+    //         break;
+    //     default:
+    //         break;
+    // }
+
+    return type != AIR && type != OUT_OF_BOUNDS;
 }
  
 void chunk_destroy(chunk* c) {

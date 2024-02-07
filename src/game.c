@@ -1,4 +1,5 @@
 #include "game.h"
+#include "entity/player.h"
 
 game *game_init() {
     game *g = malloc(sizeof(game));
@@ -56,7 +57,7 @@ void game_load_shaders(game *g) {
 void game_update_first_person_camera(game *g) {
     vec3 cam_pos;
     glm_vec3_copy(g->pl->position, cam_pos);
-    cam_pos[1] += 3.0f;
+    cam_pos[1] += 1.0f;
 
     camera_set_position(g->cam, cam_pos);
     camera_update(g->cam);
@@ -69,6 +70,9 @@ void game_update_first_person_camera(game *g) {
 }
 
 void game_process_input(game *g) {
+
+    vec3 pos = {player_get_x(g->pl), player_get_y(g->pl), player_get_z(g->pl)};
+    vec3 new_pos;
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(g->win->handle, 1);
@@ -90,19 +94,35 @@ void game_process_input(game *g) {
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_W) == GLFW_PRESS) {
-        player_move_forward(g->pl, g->win->delta_time);
+        player_would_move_forward(g->pl, g->win->delta_time, new_pos);
+
+        if (!world_does_pos_intersect(g->world, new_pos)) {
+            player_move_forward(g->pl, g->win->delta_time);
+        }
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_S) == GLFW_PRESS) {
-        player_move_backward(g->pl, g->win->delta_time);
+        player_would_move_backward(g->pl, g->win->delta_time, new_pos);
+
+        if (!world_does_pos_intersect(g->world, new_pos)) {
+            player_move_backward(g->pl, g->win->delta_time);
+        }
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_A) == GLFW_PRESS) {
-        player_move_left(g->pl, g->win->delta_time);
+        player_would_move_left(g->pl, g->win->delta_time, new_pos);
+
+        if (!world_does_pos_intersect(g->world, new_pos)) {
+            player_move_left(g->pl, g->win->delta_time);
+        }
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_D) == GLFW_PRESS) {
-        player_move_right(g->pl, g->win->delta_time);
+        player_would_move_right(g->pl, g->win->delta_time, new_pos);
+
+        if (!world_does_pos_intersect(g->world, new_pos)) {
+            player_move_right(g->pl, g->win->delta_time);
+        }
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_SPACE) == GLFW_PRESS) {
@@ -110,7 +130,11 @@ void game_process_input(game *g) {
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-        player_move_down(g->pl, g->win->delta_time);
+        player_would_move_backward(g->pl, g->win->delta_time, new_pos);
+
+        if (!world_does_pos_intersect(g->world, new_pos)) {
+            player_move_down(g->pl, g->win->delta_time);
+        }
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_LEFT) == GLFW_PRESS) {
@@ -173,10 +197,24 @@ void print_player_pos(game *g) {
     // printf("------------------------\n");
 }
 
+void game_physics_update(game *g) {
+    vec3 pos = {player_get_x(g->pl), player_get_y(g->pl), player_get_z(g->pl)};
+    pos[1] -= 2;
+
+    if (!world_does_pos_intersect(g->world, pos)) {
+        player_move_down(g->pl, g->win->delta_time);
+
+        if (world_does_pos_intersect(g->world, pos)) {
+            player_move_up(g->pl, g->win->delta_time);
+        }
+    }
+}
+
 double MS_PER_TICK = 1000.0 / 55.0; // 55 ticks per second
 
 void game_tick(game *g) {
     game_process_input(g);
+    game_physics_update(g);
     world_update_render_distance(g->world, g->pl->position, g->settings.render_distance);
     // world_load_chunks(g->world);
 }

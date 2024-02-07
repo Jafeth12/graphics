@@ -22,6 +22,8 @@ block chunk_get_block(chunk* c, int x, int y, int z);
 
 char chunk_set_block(chunk* c, int x, int y, int z, enum block_type type);
 
+char chunk_does_pos_intersect(chunk* c, ivec3 pos);
+
 void chunk_destroy(chunk* c);
 
 #define chunk_for_each_block() \

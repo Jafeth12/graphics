@@ -69,6 +69,21 @@ void world_remove_block(world *w, int x, int y, int z) {
     chunk_man_remove_block(w->chunk_manager, x, y, z);
 }
 
+char world_does_pos_intersect(world *w, vec3 pos) {
+    pos = (vec3){floor(pos[0]), floor(pos[1]), floor(pos[2])};
+
+    int offset[2];
+    chunk_get_offset_from_pos(pos[0], pos[2], offset);
+
+    chunkmesh *c = world_get_chunk(w, offset[0], offset[1]);
+
+    if (c == NULL) return 0;
+
+    ivec3 chunk_pos = {pos[0] - offset[0] * CHUNK_SIZE, pos[1], pos[2] - offset[1] * CHUNK_SIZE};
+
+    return chunk_does_pos_intersect(c->chunk, chunk_pos);
+}
+
 // ------------------------
 
 void world_draw(world *w, shader *sh) {

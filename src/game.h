@@ -49,6 +49,8 @@ void game_update_first_person_camera(game *g);
 
 void game_world_update(game *g);
 
+void game_physics_update(game *g);
+
 void game_loop(game *g);
 
 void game_process_input(game *g);
