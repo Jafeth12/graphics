@@ -111,20 +111,6 @@ char chunk_does_pos_intersect(chunk* c, ivec3 pos) {
     }
 
     enum block_type type = chunk_get_block(c, x, y, z).type;
-    // print block type
-    // switch (type) {
-    //     case GRASS:
-    //         printf("GRASS\n");
-    //         break;
-    //     case STONE:
-    //         printf("STONE\n");
-    //         break;
-    //     case BEDROCK:
-    //         printf("BEDROCK\n");
-    //         break;
-    //     default:
-    //         break;
-    // }
 
     return type != AIR && type != OUT_OF_BOUNDS;
 }

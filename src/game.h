@@ -9,9 +9,6 @@
 #include <utils/camera.h>
 #include <entity/player.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #define GAME_WIDTH 1920
 #define GAME_HEIGHT 1080
 

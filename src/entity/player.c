@@ -6,6 +6,7 @@ player* player_new(vec3 position) {
     glm_vec3_copy(position, p->position);
     glm_vec3_copy((vec3){0.0f, 0.0f, 1.0f}, p->direction);
     p->speed = 10.0f;
+    p->y_velocity = 0.0f;
 
     return p;
 }
@@ -24,6 +25,27 @@ float player_get_y(player *p) {
 
 float player_get_z(player *p) {
     return p->position[2];
+}
+
+void player_update_y_velocity(player *p, float delta_time) {
+    p->y_velocity -= 12.f * delta_time;
+}
+
+void player_apply_gravity(player *p, float delta_time) {
+    player_would_apply_gravity(p, delta_time, p->position);
+}
+
+void player_would_apply_gravity(player *p, float delta_time, vec3 result) {
+    glm_vec3_copy(p->position, result);
+    glm_vec3_add(result, (vec3){0.0f, p->y_velocity*delta_time, 0.0f}, result);
+}
+
+void player_set_y_velocity(player *p, float velocity) {
+    p->y_velocity = velocity;
+}
+
+void player_jump(player *p) {
+    p->y_velocity = 5.0f;
 }
 
 // ---------------

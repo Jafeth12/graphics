@@ -57,7 +57,7 @@ void game_load_shaders(game *g) {
 void game_update_first_person_camera(game *g) {
     vec3 cam_pos;
     glm_vec3_copy(g->pl->position, cam_pos);
-    cam_pos[1] += 1.0f;
+    cam_pos[1] += 1.8f;
 
     camera_set_position(g->cam, cam_pos);
     camera_update(g->cam);
@@ -126,7 +126,7 @@ void game_process_input(game *g) {
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_SPACE) == GLFW_PRESS) {
-        player_move_up(g->pl, g->win->delta_time);
+        player_jump(g->pl);
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
@@ -198,15 +198,15 @@ void print_player_pos(game *g) {
 }
 
 void game_physics_update(game *g) {
-    vec3 pos = {player_get_x(g->pl), player_get_y(g->pl), player_get_z(g->pl)};
-    pos[1] -= 2;
+    vec3 new_pos;
 
-    if (!world_does_pos_intersect(g->world, pos)) {
-        player_move_down(g->pl, g->win->delta_time);
+    player_update_y_velocity(g->pl, g->win->delta_time);
+    player_would_apply_gravity(g->pl, g->win->delta_time, new_pos);
 
-        if (world_does_pos_intersect(g->world, pos)) {
-            player_move_up(g->pl, g->win->delta_time);
-        }
+    if (!world_does_pos_intersect(g->world, new_pos)) {
+        player_apply_gravity(g->pl, g->win->delta_time);
+    } else {
+        player_set_y_velocity(g->pl, 0.f);
     }
 }
 

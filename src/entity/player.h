@@ -9,6 +9,7 @@
 typedef struct player {
     vec3 position;
     vec3 direction;
+    float y_velocity;
     float speed;
 } player;
 
@@ -21,6 +22,16 @@ float player_get_x(player *p);
 float player_get_y(player *p);
 
 float player_get_z(player *p);
+
+void player_update_y_velocity(player *p, float delta_time);
+
+void player_set_y_velocity(player *p, float velocity);
+
+void player_apply_gravity(player *p, float delta_time);
+
+void player_would_apply_gravity(player *p, float delta_time, vec3 result);
+
+void player_jump(player *p);
 
 // ---------------
 
