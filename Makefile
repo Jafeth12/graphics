@@ -2,8 +2,6 @@ OPTS := -O3
 
 CC = gcc
 
-GLAD = glad
-
 SRC_DIR = src
 LIBS_DIR = libs
 ENTITY_DIR = $(SRC_DIR)/entity

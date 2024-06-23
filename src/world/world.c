@@ -84,6 +84,27 @@ char world_does_pos_intersect(world *w, vec3 pos) {
     return chunk_does_pos_intersect(c->chunk, chunk_pos);
 }
 
+char world_ray_cast(world *w, vec3 start, vec3 end, vec3 hit) {
+    vec3 dir;
+    glm_vec3_sub(end, start, dir);
+    glm_vec3_normalize(dir);
+
+    // printf("dir: %f, %f, %f\n", dir[0], dir[1], dir[2]);
+
+    vec3 current = {start[0], start[1], start[2]};
+
+    for (int i = 0; i < 3; i++) {
+        if (world_does_pos_intersect(w, current)) {
+            glm_vec3_copy(current, hit);
+            return 1;
+        }
+
+        glm_vec3_add(current, dir, current);
+    }
+
+    return 0;
+}
+
 // ------------------------
 
 void world_draw(world *w, shader *sh) {

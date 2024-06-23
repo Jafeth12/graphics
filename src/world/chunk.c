@@ -1,7 +1,6 @@
 #include "chunk.h"
 
 #include "noise1234.h"
-#include <stdio.h>
 
 // f32 octave_compute(struct Octave *p, f32 seed, f32 x, f32 z) {
 //     f32 u = 1.0f, v = 0.0f;
@@ -19,8 +18,9 @@ enum block_type gen_block_type(chunk* c, int x, int y, int z) {
     }
 
     float height = 0.0f;
+    float offset = c->seed % 100;
     for (int i = 0; i < 5; i++) {
-        height += noise3((x*0.03), z*0.03, c->seed + 10 * 64) * 2.05 + 3;
+        height += noise3((x*0.03) + offset, z*0.03 + offset, c->seed + 10 * 64) * 2.05 + 3;
     }
 
     float surfaceY = height;

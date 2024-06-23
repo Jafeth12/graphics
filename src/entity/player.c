@@ -5,6 +5,7 @@ player* player_new(vec3 position) {
     player *p = malloc(sizeof(player));
     glm_vec3_copy(position, p->position);
     glm_vec3_copy((vec3){0.0f, 0.0f, 1.0f}, p->direction);
+    glm_vec3_copy((vec3){-1.0f, -1.0f, -1.0f}, p->last_ray_cast_hit);
     p->speed = 10.0f;
     p->y_velocity = 0.0f;
 
@@ -13,6 +14,14 @@ player* player_new(vec3 position) {
 
 void player_destroy(player *p) {
     free(p);
+}
+
+char player_is_ray_cast_hit_valid(player *p) {
+    return p->last_ray_cast_hit[0] >= 0 && p->last_ray_cast_hit[1] >= 0 && p->last_ray_cast_hit[2] >= 0;
+}
+
+void player_set_ray_cast_hit(player *p, vec3 hit) {
+    glm_vec3_copy(hit, p->last_ray_cast_hit);
 }
 
 float player_get_x(player *p) {

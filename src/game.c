@@ -1,5 +1,6 @@
 #include "game.h"
 #include "entity/player.h"
+#include <cglm/vec3.h>
 
 game *game_init() {
     game *g = malloc(sizeof(game));
@@ -156,11 +157,17 @@ void game_process_input(game *g) {
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_B) == GLFW_PRESS) {
-        world_place_block(g->world, WOOD, floor(player_get_x(g->pl)), floor(player_get_y(g->pl)), floor(player_get_z(g->pl)));
+        if (player_is_ray_cast_hit_valid(g->pl)) {
+            world_place_block(g->world, WOOD, floor(g->pl->last_ray_cast_hit[0]), floor(g->pl->last_ray_cast_hit[1])-2, floor(g->pl->last_ray_cast_hit[2]));
+        }
+        // world_place_block(g->world, WOOD, floor(player_get_x(g->pl)), floor(player_get_y(g->pl))-2, floor(player_get_z(g->pl)));
     }
 
     if (glfwGetKey(g->win->handle, GLFW_KEY_N) == GLFW_PRESS) {
-        world_remove_block(g->world, floor(player_get_x(g->pl)), floor(player_get_y(g->pl)), floor(player_get_z(g->pl)));
+        if (player_is_ray_cast_hit_valid(g->pl)) {
+            world_remove_block(g->world, floor(g->pl->last_ray_cast_hit[0]), floor(g->pl->last_ray_cast_hit[1])-2, floor(g->pl->last_ray_cast_hit[2]));
+        }
+        // world_remove_block(g->world, floor(player_get_x(g->pl)), floor(player_get_y(g->pl))-2, floor(player_get_z(g->pl)));
     }
 
 }
@@ -207,6 +214,26 @@ void game_physics_update(game *g) {
         player_apply_gravity(g->pl, g->win->delta_time);
     } else {
         player_set_y_velocity(g->pl, 0.f);
+    }
+
+    vec3 ray_dir;
+    glm_vec3_copy(g->pl->direction, ray_dir);
+    glm_vec3_scale(ray_dir, 3.0f, ray_dir);
+
+    vec3 ray_start;
+    ray_start[0] = player_get_x(g->pl);
+    ray_start[1] = player_get_y(g->pl)+1.8f;
+    ray_start[2] = player_get_z(g->pl);
+
+    vec3 ray_end;
+    glm_vec3_add(ray_start, ray_dir, ray_end);
+
+    // printf("start: %f, %f, %f\n", ray_start[0], ray_start[1], ray_start[2]);
+    // printf("end: %f, %f, %f\n", ray_end[0], ray_end[1], ray_end[2]);
+
+    vec3 hit;
+    if (world_ray_cast(g->world, ray_start, ray_end, hit)) {
+        // printf("hit: %f, %f, %f\n", hit[0], hit[1], hit[2]);
     }
 }
 

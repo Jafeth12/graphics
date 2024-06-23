@@ -11,11 +11,16 @@ typedef struct player {
     vec3 direction;
     float y_velocity;
     float speed;
+    vec3 last_ray_cast_hit;
 } player;
 
 player* player_new(vec3 position);
 
 void player_destroy(player *p);
+
+char player_is_ray_cast_hit_valid(player *p);
+
+void player_set_ray_cast_hit(player *p, vec3 hit);
 
 float player_get_x(player *p);
 

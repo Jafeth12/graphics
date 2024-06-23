@@ -3,7 +3,7 @@
 
 #include "block.h"
 
-#include <stdlib.h>
+// #include <stdlib.h>
 #include <cglm/cglm.h>
 
 #define CHUNK_SIZE 8

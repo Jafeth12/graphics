@@ -36,6 +36,8 @@ void world_remove_block(world *w, int x, int y, int z);
 
 char world_does_pos_intersect(world *w, vec3 pos);
 
+char world_ray_cast(world *w, vec3 start, vec3 end, vec3 result);
+
 // --- World management ---
 
 void world_draw(world *w, shader *s);
